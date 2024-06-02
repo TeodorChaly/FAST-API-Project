@@ -1,11 +1,17 @@
 import requests
 from bs4 import BeautifulSoup
-from page_scraper import *
+from bg_tasks.page_scraper import *
 
 
-def scrape(url):
+async def scrape(url):
     try:
-        response = requests.get(url)
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'}
+
+        session = requests.Session()
+        session.headers.update(headers)
+
+        response = session.get(url)
         response.raise_for_status()
 
         soup = BeautifulSoup(response.content, 'html.parser')
@@ -15,15 +21,14 @@ def scrape(url):
         img_url = img_path_scraper(soup)
         date_published = date_published_scraper(soup)
 
-        print(f'Title: {title}')
         print(f'Main text: {main_text}')
+        print(f'URL: {url}')
+        print(f'Title: {title}')
         print(f'Image URL: {img_url}')
         print(f'Date published: {date_published}')
+
+        return {"Message:": "Scraping successful"}
 
     except Exception as e:
         print(f'Error: {e}')
         return
-
-
-url = 'https://rus.delfi.lv/57860/latvia/120029175/foto-remeslenniki-lakomstva-i-suveniry-na-yarmarke-v-etnograficheskom-muzee-tysyachi-lyudey'
-scrape(url)

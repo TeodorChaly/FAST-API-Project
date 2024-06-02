@@ -13,7 +13,7 @@ celery = Celery(
 
 celery.conf.beat_schedule = {
     'celery_beat_testing': {
-        'task': 'bg_tasks.background_tasks.scrape_and_save',
+        'task': 'bg_tasks.background_tasks.scrape',
         'schedule': crontab(minute='*/1')
     }
 }

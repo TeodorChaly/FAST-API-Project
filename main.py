@@ -1,10 +1,9 @@
 from fastapi import FastAPI
-from bg_tasks.background_tasks import scrape_and_save
+from bg_tasks.router import router as scraping_router
 
-app = FastAPI()
+app = FastAPI(
+    title="News generator API",
+    version="0.1"
+)
 
-
-@app.get("/")
-def main_page():
-    scrape_and_save.delay()
-    return {"message": "Hello World"}
+app.include_router(scraping_router)

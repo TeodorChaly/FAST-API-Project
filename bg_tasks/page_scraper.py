@@ -1,4 +1,5 @@
 from datetime import datetime
+from bs4 import Comment
 
 
 def title_scraper(soup):
@@ -22,15 +23,61 @@ def title_scraper(soup):
 
 
 def main_text_scraper(soup):
-    main_content = soup.find('div', class_='article-content') or soup.find(id='main-content')
-    if main_content:
-        return main_content.get_text(separator='\n').strip()
+    try:
+        for element in soup(["script", "style"]):
+            element.decompose()
 
-    article_tag = soup.find('article')
-    if article_tag:
-        return article_tag.get_text(separator='\n').strip()
+        comments = soup.findAll(text=lambda text: isinstance(text, Comment))
+        for comment in comments:
+            comment.extract()
 
-    return "No main text"
+        candidates = [
+            ('div', {'class': 'article-content'}),
+            ('div', {'id': 'main-content'}),
+            ('div', {'class': 'main-content'}),
+            ('div', {'id': 'article-content'}),
+            ('article', {}),
+            ('section', {'class': 'main-section'}),
+            ('main', {}),
+        ]
+
+        for tag, attrs in candidates:
+            main_content = soup.find(tag, attrs=attrs)
+            if main_content and len(main_content.get_text(separator='\n').strip()) > 100:
+                return clean_text(main_content.get_text(separator='\n').strip())
+
+        # Check for general divs with class 'content' with meaningful content
+        other_divs = soup.find_all('div', class_='content')
+        for div in other_divs:
+            if len(div.get_text(separator='\n').strip()) > 100:
+                return clean_text(div.get_text(separator='\n').strip())
+
+        paragraphs = soup.find_all('p')
+        combined_text = '\n'.join(
+            p.get_text(separator='\n').strip() for p in paragraphs if len(p.get_text().strip()) > 50)
+        if combined_text.strip():
+            return clean_text(combined_text.strip())
+
+        return "No main text found"
+
+    except Exception as e:
+        return f"An error occurred: {str(e)}"
+
+
+def clean_text(text):
+    lines = text.split('\n')
+    cleaned_lines = []
+    for line in lines:
+        line = line.strip()
+        if len(line) > 10 and not any(
+                phrase in line.lower() for phrase in [
+                    'ask questions', 'find answers', 'collaborate', 'subscribe', 'rss feed',
+                    'learn more', 'post your answer', 'terms of service', 'privacy policy',
+                    'site design', 'logo', 'stack exchange', 'licensed under'
+                ]
+        ):
+            cleaned_lines.append(line)
+    return '\n'.join(cleaned_lines)
 
 
 def img_path_scraper(soup):
@@ -82,4 +129,3 @@ def date_published_scraper(soup):
             return f"Error with date parsing: {date_str}"
     else:
         return "No date found"
-
