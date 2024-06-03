@@ -1,10 +1,12 @@
 from fastapi import Query, APIRouter
-from bg_tasks.background_tasks import scrape
+from bg_tasks.scraper.background_tasks import scrape
 
 router = APIRouter(tags=["Scraping"])
 
 
 @router.get("/scrape")
-async def scraper_fun(url: str = Query(..., description="URL to scrape")):
-    await scrape(url)
-    return {"message": f"Scraping initiated for {url}"}
+async def scraper_fun(url: str = Query(..., description="URL to scrape"),
+                      topic: str = Query("crypto"),
+                      language: str = Query("english")):
+    result = await scrape(url, topic, language)
+    return result

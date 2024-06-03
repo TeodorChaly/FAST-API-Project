@@ -1,10 +1,8 @@
-import os
-
 from celery import Celery
 from celery.schedules import crontab
-
 from config import settings
 
+""""Core celery task configuration"""
 celery = Celery(
     "tasks",
     broker=f"redis://{settings.REDIS_HOST}:{settings.REDIS_PORT}",
