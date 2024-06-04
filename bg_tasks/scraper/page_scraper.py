@@ -11,13 +11,13 @@ def title_scraper(soup):
     if title_meta:
         return title_meta['content'].strip()
 
-    for header_tag in soup.find('h1'):
-        if header_tag.text.strip():
-            return header_tag.text.strip()
+    header_tag = soup.find('h1')
+    if header_tag:
+        return header_tag.text.strip()
 
-    for header2_tag in soup.find('h2'):
-        if header2_tag.text.strip():
-            return header2_tag.text.strip()
+    header2_tag = soup.find('h2')
+    if header2_tag:
+        return header2_tag.text.strip()
 
     return "No title"
 
@@ -42,11 +42,10 @@ def main_text_scraper(soup):
         ]
 
         for tag, attrs in candidates:
-            main_content = soup.find(tag, attrs=attrs)
+            main_content = soup.find(tag, **attrs)
             if main_content and len(main_content.get_text(separator='\n').strip()) > 100:
                 return clean_text(main_content.get_text(separator='\n').strip())
 
-        # Check for general divs with class 'content' with meaningful content
         other_divs = soup.find_all('div', class_='content')
         for div in other_divs:
             if len(div.get_text(separator='\n').strip()) > 100:
@@ -85,14 +84,10 @@ def img_path_scraper(soup):
     if img_meta and img_meta.has_attr('content'):
         return img_meta['content'].strip()
 
-    main_image = soup.find(class_='main-image') or soup.find('img', class_='main-img') or soup.find('img',
-                                                                                                    class_='header-image')
+    main_image = soup.find('img', class_='main-image') or soup.find('img', class_='main-img') or soup.find('img',
+                                                                                                           class_='header-image')
     if main_image and main_image.has_attr('src'):
         return main_image['src'].strip()
-
-    img_meta = soup.find('meta', property='og:image') or soup.find('meta', name='twitter:image')
-    if img_meta and img_meta.has_attr('content'):
-        return img_meta['content'].strip()
 
     return "Image not found"
 

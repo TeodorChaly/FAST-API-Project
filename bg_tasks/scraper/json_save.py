@@ -3,7 +3,7 @@ import os
 
 
 def result_json_function(scraper_result_data, content, language, url, title, main_text, img_url, date_published):
-    folder_name = "news"
+    folder_name = "news_json"
     file_name = f"{content}.json"
     file_path = os.path.join(folder_name, file_name)
 
