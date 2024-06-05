@@ -8,16 +8,18 @@
     {% if error %}
         <p>{{ error }}</p>
     {% else %}
-        <ul>
-        {% for item in data %}
+    <ul>
+        {% for item in articles %}
+            {% if 'id' in item %}
             <li>
-                <h2>{{ item.Title }}</h2>
+                <a href="/content/{{ topic }}/{{ item.id }}"><h2>{{ item.Title }}</h2></a>
                 <p>{{ item["Main Text"] }}</p>
                 <img src="{{ item['Image URL'] }}" alt="Image for {{ item.Title }}">
                 <p>Date Published: {{ item["Date Published"] }}</p>
             </li>
+            {% endif %}
         {% endfor %}
-        </ul>
-    {% endif %}
+    </ul>
+{% endif %}
 </body>
 </html>

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ article.Title }}</title>
+</head>
+<body>
+    <h1>{{ article.Title }}</h1>
+    <p>{{ article["Main Text"] }}</p>
+    <img src="{{ article['Image URL'] }}" alt="Image for {{ article.Title }}">
+    <p>Date Published: {{ article["Date Published"] }}</p>
+    <a href="/content/{{ topic }}">Back to list</a>
+</body>
+</html>

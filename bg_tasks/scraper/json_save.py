@@ -23,9 +23,20 @@ def result_json_function(scraper_result_data, content, language, url, title, mai
         except json.decoder.JSONDecodeError:
             existing_data = []
 
+        # Check if existing_data is not empty
+        if existing_data:
+            # Get the maximum existing id
+            max_id = max(existing_data, key=lambda x: x.get('id', 0)).get('id', 0)
+        else:
+            max_id = 0
+
         urls = [item['URL'] for item in existing_data]
 
         if url not in urls:
+            # Assign a new id greater than the maximum existing id
+            new_id = max_id + 1
+            # Add 'id' field to the scraper_result_data object
+            scraper_result_data['id'] = new_id
             existing_data.insert(0, scraper_result_data)  # Insert new data at the beginning of the list
             file.seek(0)  # Move the file pointer to the beginning
             json.dump(existing_data, file, indent=4)
@@ -34,8 +45,8 @@ def result_json_function(scraper_result_data, content, language, url, title, mai
         else:
             print("URL already exists in JSON file. Data not appended.")
 
-    print(f'Main text: {main_text}')
-    print(f'URL: {url}')
-    print(f'Title: {title}')
-    print(f'Image URL: {img_url}')
-    print(f'Date published: {date_published}')
+    # print(f'Main text: {main_text}')
+    # print(f'URL: {url}')
+    # print(f'Title: {title}')
+    # print(f'Image URL: {img_url}')
+    # print(f'Date published: {date_published}')
