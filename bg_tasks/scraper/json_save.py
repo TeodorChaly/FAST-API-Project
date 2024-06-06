@@ -13,11 +13,11 @@ def result_json_function(scraper_result_data, content, language, url, title, mai
 
     # Check if JSON file exists, create it if not
     if not os.path.exists(file_path):
-        with open(file_path, 'w') as file:
+        with open(file_path, 'w', encoding='utf-8') as file:
             json.dump([], file)
 
     # Check if URL already exists in JSON
-    with open(file_path, 'r+') as file:
+    with open(file_path, 'r+', encoding='utf-8') as file:
         try:
             existing_data = json.load(file)
         except json.decoder.JSONDecodeError:
