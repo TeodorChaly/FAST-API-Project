@@ -1,5 +1,5 @@
 from fastapi import Query, APIRouter
-from bg_tasks.scraper.background_tasks import scrape
+from bg_tasks.background_tasks import scrape
 
 router = APIRouter(tags=["Scraping"])
 

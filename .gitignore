@@ -4,3 +4,4 @@ project-API-env/
 *.env
 celerybeat-schedule.*
 news_json
+scraped_urls.json

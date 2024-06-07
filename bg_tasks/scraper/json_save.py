@@ -2,10 +2,12 @@ import json
 import os
 
 
-def result_json_function(scraper_result_data, content, language, url, title, main_text, img_url, date_published):
+def result_json_function(scraper_result_data, content):
     folder_name = "news_json"
     file_name = f"{content}.json"
     file_path = os.path.join(folder_name, file_name)
+
+    url = scraper_result_data.get('URL')
 
     # Check if folder exists, create it if not
     if not os.path.exists(folder_name):
@@ -50,3 +52,32 @@ def result_json_function(scraper_result_data, content, language, url, title, mai
     # print(f'Title: {title}')
     # print(f'Image URL: {img_url}')
     # print(f'Date published: {date_published}')
+
+
+def check(url):
+    if not os.path.exists("scraped_urls.json"):
+        with open("scraped_urls.json", 'w', encoding='utf-8') as file:
+            json.dump([], file)
+
+    try:
+        with open("scraped_urls.json", "r", encoding="utf-8") as file:
+            scraped_urls = json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        scraped_urls = []
+
+    if url in scraped_urls:
+        return False
+    else:
+        return True
+
+
+def save_url(url):
+    try:
+        with open("scraped_urls.json", "r", encoding="utf-8") as file:
+            scraped_urls = json.load(file)
+    except (FileNotFoundError, json.JSONDecodeError):
+        scraped_urls = []
+
+    scraped_urls.append(url)
+    with open("scraped_urls.json", "w", encoding="utf-8") as file:
+        json.dump(scraped_urls, file, indent=4)
