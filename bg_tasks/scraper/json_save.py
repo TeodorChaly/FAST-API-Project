@@ -2,9 +2,9 @@ import json
 import os
 
 
-def result_json_function(scraper_result_data, content):
+def result_json_function(scraper_result_data, topic):
     folder_name = "news_json"
-    file_name = f"{content}.json"
+    file_name = f"{topic}.json"
     file_path = os.path.join(folder_name, file_name)
 
     url = scraper_result_data.get('URL')
@@ -55,10 +55,6 @@ def result_json_function(scraper_result_data, content):
 
 
 def check(url):
-    if not os.path.exists("scraped_urls.json"):
-        with open("scraped_urls.json", 'w', encoding='utf-8') as file:
-            json.dump([], file)
-
     try:
         with open("scraped_urls.json", "r", encoding="utf-8") as file:
             scraped_urls = json.load(file)

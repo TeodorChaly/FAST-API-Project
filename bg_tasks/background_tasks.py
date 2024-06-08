@@ -5,7 +5,7 @@ from bg_tasks.scraper.json_save import *
 from bg_tasks.scraper.page_scraper import *
 
 
-async def scrape(url, content, languages):
+async def scrape(url, topic, languages):
     try:
         if check(url):
             headers = {
@@ -27,7 +27,7 @@ async def scrape(url, content, languages):
             # Data saving (RAW NEWS)
             data = {"URL": url, "Title": title, "Main Text": main_text, "Image URL": img_url,
                     "Date Published": date_published}
-            result_json_function(data, content)
+            result_json_function(data, topic)
 
             save_url(url)
 
