@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
+from ai_regenerator.prompts import ai_generator_function
 from bg_tasks.scraper.json_save import *
 from bg_tasks.scraper.page_scraper import *
 
@@ -24,10 +25,18 @@ async def scrape(url, topic, languages):
             img_url = img_path_scraper(soup)
             date_published = date_published_scraper(soup)
 
-            # Data saving (RAW NEWS)
-            data = {"URL": url, "Title": title, "Main Text": main_text, "Image URL": img_url,
-                    "Date Published": date_published}
-            result_json_function(data, topic)
+            for language in languages:
+                # data = {"URL": url, "Title": title, "Main Text": main_text, "Image URL": img_url,
+                #         "Date Published": date_published}
+                # result_json_function(data, topic, language)
+                content_to_generate = title + " " + main_text + " " + date_published
+
+                regenerated_result = ai_generator_function(content_to_generate, language)
+                regenerated_result_json = json.loads(regenerated_result)
+
+                json_rewritten_news_saver(regenerated_result_json, topic, language, img_url)
+
+                print(f"Data appended to JSON file for {language} language.")
 
             save_url(url)
 

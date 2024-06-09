@@ -4,24 +4,16 @@ from fastapi import APIRouter, Request
 from starlette.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
-from topics.news_file_extractor import news_extractor
+from topics.news_file_extractor import *
 
 router = APIRouter(tags=["Topics"])
 
 templates = Jinja2Templates(directory="templates")
 
 
-def load_articles_from_json(topic: str):
-    folder_name = "news_json"
-    file_name = f"{folder_name}/{topic}.json"
-    with open(file_name, 'r') as file:
-        articles = json.load(file)
-    return articles
-
-
 @router.get("/content/{topic}/{article_id}", response_class=HTMLResponse)
-async def show_article_html(request: Request, topic: str, article_id: int):
-    articles = load_articles_from_json(topic)
+async def show_article_html(request: Request, topic: str, article_id: int, language: str = "english"):
+    articles = load_articles_from_json(topic, language)
     for article in articles:
         if article.get("id") == article_id:
             return templates.TemplateResponse("article_detail.html",
@@ -30,9 +22,9 @@ async def show_article_html(request: Request, topic: str, article_id: int):
 
 
 @router.get("/content/{topic}", response_class=HTMLResponse)
-async def show_content_html(request: Request, topic: str, limit: int = None):
+async def show_content_html(request: Request, topic: str, language: str = "english", limit: int = None):
     print(f"Requested topic: {topic}")
-    json_data = await show_content_json(topic, limit)
+    json_data = await show_content_json(topic, language, limit)
     if isinstance(json_data, dict) and "error" in json_data:
         return templates.TemplateResponse("error.html", {"request": request, "error": json_data["error"]})
 
@@ -43,6 +35,6 @@ async def show_content_html(request: Request, topic: str, limit: int = None):
 
 
 @router.get("/api/content/{topic}")
-async def show_content_json(topic: str, limit: int = None):
+async def show_content_json(topic: str, language: str = "english", limit: int = None):
     print(f"Requested topic: {topic}")
-    return await news_extractor(topic, limit)
+    return await news_extractor(topic, language, limit)

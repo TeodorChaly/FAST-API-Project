@@ -2,56 +2,52 @@ import json
 import os
 
 
-def result_json_function(scraper_result_data, topic):
-    folder_name = "news_json"
-    file_name = f"{topic}.json"
-    file_path = os.path.join(folder_name, file_name)
+def json_rewritten_news_saver(generated_json_data, topic, language, image):
+    try:
+        language = language.lower()
+        topic = topic.lower()
 
-    url = scraper_result_data.get('URL')
+        generated_json_data["topic"] = topic
+        generated_json_data["language"] = language
+        generated_json_data["image"] = image
 
-    # Check if folder exists, create it if not
-    if not os.path.exists(folder_name):
-        os.makedirs(folder_name)
+        current_file_path = os.path.abspath(__file__)
+        main_directory = os.path.dirname((os.path.dirname(os.path.dirname(current_file_path))))
 
-    # Check if JSON file exists, create it if not
-    if not os.path.exists(file_path):
-        with open(file_path, 'w', encoding='utf-8') as file:
-            json.dump([], file)
+        folder_name = os.path.join(main_directory, "news_json")
+        sub_folder_name = os.path.join(folder_name, topic)
+        file_name = f"{topic}_{language}.json"
+        file_path = os.path.join(sub_folder_name, file_name)
 
-    # Check if URL already exists in JSON
-    with open(file_path, 'r+', encoding='utf-8') as file:
-        try:
-            existing_data = json.load(file)
-        except json.decoder.JSONDecodeError:
-            existing_data = []
+        if not os.path.exists(folder_name):
+            os.makedirs(folder_name)
 
-        # Check if existing_data is not empty
-        if existing_data:
-            # Get the maximum existing id
-            max_id = max(existing_data, key=lambda x: x.get('id', 0)).get('id', 0)
-        else:
-            max_id = 0
+        if not os.path.exists(sub_folder_name):
+            os.makedirs(sub_folder_name)
 
-        urls = [item['URL'] for item in existing_data]
+        if not os.path.exists(file_path):
+            with open(file_path, 'w', encoding='utf-8') as file:
+                json.dump([], file)
+                print(f"File created: {file_path}")
 
-        if url not in urls:
-            # Assign a new id greater than the maximum existing id
-            new_id = max_id + 1
-            # Add 'id' field to the scraper_result_data object
-            scraper_result_data['id'] = new_id
-            existing_data.insert(0, scraper_result_data)  # Insert new data at the beginning of the list
-            file.seek(0)  # Move the file pointer to the beginning
-            json.dump(existing_data, file, indent=4)
-            file.truncate()  # Truncate any remaining content
-            print("Data appended to JSON file.")
-        else:
-            print("URL already exists in JSON file. Data not appended.")
+        with open(file_path, 'r+', encoding='utf-8') as file:
+            try:
+                existing_data = json.load(file)
+            except json.decoder.JSONDecodeError:
+                existing_data = []
 
-    # print(f'Main text: {main_text}')
-    # print(f'URL: {url}')
-    # print(f'Title: {title}')
-    # print(f'Image URL: {img_url}')
-    # print(f'Date published: {date_published}')
+            incoming_url_part = generated_json_data.get('url_part')
+
+            if any(item.get('url_part') == incoming_url_part for item in existing_data):
+                print(f"URL part '{incoming_url_part}' already exists in the JSON file.")
+            else:
+                existing_data.insert(0, generated_json_data)
+                file.seek(0)
+                json.dump(existing_data, file, ensure_ascii=False, indent=4)
+                file.truncate()
+    except Exception as e:
+        print(f'Error during saving new content: {e}')
+        raise f"Error during saving new content: {e}"
 
 
 def check(url):
