@@ -13,9 +13,6 @@ def json_loader():
 
 def ai_generator_function(text, language):
     try:
-        words = text.split()
-        word_count = len(words)
-        print(word_count)
         completion = API_endpoint.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[

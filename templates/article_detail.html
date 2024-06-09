@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>{{ article.Title }}</title>
+    <meta charset="UTF-8">
+    <title>{{ article.seo_title }}</title>
 </head>
 <body>
-    <h1>{{ article.Title }}</h1>
-    <p>{{ article["Main Text"] }}</p>
-    <img src="{{ article['Image URL'] }}" alt="Image for {{ article.Title }}">
-    <p>Date Published: {{ article["Date Published"] }}</p>
-    <a href="/content/{{ topic }}">Back to list</a>
+    <h1>{{ article.seo_title }}</h1>
+    <p>{{ article.rewritten_content | safe }}</p>
+    <img src="{{ article.image }}" alt="Image for {{ article.seo_title }}">
+    <p>Date Published: {{ article.date_published }}</p>
+    <a href="/{{ article.language | language_name }}/content/{{ article.topic }}">Back to list</a>
 </body>
 </html>

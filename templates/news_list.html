@@ -5,21 +5,15 @@
 </head>
 <body>
     <h1>News Content</h1>
-    {% if error %}
-        <p>{{ error }}</p>
-    {% else %}
     <ul>
         {% for item in articles %}
-            {% if 'id' in item %}
-            <li>
-                <a href="/content/{{ topic }}/{{ item.id }}"><h2>{{ item.Title }}</h2></a>
-                <p>{{ item["Main Text"] }}</p>
-                <img src="{{ item['Image URL'] }}" alt="Image for {{ item.Title }}">
-                <p>Date Published: {{ item["Date Published"] }}</p>
-            </li>
-            {% endif %}
+        <li>
+            <a href="/{{ item.language | language_name  }}/content/{{ item.topic }}/{{ item.url_part }}"><h2>{{ item.seo_title }}</h2></a>
+            {{ item.rewritten_content | safe }}
+            <img src="{{ item.image }}" alt="Image for {{ item.seo_title }}">
+            <p>Date Published: {{ item.date_published }}</p>
+        </li>
         {% endfor %}
     </ul>
-{% endif %}
 </body>
 </html>

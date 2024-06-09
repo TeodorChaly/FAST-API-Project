@@ -25,14 +25,23 @@ async def scrape(url, topic, languages):
             img_url = img_path_scraper(soup)
             date_published = date_published_scraper(soup)
 
+            content_to_generate = title + " " + main_text + " " + date_published
+
+            words = content_to_generate.split()
+            word_count = len(words)
+            print(word_count)
+
             for language in languages:
                 # data = {"URL": url, "Title": title, "Main Text": main_text, "Image URL": img_url,
                 #         "Date Published": date_published}
                 # result_json_function(data, topic, language)
-                content_to_generate = title + " " + main_text + " " + date_published
 
                 regenerated_result = ai_generator_function(content_to_generate, language)
                 regenerated_result_json = json.loads(regenerated_result)
+
+                words = regenerated_result_json["rewritten_content"].split()
+                word_count = len(words)
+                print(word_count, f"for {language} language.")
 
                 json_rewritten_news_saver(regenerated_result_json, topic, language, img_url)
 
