@@ -32,11 +32,10 @@ async def scrape(url, topic, languages):
             print(word_count)
 
             for language in languages:
-                # data = {"URL": url, "Title": title, "Main Text": main_text, "Image URL": img_url,
-                #         "Date Published": date_published}
-                # result_json_function(data, topic, language)
+                folder_prep(topic, language)
+                categories = json.loads(categories_extractor(topic))
 
-                regenerated_result = ai_generator_function(content_to_generate, language)
+                regenerated_result = ai_generator_function(content_to_generate, language, categories)
                 regenerated_result_json = json.loads(regenerated_result)
 
                 words = regenerated_result_json["rewritten_content"].split()

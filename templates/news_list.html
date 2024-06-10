@@ -2,15 +2,82 @@
 <html>
 <head>
     <title>News Content</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            text-align: center;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+            margin: 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        li {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin: 10px;
+            padding: 20px;
+            width: 30%;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        li img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+        li h2 {
+            font-size: 1.5em;
+            margin: 0 0 10px 0;
+            color: #333;
+            text-align: center;
+            word-break: break-all;
+        }
+        li .content {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* Устанавливает количество видимых строк */
+            -webkit-box-orient: vertical;
+            height: 4.5em; /* Высота должна соответствовать количеству строк */
+        }
+        li p {
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+    </style>
 </head>
 <body>
     <h1>News Content</h1>
     <ul>
         {% for item in articles %}
         <li>
-            <a href="/{{ item.language | language_name  }}/content/{{ item.topic }}/{{ item.url_part }}"><h2>{{ item.seo_title }}</h2></a>
-            {{ item.rewritten_content | safe }}
             <img src="{{ item.image }}" alt="Image for {{ item.seo_title }}">
+            <a href="/{{ item.language | language_name  }}/content/{{ item.topic }}/{{ item.url_part }}">
+                <h2>{{ item.seo_title }}</h2>
+            </a>
+            <div class="content">{{ item.rewritten_content | safe }}</div>
+
             <p>Date Published: {{ item.date_published }}</p>
         </li>
         {% endfor %}

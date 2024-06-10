@@ -3,12 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ article.seo_title }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        h1 {
+            text-align: center;
+            padding: 20px;
+            background-color: #4CAF50;
+            color: white;
+            width: 100%;
+            box-sizing: border-box;
+            margin: 0;
+        }
+        .content {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin: 20px;
+            max-width: 800px;
+            width: 90%;
+            box-sizing: border-box;
+        }
+        .content p {
+            font-size: 1.1em;
+            color: #333;
+            line-height: 1.6;
+        }
+        .content img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .content .date {
+            font-size: 0.9em;
+            color: #666;
+            text-align: center;
+            margin: 10px 0;
+        }
+        .back-link {
+            text-align: center;
+            margin: 20px;
+        }
+        .back-link a {
+            text-decoration: none;
+            color: white;
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: background-color 0.3s;
+        }
+        .back-link a:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
     <h1>{{ article.seo_title }}</h1>
-    <p>{{ article.rewritten_content | safe }}</p>
-    <img src="{{ article.image }}" alt="Image for {{ article.seo_title }}">
-    <p>Date Published: {{ article.date_published }}</p>
-    <a href="/{{ article.language | language_name }}/content/{{ article.topic }}">Back to list</a>
+    <div class="content">
+        <p>{{ article.rewritten_content | safe }}</p>
+        <img src="{{ article.image }}" alt="Image for {{ article.seo_title }}">
+        <p class="date">Date Published: {{ article.date_published }}</p>
+    </div>
+    <div class="back-link">
+        <a href="/{{ article.language | language_name }}/content/{{ article.topic }}">Back to list</a>
+    </div>
 </body>
 </html>
