@@ -49,9 +49,10 @@ def ai_category_function(topic_name):
                  JSON result format:
                  [
                  "category",
-                 "category2",
+                 "category2", 
                  "other" -- necessary add other
                  ]
+                 all object must be in lower case.
                  Here is main topic:"""},
 
                 {"role": "user", "content": topic_name},

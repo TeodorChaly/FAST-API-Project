@@ -2,6 +2,8 @@ import json
 import os
 
 from fastapi import FastAPI
+from starlette.staticfiles import StaticFiles
+
 from bg_tasks.router import router as scraping_router
 from topics.router import router as topics_router
 from languages.router import router as languages_router
@@ -10,6 +12,8 @@ app = FastAPI(
     title="News generator API",
     version="0.1"
 )
+
+app.mount("/static", StaticFiles(directory="templates/static"), name="static")
 
 
 @app.on_event("startup")

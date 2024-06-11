@@ -3,8 +3,7 @@
 <head>
     <title>About {{ articles[0].category }}</title>
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='/news_list.css') }}">
-    <script src="{{ url_for('static', path='/language_switcher.js') }}"></script>
-
+     <script src="{{ url_for('static', path='/language_switcher.js') }}"></script>
 </head>
 <body>
     <h1>{{ articles[0].category }}</h1>
@@ -15,15 +14,6 @@
             {% endfor %}
         </select>
     </div>
-    <div class="popular-categories">
-        <h2>Popular Categories:</h2>
-        <ul>
-            {% for category, count in categories %}
-            <li><a href="/{{ language }}/{{ topic }}/{{ category }}">{{ category }}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
-
     <ul>
         {% for item in articles %}
         <li>
@@ -36,8 +26,10 @@
         </li>
         {% endfor %}
     </ul>
-
-
+    <div class="back-link">
+        <a href="/{{ language }}/{{ articles[0].topic }}">Back to News List</a>
+    </div>
 </body>
+
 
 </html>

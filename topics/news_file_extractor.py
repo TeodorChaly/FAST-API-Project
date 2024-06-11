@@ -20,7 +20,6 @@ async def read_json(file_path, limit=None):
     try:
         with open(file_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
-            print(data)
             if limit:
                 return data[:limit]
             return data
@@ -60,3 +59,17 @@ def get_language_name_by_code(language_code):
         return {"error": "Invalid language."}
 
     return language_name
+
+
+def get_list_of_categories_for_language(articles):
+    category_counts = {}
+
+    for article in articles:
+        category = article["category"]
+        if category in category_counts:
+            category_counts[category] += 1
+        else:
+            category_counts[category] = 1
+
+    sorted_categories = sorted(category_counts.items(), key=lambda x: x[1], reverse=True)
+    return sorted_categories

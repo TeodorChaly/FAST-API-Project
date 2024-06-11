@@ -1,10 +1,20 @@
 import json
 
+from topics.news_file_extractor import language_to_code
+
 
 def language_json_read():
     with open("languages/languages.json", "r", encoding="utf-8") as file:
         languages_list = json.load(file)
     return languages_list
+
+
+def languages_to_code():
+    languages = language_json_read()
+    decoded_languages = []
+    for i in languages:
+        decoded_languages.append(language_to_code(i))
+    return decoded_languages
 
 
 def del_append_language(language, action):
