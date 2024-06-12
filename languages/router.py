@@ -21,12 +21,12 @@ def get_api_key(api_key: str = Query(..., description="Your API key")):
     return api_key
 
 
-@router.get("/add_language")
+@router.post("/add_language")
 async def add_language(language: str, api_key: str = Depends(get_api_key)):
     return del_append_language(language, "append")
 
 
-@router.get("/delete_language")
+@router.delete("/delete_language")
 async def delete_language(language: str, api_key: str = Depends(get_api_key)):
     return del_append_language(language, "delete")
 

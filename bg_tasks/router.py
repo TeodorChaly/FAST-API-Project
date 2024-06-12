@@ -5,7 +5,7 @@ from languages.language_json import language_json_read
 router = APIRouter(tags=["Scraping"])
 
 
-@router.get("/scrape")
+@router.post("/scrape")
 async def scraper_fun(url: str = Query(..., description="URL to scrape"),
                       topic: str = Query("crypto")):
     languages = language_json_read()
