@@ -31,3 +31,8 @@ async def startup_event():
 app.include_router(scraping_router)
 app.include_router(topics_router)
 app.include_router(languages_router)
+
+
+@app.post("/smart_url/{question}", tags=["Smart URL"])
+def smart_url(question):
+    print(question)

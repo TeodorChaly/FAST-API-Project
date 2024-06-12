@@ -45,13 +45,14 @@ def ai_category_function(topic_name):
                 {"role": "system",
                  "content": """You are creating a news/blog site.
                  And you have to create a JSON-response list, that contains from 10 to 20 subcategories
-                 (that they cover 100% of any sports articles if possible).
+                 (that they cover 100% of any articles if possible).
                  JSON result format:
                  [
                  "category",
                  "category2", 
                  "other" -- necessary add other
                  ]
+                 please try to think abstractive and use wide categories name
                  all object must be in lower case.
                  Here is main topic:"""},
 

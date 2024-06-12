@@ -31,7 +31,7 @@
             <a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail">
                 <h2>{{ item.seo_title }}</h2>
             </a>
-            <div class="content">{{ item.rewritten_content | safe }}</div>
+            <div class="content">{{ item.seo_description | safe }}</div>
             <p>Date Published: {{ item.date_published }}</p>
         </li>
         {% endfor %}
