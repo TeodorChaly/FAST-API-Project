@@ -60,7 +60,8 @@ def main_text_scraper(soup):
         return "No main text found"
 
     except Exception as e:
-        return f"An error occurred: {str(e)}"
+        print(f"An error occurred: {str(e)}")
+        return "Error"
 
 
 def clean_text(text):

@@ -5,42 +5,47 @@ from ai_regenerator.prompts import ai_category_function
 
 
 def categories_extractor(topic):
-    current_file_path = os.path.abspath(__file__)
-    main_directory = os.path.dirname((os.path.dirname(os.path.dirname(current_file_path))))
+    try:
+        current_file_path = os.path.abspath(__file__)
+        main_directory = os.path.dirname((os.path.dirname(os.path.dirname(current_file_path))))
 
-    folder_name = os.path.join(main_directory, "news_json")
-    sub_folder_name = os.path.join(folder_name, topic)
-    file_name = f"{topic}.json"
-    file_path = os.path.join(sub_folder_name, file_name)
-
-    with open(file_path, 'r', encoding='utf-8') as file:
-        return json.load(file)
+        folder_name = os.path.join(main_directory, "news_json")
+        sub_folder_name = os.path.join(folder_name, topic)
+        file_name = f"{topic}.json"
+        file_path = os.path.join(sub_folder_name, file_name)
+        with open(file_path, 'r', encoding='utf-8') as file:
+            return json.load(file)
+    except Exception as e:
+        print(e)
 
 
 def folder_prep(topic, language):
-    current_file_path = os.path.abspath(__file__)
-    main_directory = os.path.dirname((os.path.dirname(os.path.dirname(current_file_path))))
+    try:
+        current_file_path = os.path.abspath(__file__)
+        main_directory = os.path.dirname((os.path.dirname(os.path.dirname(current_file_path))))
 
-    folder_name = os.path.join(main_directory, "news_json")
-    sub_folder_name = os.path.join(folder_name, topic)
-    file_name = f"{topic}_{language}.json"
-    file_path = os.path.join(sub_folder_name, file_name)
+        folder_name = os.path.join(main_directory, "news_json")
+        sub_folder_name = os.path.join(folder_name, topic)
+        file_name = f"{topic}_{language}.json"
+        file_path = os.path.join(sub_folder_name, file_name)
 
-    if not os.path.exists(folder_name):
-        os.makedirs(folder_name)
+        if not os.path.exists(folder_name):
+            os.makedirs(folder_name)
 
-    if not os.path.exists(sub_folder_name):
-        category_path = os.path.join(sub_folder_name, f"{topic}.json")
-        os.makedirs(sub_folder_name)
-        with open(category_path, 'w', encoding='utf-8') as file:
-            ai_result = ai_category_function(topic)
-            json.dump(ai_result, file)
-            print(f"File created: {category_path}")
+        if not os.path.exists(sub_folder_name):
+            category_path = os.path.join(sub_folder_name, f"{topic}.json")
+            os.makedirs(sub_folder_name)
+            with open(category_path, 'w', encoding='utf-8') as file:
+                ai_result = ai_category_function(topic)
+                json.dump(ai_result, file)
+                print(f"File created: {category_path}")
 
-    if not os.path.exists(file_path):
-        with open(file_path, 'w', encoding='utf-8') as file:
-            json.dump([], file)
-            print(f"File created: {file_path}")
+        if not os.path.exists(file_path):
+            with open(file_path, 'w', encoding='utf-8') as file:
+                json.dump([], file)
+                print(f"File created: {file_path}")
+    except Exception as e:
+        raise "Problem"
 
 
 def json_rewritten_news_saver(generated_json_data, topic, language, image):
