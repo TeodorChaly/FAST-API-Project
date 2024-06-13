@@ -6,6 +6,36 @@ from bg_tasks.scraper.json_save import *
 from bg_tasks.scraper.page_scraper import *
 
 
+def regenerate_function(soup, languages, topic, url):
+    title = title_scraper(soup)
+    main_text = main_text_scraper(soup)
+    img_url = img_path_scraper(soup)
+    date_published = date_published_scraper(soup)
+
+    content_to_generate = title + " " + main_text + " " + date_published
+
+    words = content_to_generate.split()
+    word_count = len(words)
+    print(word_count)
+
+    for language in languages:
+        folder_prep(topic, language)
+        categories = json.loads(categories_extractor(topic))
+
+        regenerated_result = ai_generator_function(content_to_generate, language, categories)
+        regenerated_result_json = json.loads(regenerated_result)
+
+        words = regenerated_result_json["rewritten_content"].split()
+        word_count = len(words)
+        print(word_count, f"for {language} language.")
+
+        json_rewritten_news_saver(regenerated_result_json, topic, language, img_url)
+
+        print(f"Data appended to JSON file for {language} language.")
+
+    save_url(url)
+
+
 async def scrape(url, topic, languages):
     try:
         if check(url):
@@ -20,33 +50,7 @@ async def scrape(url, topic, languages):
 
             soup = BeautifulSoup(response.content, 'html.parser')
 
-            title = title_scraper(soup)
-            main_text = main_text_scraper(soup)
-            img_url = img_path_scraper(soup)
-            date_published = date_published_scraper(soup)
-
-            content_to_generate = title + " " + main_text + " " + date_published
-
-            words = content_to_generate.split()
-            word_count = len(words)
-            print(word_count)
-
-            for language in languages:
-                folder_prep(topic, language)
-                categories = json.loads(categories_extractor(topic))
-
-                regenerated_result = ai_generator_function(content_to_generate, language, categories)
-                regenerated_result_json = json.loads(regenerated_result)
-
-                words = regenerated_result_json["rewritten_content"].split()
-                word_count = len(words)
-                print(word_count, f"for {language} language.")
-
-                json_rewritten_news_saver(regenerated_result_json, topic, language, img_url)
-
-                print(f"Data appended to JSON file for {language} language.")
-
-            save_url(url)
+            # regenerate_function(soup, languages, topic, url)
 
             return {"Success": "Data scraped successfully"}
         else:
