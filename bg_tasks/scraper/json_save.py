@@ -48,7 +48,7 @@ def folder_prep(topic, language):
         raise "Problem"
 
 
-def json_rewritten_news_saver(generated_json_data, topic, language, image):
+def json_rewritten_news_saver(generated_json_data, topic, language, image, url):
     try:
         language = language.lower()
         topic = topic.lower()
@@ -56,6 +56,7 @@ def json_rewritten_news_saver(generated_json_data, topic, language, image):
         generated_json_data["topic"] = topic
         generated_json_data["language"] = language
         generated_json_data["image"] = image
+        generated_json_data["url"] = url
 
         current_file_path = os.path.abspath(__file__)
         main_directory = os.path.dirname((os.path.dirname(os.path.dirname(current_file_path))))

@@ -53,7 +53,6 @@ async def extract_all_rss_function(topic):
         os.makedirs(directory2)
 
     filename = f"{directory2}/rss_{topic}.json"
-    print(filename)
     data = {
         "feeds": []
     }

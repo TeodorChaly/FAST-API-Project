@@ -7,40 +7,52 @@ from bg_tasks.scraper.page_scraper import *
 
 
 def regenerate_function(soup, languages, topic, url):
-    title = title_scraper(soup)
-    main_text = main_text_scraper(soup)
-    img_url = img_path_scraper(soup)
-    date_published = date_published_scraper(soup)
+    try:
+        main_text = main_text_scraper(soup)
+        img_url = img_path_scraper(soup)
 
-    if main_text == "No main text found" or main_text == "Error":
-        print("Main content not scrapped.")
-        return {"Next_url": "This url wasn't scrapped correctly."}
+        try:
+            title = title_scraper(soup)
+        except Exception as e:
+            print("Error during scraping title,", e)
+            title = "No title"
+        try:
+            date_published = date_published_scraper(soup)
+        except Exception as e:
+            print("Error during scraping date,", e)
+            date_published = str(datetime.now())
 
-    if date_published == "No date found":
-        date_published = str(datetime.now())
+        if main_text == "No main text found" or main_text == "Error":
+            print("Main content not scrapped.")
+            return {"Next_url": "This url wasn't scrapped correctly."}
 
-    content_to_generate = title + " " + main_text + " " + date_published
+        if date_published == "No date found":
+            date_published = str(datetime.now())
 
-    words = content_to_generate.split()
-    word_count = len(words)
-    print(word_count)
+        content_to_generate = title + " " + main_text + " " + date_published
 
-    for language in languages:
-        folder_prep(topic, language)
-        categories = json.loads(categories_extractor(topic))
-
-        regenerated_result = ai_generator_function(content_to_generate, language, categories)
-        regenerated_result_json = json.loads(regenerated_result)
-
-        words = regenerated_result_json["rewritten_content"].split()
+        words = content_to_generate.split()
         word_count = len(words)
-        print(word_count, f"for {language} language.")
+        print(word_count)
 
-        json_rewritten_news_saver(regenerated_result_json, topic, language, img_url)
+        for language in languages:
+            folder_prep(topic, language)
+            categories = json.loads(categories_extractor(topic))
 
-        print(f"Data appended to JSON file for {language} language.")
+            regenerated_result = ai_generator_function(content_to_generate, language, categories)
+            regenerated_result_json = json.loads(regenerated_result)
 
-    save_url(url)
+            words = regenerated_result_json["rewritten_content"].split()
+            word_count = len(words)
+            print(word_count, f"for {language} language.")
+
+            json_rewritten_news_saver(regenerated_result_json, topic, language, img_url, url)
+
+            print(f"Data appended to JSON file for {language} language.")
+
+        save_url(url)
+    except Exception as e:
+        print("Error during regenerate:", e)
 
 
 async def scrape(url, topic, languages):
@@ -60,7 +72,8 @@ async def scrape(url, topic, languages):
             response.raise_for_status()
 
             soup = BeautifulSoup(response.content, 'html.parser')
-
+            with open("test.html", "w", encoding="utf-8") as f:
+                f.write(soup.text)
             regenerate_function(soup, languages, topic, url)
 
             return {"Success": "Data scraped successfully"}

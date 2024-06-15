@@ -81,16 +81,20 @@ def clean_text(text):
 
 
 def img_path_scraper(soup):
-    img_meta = soup.find('meta', property='og:image') or soup.find('meta', name='twitter:image')
-    if img_meta and img_meta.has_attr('content'):
-        return img_meta['content'].strip()
+    try:
+        img_meta = soup.find('meta', property='og:image') or soup.find('meta', name='twitter:image')
+        if img_meta and img_meta.has_attr('content'):
+            return img_meta['content'].strip()
 
-    main_image = soup.find('img', class_='main-image') or soup.find('img', class_='main-img') or soup.find('img',
-                                                                                                           class_='header-image')
-    if main_image and main_image.has_attr('src'):
-        return main_image['src'].strip()
+        main_image = soup.find('img', class_='main-image') or soup.find('img', class_='main-img') or soup.find('img',
+                                                                                                               class_='header-image')
+        if main_image and main_image.has_attr('src'):
+            return main_image['src'].strip()
 
-    return "Image not found"
+        return "Image not found"
+    except Exception as e:
+        print("Error during scrapping img", e)
+        return "Image not found"
 
 
 def date_published_scraper(soup):
