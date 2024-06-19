@@ -7,6 +7,7 @@ from starlette.staticfiles import StaticFiles
 from bg_tasks.router import router as scraping_router
 from topics.router import router as topics_router
 from languages.router import router as languages_router
+from bg_tasks.crawlers.RSS_crawler.router import router as crawler_router
 
 app = FastAPI(
     title="News generator API",
@@ -29,6 +30,7 @@ async def startup_event():
 
 
 app.include_router(scraping_router)
+app.include_router(crawler_router)
 app.include_router(topics_router)
 app.include_router(languages_router)
 
