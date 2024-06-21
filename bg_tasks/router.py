@@ -9,6 +9,6 @@ router = APIRouter()
 async def scraper_fun(url: str = Query(..., description="URL to scrape"),
                       topic: str = Query("crypto")):
     languages = language_json_read()
-    result = await scrape(url, topic, languages)
+    result = await scrape(url, topic, languages, "scrape")
     return result
 

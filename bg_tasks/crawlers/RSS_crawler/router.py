@@ -42,3 +42,8 @@ async def add_by_rss_by_url(url: str = Query(..., description="URL to RSS"),
 @router.get("/list_of_rss", tags=["RSS config"])
 async def extract_all_rss(topic: str):
     return await extract_all_rss_function(topic)
+
+
+@router.get("/check_rss_url", tags=["RSS config"])
+async def check_by_rss_by_url(url: str = Query(..., description="URL to RSS")):
+    return await check_by_rss_by_url_function(url)

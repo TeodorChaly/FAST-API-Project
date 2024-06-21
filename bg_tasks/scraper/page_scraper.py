@@ -82,7 +82,7 @@ def clean_text(text):
 
 def img_path_scraper(soup):
     try:
-        img_meta = soup.find('meta', property='og:image') or soup.find('meta', name='twitter:image')
+        img_meta = soup.find('meta', attrs={'property': 'og:image'}) or soup.find('meta', attrs={'property': 'og:image'})
         if img_meta and img_meta.has_attr('content'):
             return img_meta['content'].strip()
 
@@ -126,6 +126,6 @@ def date_published_scraper(soup):
             date_time = datetime.strptime(date_str, '%d.%m.%Y %H:%M:%S')
             return date_time.strftime('%Y-%m-%d %H:%M:%S')
         except ValueError:
-            return f"Error with date parsing: {date_str}"
+            return "No date found"
     else:
         return "No date found"

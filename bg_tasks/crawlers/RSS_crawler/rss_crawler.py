@@ -1,8 +1,13 @@
 import json
 import os
 
+import feedparser
+import requests
+from bs4 import BeautifulSoup
 from fastapi import HTTPException
 import aiofiles
+
+from bg_tasks.background_tasks import regenerate_function
 
 
 async def add_by_rss_function(url, topic):
@@ -66,3 +71,26 @@ async def extract_all_rss_function(topic):
     except FileNotFoundError:
         pass
     return data["feeds"]
+
+
+async def check_by_rss_by_url_function(rss_url):
+    feed = feedparser.parse(rss_url)
+    test_topic = "crypto"
+    test_language = ["english", "german", "russian"]
+    test_rss = feed.entries[1].link
+    print(test_rss, test_topic, test_language)
+
+    url = test_rss
+
+    session = requests.Session()
+
+    try:
+        response = session.get(url)
+        response.raise_for_status()
+
+        soup = BeautifulSoup(response.content, 'html.parser')
+
+        regenerate_function(soup, test_language, test_topic, url, "test")
+
+    except requests.exceptions.RequestException as e:
+        return f"Error: {e}"

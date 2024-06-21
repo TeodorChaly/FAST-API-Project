@@ -6,7 +6,7 @@ from bg_tasks.scraper.json_save import *
 from bg_tasks.scraper.page_scraper import *
 
 
-def regenerate_function(soup, languages, topic, url):
+def regenerate_function(soup, languages, topic, url, status):
     try:
         main_text = main_text_scraper(soup)
         img_url = img_path_scraper(soup)
@@ -33,29 +33,41 @@ def regenerate_function(soup, languages, topic, url):
 
         words = content_to_generate.split()
         word_count = len(words)
-        print(word_count)
 
-        for language in languages:
-            folder_prep(topic, language)
-            categories = json.loads(categories_extractor(topic))
+        print(word_count, "words in total.")
 
-            regenerated_result = ai_generator_function(content_to_generate, language, categories)
-            regenerated_result_json = json.loads(regenerated_result)
+        # with open("scraped_urls.html", "w", encoding="utf-8") as file:
+        #     file.write(str(soup))
 
-            words = regenerated_result_json["rewritten_content"].split()
-            word_count = len(words)
-            print(word_count, f"for {language} language.")
+        if status == "scrape":
+            for language in languages:
+                folder_prep(topic, language)
+                categories = json.loads(categories_extractor(topic))
 
-            json_rewritten_news_saver(regenerated_result_json, topic, language, img_url, url)
+                regenerated_result = ai_generator_function(content_to_generate, language, categories)
+                regenerated_result_json = json.loads(regenerated_result)
 
-            print(f"Data appended to JSON file for {language} language.")
+                words = regenerated_result_json["rewritten_content"].split()
+                word_count = len(words)
+                print(word_count, f"for {language} language.")
 
-        save_url(url)
+                json_rewritten_news_saver(regenerated_result_json, topic, language, img_url, url)
+
+                print(f"Data appended to JSON file for {language} language.")
+
+            save_url(url)
+        else:
+            print("Check data.")
+            print("Title:", title)
+            print("Date:", date_published)
+            print("Img:", img_url)
+            print("URL:", url)
+
     except Exception as e:
         print("Error during regenerate:", e)
 
 
-async def scrape(url, topic, languages):
+async def scrape(url, topic, languages, status):
     try:
         if check(url):
             headers = {
@@ -76,7 +88,7 @@ async def scrape(url, topic, languages):
 
             soup = BeautifulSoup(response.content, 'html.parser')
 
-            regenerate_function(soup, languages, topic, url)
+            regenerate_function(soup, languages, topic, url, status)
 
             return {"Success": "Data scraped successfully"}
         else:
