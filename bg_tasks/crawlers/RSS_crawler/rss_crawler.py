@@ -74,23 +74,27 @@ async def extract_all_rss_function(topic):
 
 
 async def check_by_rss_by_url_function(rss_url):
-    feed = feedparser.parse(rss_url)
-    test_topic = "crypto"
-    test_language = ["english", "german", "russian"]
-    test_rss = feed.entries[1].link
-    print(test_rss, test_topic, test_language)
-
-    url = test_rss
-
-    session = requests.Session()
-
     try:
-        response = session.get(url)
-        response.raise_for_status()
+        feed = feedparser.parse(rss_url)
+        test_topic = "crypto"
+        test_language = ["english", "german", "russian"]
+        test_rss = feed.entries[1].link
 
-        soup = BeautifulSoup(response.content, 'html.parser')
+        url = test_rss
 
-        regenerate_function(soup, test_language, test_topic, url, "test")
+        session = requests.Session()
 
-    except requests.exceptions.RequestException as e:
-        return f"Error: {e}"
+        try:
+            response = session.get(url)
+            response.raise_for_status()
+
+            soup = BeautifulSoup(response.content, 'html.parser')
+
+            result = regenerate_function(soup, test_language, test_topic, url, "test")
+
+            return result
+        except requests.exceptions.RequestException as e:
+            return f"Error: {e}"
+    except Exception as e:
+        print(f"Problem with RSS: {e}")
+        return "Problem with RSS url"

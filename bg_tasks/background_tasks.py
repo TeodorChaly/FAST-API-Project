@@ -62,6 +62,7 @@ def regenerate_function(soup, languages, topic, url, status):
             print("Date:", date_published)
             print("Img:", img_url)
             print("URL:", url)
+            return {"Title": title, "Date": date_published, "Img": img_url, "URL": url}
 
     except Exception as e:
         print("Error during regenerate:", e)
