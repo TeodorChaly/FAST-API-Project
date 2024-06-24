@@ -1,4 +1,3 @@
-import feedparser
 import requests
 from bs4 import BeautifulSoup
 
@@ -50,4 +49,4 @@ def google_search_extractor():
         print("-" * 10)
 
 
-google_news_extractor()
+# google_news_extractor()
