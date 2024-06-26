@@ -17,7 +17,7 @@ def ai_generator_function(text, language, list_of_categories):
             messages=[
                 {"role": "system",
                  "content": f"""I will give you a news text, please study it in its entirety and process it in the following JSON format:
-        1) 'rewritten_content': 'Please study, shorten, and then briefly rewrite this entire news in {language}. Be concise and laconic. Write in the third person. Separate distinct thoughts or ideas clearly, each starting with a new paragraph. In any case, separate the text into paragraphs every 2-3 sentences. Divide the text into paragraphs using <p></p> tags.'
+        1) 'rewritten_content': 'Please study, shorten, and then briefly rewrite this entire news in {language}. Do not translate companie's names. Be concise and laconic. Write in the third person. Separate distinct thoughts or ideas clearly, each starting with a new paragraph. In any case, separate the text into paragraphs every 2-3 sentences. Divide the text into paragraphs using <p></p> tags.'
         2) 'seo_title': 'SEO title not exceeding 50 characters, without quotes, reflecting the main theme.'
         3) 'seo_description': 'SEO description not longer than 170 characters, briefly describing the content and significance of the news.'
         4) 'category': 'The category that best reflects the topic of the news. Chose only one and only from {list_of_categories}'

@@ -2,17 +2,18 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def google_news_extractor():
+def google_news_extractor(another_url):
     url = 'https://www.google.com'
 
     response = requests.get(url)
     cookies = response.cookies
 
-    another_url = "https://trends.google.com/trends/trendingsearches/realtime?geo=DE&hl=en-US&category=all"
     response = requests.get(another_url, cookies=cookies)
 
     with open("google_search.html", "w", encoding="utf-8") as file:
         file.write(response.text)
+    soup = BeautifulSoup(response.text, 'html.parser')
+    return soup
 
 
 def google_search_extractor():
@@ -49,4 +50,3 @@ def google_search_extractor():
         print("-" * 10)
 
 
-# google_news_extractor()

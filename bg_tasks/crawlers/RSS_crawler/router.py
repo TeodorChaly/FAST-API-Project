@@ -9,7 +9,7 @@ router = APIRouter()
 
 
 @router.post("/crawler_by_RSS", tags=["RSS crawler"])
-async def crawler_by_rss_or_feed(topic: str = Query(..., description="Topic")):
+async def crawler_by_rss_or_feed(topic: str = Query(..., description="Topic"), google: bool = Query(False)):
     list_of_feeds = await extract_all_rss_function(topic)
     new_links_number = 0
     new_links = []
@@ -27,8 +27,13 @@ async def crawler_by_rss_or_feed(topic: str = Query(..., description="Topic")):
     if counter < 10:
         for urls in new_links:
             for url in urls:
-                print(f"Scraping for {url}")
-                await scraper_fun(url, topic)
+                if google:
+                    print(f"Scraping for {url}")
+                    await scraper_fun(url, topic, google=True)
+                else:
+                    await scraper_fun(url, topic)
+    else:
+        print("Too many new links. Not scraping.")
 
     return f"RSS scraped. New - {new_links_number}"
 

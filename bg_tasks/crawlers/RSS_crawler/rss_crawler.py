@@ -54,8 +54,8 @@ async def extract_all_rss_function(topic):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    if not os.path.exists(directory2):
-        os.makedirs(directory2)
+    # if not os.path.exists(directory2):
+    #     os.makedirs(directory2)
 
     filename = f"{directory2}/rss_{topic}.json"
     data = {

@@ -7,8 +7,8 @@ router = APIRouter()
 
 @router.post("/scrape", tags=["Scraping function"])
 async def scraper_fun(url: str = Query(..., description="URL to scrape"),
-                      topic: str = Query("crypto")):
+                      topic: str = Query("crypto"), google: bool = Query(False)):
     languages = language_json_read()
-    result = await scrape(url, topic, languages, "scrape")
+    result = await scrape(url, topic, languages, "scrape", google)
     return result
 

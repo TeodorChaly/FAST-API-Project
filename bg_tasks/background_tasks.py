@@ -2,11 +2,12 @@ import requests
 from bs4 import BeautifulSoup
 
 from ai_regenerator.prompts import ai_generator_function
+from bg_tasks.crawlers.Google_news_crawler.google_search_crawler import google_news_extractor
 from bg_tasks.scraper.json_save import *
 from bg_tasks.scraper.page_scraper import *
 
 
-def regenerate_function(soup, languages, topic, url, status):
+async def regenerate_function(soup, languages, topic, url, status):
     try:
         main_text = main_text_scraper(soup)
         img_url = img_path_scraper(soup)
@@ -68,7 +69,7 @@ def regenerate_function(soup, languages, topic, url, status):
         print("Error during regenerate:", e)
 
 
-async def scrape(url, topic, languages, status):
+async def scrape(url, topic, languages, status, bool_google=False):
     try:
         if check(url):
             headers = {
@@ -81,15 +82,18 @@ async def scrape(url, topic, languages, status):
                 'Cache-Control': 'max-age=0'
             }
 
-            session = requests.Session()
-            session.headers.update(headers)
+            if not bool_google:
+                session = requests.Session()
+                session.headers.update(headers)
 
-            response = session.get(url)
-            response.raise_for_status()
+                response = session.get(url)
+                response.raise_for_status()
+                soup = BeautifulSoup(response.content, 'html.parser')
+            else:
+                print("Google search.")
+                soup = google_news_extractor(url)
 
-            soup = BeautifulSoup(response.content, 'html.parser')
-
-            regenerate_function(soup, languages, topic, url, status)
+            await regenerate_function(soup, languages, topic, url, status)
 
             return {"Success": "Data scraped successfully"}
         else:
