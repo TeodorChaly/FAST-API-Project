@@ -2,7 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def google_news_extractor(another_url):
+async def google_news_extractor(another_url):
     url = 'https://www.google.com'
 
     response = requests.get(url)

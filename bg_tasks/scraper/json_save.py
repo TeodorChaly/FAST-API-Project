@@ -4,7 +4,7 @@ import os
 from ai_regenerator.prompts import ai_category_function
 
 
-def categories_extractor(topic):
+async def categories_extractor(topic):
     try:
         current_file_path = os.path.abspath(__file__)
         main_directory = os.path.dirname((os.path.dirname(os.path.dirname(current_file_path))))
@@ -19,7 +19,7 @@ def categories_extractor(topic):
         print(e)
 
 
-def folder_prep(topic, language):
+async def folder_prep(topic, language):
     try:
         current_file_path = os.path.abspath(__file__)
         main_directory = os.path.dirname((os.path.dirname(os.path.dirname(current_file_path))))
@@ -36,7 +36,7 @@ def folder_prep(topic, language):
             category_path = os.path.join(sub_folder_name, f"{topic}.json")
             os.makedirs(sub_folder_name)
             with open(category_path, 'w', encoding='utf-8') as file:
-                ai_result = ai_category_function(topic)
+                ai_result = await ai_category_function(topic)
                 json.dump(ai_result, file)
                 print(f"File created: {category_path}")
 
@@ -48,7 +48,7 @@ def folder_prep(topic, language):
         raise "Problem"
 
 
-def json_rewritten_news_saver(generated_json_data, topic, language, image, url):
+async def json_rewritten_news_saver(generated_json_data, topic, language, image, url):
     try:
         language = language.lower()
         topic = topic.lower()
@@ -99,7 +99,7 @@ def check(url):
         return True
 
 
-def save_url(url):
+async def save_url(url):
     try:
         with open("scraped_urls.json", "r", encoding="utf-8") as file:
             scraped_urls = json.load(file)

@@ -24,7 +24,7 @@ async def rss_list_saver(url, topic):
         os.makedirs(f'RSS_news/{topic}_rss_sites')
 
     filename = f'RSS_news/{topic}_rss_sites/{domain}_rss.json'
-    max_entries = 50
+    max_entries = 100
 
     os.makedirs(os.path.dirname(filename), exist_ok=True)
 

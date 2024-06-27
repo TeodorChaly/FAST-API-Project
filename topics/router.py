@@ -29,9 +29,8 @@ async def show_article_html(request: Request, topic: str, url_part: str, languag
 
 @router.get("/{language}/{topic}", response_class=HTMLResponse, tags=["Content"])
 async def show_content_html(request: Request, topic: str, language: str = "en", limit: int = None):
-    print(f"Requested topic: {topic}")
+    print(f"Requested topic: {topic}, {language} language.")
     json_data = await show_content_json(topic, language, limit)
-    print(json_data)
 
     if isinstance(json_data, dict) and "error" in json_data:
         return templates.TemplateResponse("error.html", {"request": request, "error": json_data["error"]})

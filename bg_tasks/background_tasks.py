@@ -1,3 +1,4 @@
+import httpx
 import requests
 from bs4 import BeautifulSoup
 
@@ -41,22 +42,23 @@ async def regenerate_function(soup, languages, topic, url, status):
         #     file.write(str(soup))
 
         if status == "scrape":
+            print(123)
             for language in languages:
-                folder_prep(topic, language)
-                categories = json.loads(categories_extractor(topic))
+                await folder_prep(topic, language)
+                categories = json.loads(await categories_extractor(topic))
 
-                regenerated_result = ai_generator_function(content_to_generate, language, categories)
+                regenerated_result = await ai_generator_function(content_to_generate, language, categories)
                 regenerated_result_json = json.loads(regenerated_result)
 
                 words = regenerated_result_json["rewritten_content"].split()
                 word_count = len(words)
                 print(word_count, f"for {language} language.")
 
-                json_rewritten_news_saver(regenerated_result_json, topic, language, img_url, url)
+                await json_rewritten_news_saver(regenerated_result_json, topic, language, img_url, url)
 
                 print(f"Data appended to JSON file for {language} language.")
 
-            save_url(url)
+            await save_url(url)
         else:
             print("Check data.")
             print("Title:", title)
@@ -67,7 +69,10 @@ async def regenerate_function(soup, languages, topic, url, status):
 
     except Exception as e:
         print("Error during regenerate:", e)
-
+        with open("bug.html", "w", encoding="utf-8") as file:
+            file.write(str(soup))
+        with open("bug.txt", "w", encoding="utf-8") as file:
+            file.write(regenerated_result)
 
 async def scrape(url, topic, languages, status, bool_google=False):
     try:
@@ -83,15 +88,13 @@ async def scrape(url, topic, languages, status, bool_google=False):
             }
 
             if not bool_google:
-                session = requests.Session()
-                session.headers.update(headers)
-
-                response = session.get(url)
-                response.raise_for_status()
-                soup = BeautifulSoup(response.content, 'html.parser')
+                async with httpx.AsyncClient() as client:
+                    response = await client.get(url, headers=headers)
+                    response.raise_for_status()
+                    soup = BeautifulSoup(response.content, 'html.parser')
             else:
                 print("Google search.")
-                soup = google_news_extractor(url)
+                soup = await google_news_extractor(url)
 
             await regenerate_function(soup, languages, topic, url, status)
 
