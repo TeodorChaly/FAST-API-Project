@@ -12,7 +12,6 @@ def json_loader():
 
 async def ai_generator_function(text, language, list_of_categories):
     try:
-        print("start")
         completion = API_endpoint.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -31,7 +30,6 @@ async def ai_generator_function(text, language, list_of_categories):
                 {"role": "user", "content": text},
             ]
         )
-        print("end")
         return completion.choices[0].message.content
     except Exception as e:
         print(f'Error during generation: {e}')

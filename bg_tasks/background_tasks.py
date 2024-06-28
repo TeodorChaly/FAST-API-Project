@@ -1,3 +1,5 @@
+import datetime
+
 import httpx
 import requests
 from bs4 import BeautifulSoup
@@ -69,10 +71,16 @@ async def regenerate_function(soup, languages, topic, url, status):
 
     except Exception as e:
         print("Error during regenerate:", e)
-        with open("bug.html", "w", encoding="utf-8") as file:
-            file.write(str(soup))
-        with open("bug.txt", "w", encoding="utf-8") as file:
-            file.write(regenerated_result)
+
+        if not os.path.exists("logs_list"):
+            os.makedirs("logs_list")
+
+        now_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        log_filename = f"bug_{now_time}.log"
+
+        with open(f"bug_{log_filename}", "w", encoding="utf-8") as file:
+            file.write(regenerated_result + "\n" + str(e))
+
 
 async def scrape(url, topic, languages, status, bool_google=False):
     try:

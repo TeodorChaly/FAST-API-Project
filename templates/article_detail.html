@@ -12,6 +12,15 @@
         <img src="{{ article.image }}" alt="Image for {{ article.seo_title }}">
         <p class="date">Date Published: {{ article.date_published }}</p>
     </div>
+    <form id="languageForm" action="/change_language/{{ language }}/{{ topic }}" method="get">
+        <input type="hidden" name="url_part" value="{{ article.url_part }}">
+        <label for="new_language">Select Language:</label>
+        <select id="new_language" name="new_language">
+            {% for lang in languages %}
+            <option value="{{ lang }}" {% if lang == language %}selected{% endif %}>{{ lang }}</option>
+            {% endfor %}
+        </select>
+    </form>
     <div class="category-link">
         <a href="/{{ language }}/{{ article.topic }}/{{ article.category }}">Category: {{ article.category }}</a>
     </div>
@@ -20,3 +29,8 @@
     </div>
 </body>
 </html>
+<script>
+    document.getElementById('new_language').addEventListener('change', function() {
+        document.getElementById('languageForm').submit();
+    });
+</script>

@@ -27,6 +27,25 @@ async def show_article_html(request: Request, topic: str, url_part: str, languag
     return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
 
 
+@router.get("/change_language/{language}/{topic}", response_class=HTMLResponse, tags=["Content"])
+async def change_language(request: Request, topic: str, url_part: str, language: str, new_language: str):
+    language_name = get_language_name_by_code(language)
+    articles = load_articles_from_json(topic, language_name)
+    languages = languages_to_code()
+
+    for article in articles:
+        if article.get("url_part") == url_part:
+            new_id = article.get("url")
+            language_name = get_language_name_by_code(new_language)
+            json_response = await news_extractor(topic, language_name, None)
+            for i in json_response:
+                if i.get("url") == new_id:
+                    return templates.TemplateResponse("article_detail.html",
+                                                      {"request": request, "topic": topic, "article": i,
+                                                       "language": new_language, "languages": languages})
+    return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
+
+
 @router.get("/{language}/{topic}", response_class=HTMLResponse, tags=["Content"])
 async def show_content_html(request: Request, topic: str, language: str = "en", limit: int = None):
     print(f"Requested topic: {topic}, {language} language.")
