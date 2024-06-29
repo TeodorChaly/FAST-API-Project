@@ -25,8 +25,8 @@ async def folder_prep(topic, language):
         main_directory = os.path.dirname((os.path.dirname(os.path.dirname(current_file_path))))
 
         folder_name = os.path.join(main_directory, "news_json")
-        sub_folder_name = os.path.join(folder_name, topic)
-        file_name = f"{topic}_{language}.json"
+        sub_folder_name = os.path.join(folder_name, str(topic))
+        file_name = f"{str(topic)}_{str(language)}.json"
         file_path = os.path.join(sub_folder_name, file_name)
 
         if not os.path.exists(folder_name):
@@ -45,6 +45,7 @@ async def folder_prep(topic, language):
                 json.dump([], file)
                 print(f"File created: {file_path}")
     except Exception as e:
+        print(f"Error during folder preparation: {e}")
         raise "Problem"
 
 

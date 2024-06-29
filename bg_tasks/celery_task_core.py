@@ -11,7 +11,7 @@ celery = Celery(
 
 celery.conf.beat_schedule = {
     'celery_beat_testing': {
-        'task': 'bg_tasks.background_tasks.scrape',
+        'task': 'bg_tasks.crawlers.router.crawler_by_rss_or_feed',
         'schedule': crontab(minute='*/1')
     }
 }

@@ -39,7 +39,7 @@ async def ai_generator_function(text, language, list_of_categories):
 async def ai_category_function(topic_name):
     try:
         print("start")
-        completion = API_endpoint.chat.completions.create( # await
+        completion = API_endpoint.chat.completions.create(  # await
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system",

@@ -44,13 +44,16 @@ async def regenerate_function(soup, languages, topic, url, status):
         #     file.write(str(soup))
 
         if status == "scrape":
-            print(123)
             for language in languages:
                 await folder_prep(topic, language)
                 categories = json.loads(await categories_extractor(topic))
 
                 regenerated_result = await ai_generator_function(content_to_generate, language, categories)
-                regenerated_result_json = json.loads(regenerated_result)
+                try:
+
+                    regenerated_result_json = json.loads(regenerated_result)
+                except Exception as e:
+                    raise "Error during JSON parsing."
 
                 words = regenerated_result_json["rewritten_content"].split()
                 word_count = len(words)
@@ -75,10 +78,10 @@ async def regenerate_function(soup, languages, topic, url, status):
         if not os.path.exists("logs_list"):
             os.makedirs("logs_list")
 
-        now_time = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+        now_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         log_filename = f"bug_{now_time}.log"
 
-        with open(f"bug_{log_filename}", "w", encoding="utf-8") as file:
+        with open(f"logs_list/bug_{log_filename}", "w", encoding="utf-8") as file:
             file.write(regenerated_result + "\n" + str(e))
 
 
