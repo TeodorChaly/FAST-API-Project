@@ -4,9 +4,9 @@ import httpx
 from bs4 import BeautifulSoup
 
 from ai_regenerator.prompts import ai_generator_function
-from bg_tasks.crawlers.Google_news_crawler.google_search_crawler import google_news_extractor
-from bg_tasks.scraper.json_save import *
-from bg_tasks.scraper.page_scraper import *
+from main_operations.crawlers.Google_news_crawler.google_search_crawler import google_news_extractor
+from main_operations.scraper.json_save import *
+from main_operations.scraper.page_scraper import *
 
 
 async def regenerate_function(soup, languages, topic, url, status):

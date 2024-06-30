@@ -4,10 +4,10 @@ import os
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
 
-from bg_tasks.router import router as scraping_router
+from main_operations.router import router as scraping_router
 from topics.router import router as topics_router
 from languages.router import router as languages_router
-from bg_tasks.crawlers.RSS_crawler.router import router as crawler_router
+from main_operations.crawlers.RSS_crawler.router import router as crawler_router
 
 app = FastAPI(
     title="News generator API",

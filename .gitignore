@@ -7,3 +7,4 @@ news_json
 scraped_urls.json
 RSS_news/
 google_search.html
+logs_list/

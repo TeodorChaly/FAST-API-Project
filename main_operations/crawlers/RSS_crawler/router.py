@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 from fastapi.params import Query
 
-from bg_tasks.crawlers.RSS_crawler.json_save import rss_list_saver
-from bg_tasks.crawlers.RSS_crawler.rss_crawler import *
-from bg_tasks.router import scraper_fun
+from main_operations.crawlers.RSS_crawler.json_save import rss_list_saver
+from main_operations.crawlers.RSS_crawler.rss_crawler import *
+from main_operations.router import scraper_fun
 
 router = APIRouter()
 

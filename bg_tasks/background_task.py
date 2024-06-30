@@ -1,7 +1,7 @@
 from asgiref.sync import async_to_sync
 
 from bg_tasks.celery_task_core import celery
-from bg_tasks.crawlers.RSS_crawler.router import crawler_by_rss_or_feed
+from main_operations.crawlers.RSS_crawler.router import crawler_by_rss_or_feed
 
 
 @celery.task(name="bg_tasks.background_task.main_bg_function")

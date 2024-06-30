@@ -5,7 +5,7 @@ from urllib.parse import urlparse
 import feedparser
 import requests
 
-from bg_tasks.router import scraper_fun
+from main_operations.router import scraper_fun
 
 
 async def rss_list_saver(url, topic):
