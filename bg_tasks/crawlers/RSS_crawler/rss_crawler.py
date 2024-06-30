@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from fastapi import HTTPException
 import aiofiles
 
-from bg_tasks.background_tasks import regenerate_function
+from bg_tasks.main_function import regenerate_function
 
 
 async def add_by_rss_function(url, topic):

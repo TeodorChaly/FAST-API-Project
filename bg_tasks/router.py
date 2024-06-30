@@ -1,5 +1,5 @@
 from fastapi import Query, APIRouter
-from bg_tasks.background_tasks import scrape
+from bg_tasks.main_function import scrape
 from languages.language_json import language_json_read
 
 router = APIRouter()

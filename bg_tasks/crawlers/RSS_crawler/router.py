@@ -35,6 +35,7 @@ async def crawler_by_rss_or_feed(topic: str = Query(..., description="Topic"), g
     else:
         print("Too many new links. Not scraping.")
 
+    print(f"RSS list was scraped. New - {new_links_number}")
     return f"RSS scraped. New - {new_links_number}"
 
 

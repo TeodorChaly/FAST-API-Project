@@ -1,7 +1,6 @@
 import datetime
 
 import httpx
-import requests
 from bs4 import BeautifulSoup
 
 from ai_regenerator.prompts import ai_generator_function
