@@ -52,4 +52,5 @@ async def extract_all_rss(topic: str):
 
 @router.get("/check_rss_url", tags=["RSS config"])
 async def check_by_rss_by_url(url: str = Query(..., description="URL to RSS")):
-    return await check_by_rss_by_url_function(url)
+    result = await check_by_rss_by_url_function(url)
+    return result

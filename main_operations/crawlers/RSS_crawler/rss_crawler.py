@@ -79,7 +79,7 @@ async def check_by_rss_by_url_function(rss_url):
         test_topic = "crypto"
         test_language = ["english", "german", "russian"]
         test_rss = feed.entries[1].link
-
+        print(test_rss)
         url = test_rss
 
         session = requests.Session()
@@ -90,7 +90,7 @@ async def check_by_rss_by_url_function(rss_url):
 
             soup = BeautifulSoup(response.content, 'html.parser')
 
-            result = regenerate_function(soup, test_language, test_topic, url, "test")
+            result = await regenerate_function(soup, test_language, test_topic, url, "test")
 
             return result
         except requests.exceptions.RequestException as e:

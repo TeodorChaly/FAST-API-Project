@@ -9,7 +9,7 @@ from main_operations.scraper.json_save import *
 from main_operations.scraper.page_scraper import *
 
 
-async def regenerate_function(soup, languages, topic, url, status):
+async def regenerate_function(soup, languages, topic, url, status, additional_info=None):
     try:
         main_text = main_text_scraper(soup)
         img_url = img_path_scraper(soup)
@@ -44,7 +44,7 @@ async def regenerate_function(soup, languages, topic, url, status):
 
         if status == "scrape":
             for language in languages:
-                await folder_prep(topic, language)
+                await folder_prep(topic, language, additional_info)
                 categories = json.loads(await categories_extractor(topic))
 
                 regenerated_result = await ai_generator_function(content_to_generate, language, categories)
@@ -84,7 +84,7 @@ async def regenerate_function(soup, languages, topic, url, status):
             file.write(regenerated_result + "\n" + str(e))
 
 
-async def scrape(url, topic, languages, status, bool_google=False):
+async def scrape(url, topic, languages, status, bool_google=False, additional_info=None):
     try:
         if check(url):
             headers = {
@@ -106,7 +106,7 @@ async def scrape(url, topic, languages, status, bool_google=False):
                 print("Google search.")
                 soup = await google_news_extractor(url)
 
-            await regenerate_function(soup, languages, topic, url, status)
+            await regenerate_function(soup, languages, topic, url, status, additional_info)
 
             return {"Success": "Data scraped successfully"}
         else:

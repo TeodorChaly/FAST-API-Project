@@ -4,7 +4,7 @@ from starlette.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
 from languages.language_json import languages_to_code
-from topics.news_file_extractor import *
+from content.news_file_extractor import *
 
 router = APIRouter()
 

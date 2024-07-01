@@ -12,11 +12,7 @@ def json_loader():
 
 async def ai_generator_function(text, language, list_of_categories):
     try:
-        completion = API_endpoint.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system",
-                 "content": f"""I will give you a news text, please study it in its entirety and process it in the following JSON format:
+        system_fine_tuning = f"""I will give you a news text, please study it in its entirety and process it in the following JSON format:
         1) 'rewritten_content': 'Please study, shorten, and then briefly rewrite this entire news in {language}. Do not translate companie's names. Be concise and laconic. Write in the third person. Separate distinct thoughts or ideas clearly, each starting with a new paragraph. In any case, separate the text into paragraphs every 2-3 sentences. Divide the text into paragraphs using <p></p> tags.'
         2) 'seo_title': 'SEO title not exceeding 50 characters, without quotes, reflecting the main theme.'
         3) 'seo_description': 'SEO description not longer than 170 characters, briefly describing the content and significance of the news.'
@@ -26,7 +22,12 @@ async def ai_generator_function(text, language, list_of_categories):
         7) 'language': 'Only one language is allowed - {language}.
         8) 'date_published': 'The date the news was published in the format YYYY-MM-DD. But if the date is not specified, you leave it -'
         Output must be in {language} language.""
-        """},
+        """
+        completion = API_endpoint.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system",
+                 "content": system_fine_tuning},
                 {"role": "user", "content": text},
             ]
         )
@@ -36,31 +37,36 @@ async def ai_generator_function(text, language, list_of_categories):
         raise f"Error during generation: {e}"
 
 
-async def ai_category_function(topic_name):
+async def ai_category_function(topic_name, additional_info=None):
     try:
+        system_fine_tuning = f"""You are creating a news/blog site.
+                     And you have to create a JSON-response list, that contains from 20 sub-categories of main category
+                     /topic - {topic_name}.
+                     (sub-categories must cover 100% of articles of the topic {topic_name}).
+                     Here is additional info about the topic:
+                     {additional_info} 
+                     JSON result format:
+                     [
+                     "category",
+                     "category2", 
+                     "other" # at the end necessary add category other 
+                     ]
+                     please try to think abstractive and use wide categories name
+                     all object must be in lower case.
+                     Here is main topic:"""
         print("start")
-        completion = API_endpoint.chat.completions.create(  # await
+        completion = API_endpoint.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system",
-                 "content": """You are creating a news/blog site.
-                 And you have to create a JSON-response list, that contains from 10 to 20 subcategories
-                 (that they cover 100% of any articles if possible).
-                 JSON result format:
-                 [
-                 "category",
-                 "category2", 
-                 "other" -- necessary add other
-                 ]
-                 please try to think abstractive and use wide categories name
-                 all object must be in lower case.
-                 Here is main topic:"""},
+                 "content": system_fine_tuning},
 
                 {"role": "user", "content": topic_name},
             ]
         )
 
         return completion.choices[0].message.content
+
     except Exception as e:
         print(f'Error during generation: {e}')
         raise f"Error during generation: {e}"

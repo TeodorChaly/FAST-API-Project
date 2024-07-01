@@ -1,6 +1,6 @@
 import json
 
-from topics.news_file_extractor import language_to_code
+from content.news_file_extractor import language_to_code
 
 
 def language_json_read():

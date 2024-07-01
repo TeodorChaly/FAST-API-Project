@@ -19,7 +19,7 @@ async def categories_extractor(topic):
         print(e)
 
 
-async def folder_prep(topic, language):
+async def folder_prep(topic, language, additional_info=None):
     try:
         current_file_path = os.path.abspath(__file__)
         main_directory = os.path.dirname((os.path.dirname(os.path.dirname(current_file_path))))
@@ -36,7 +36,7 @@ async def folder_prep(topic, language):
             category_path = os.path.join(sub_folder_name, f"{topic}.json")
             os.makedirs(sub_folder_name)
             with open(category_path, 'w', encoding='utf-8') as file:
-                ai_result = await ai_category_function(topic)
+                ai_result = await ai_category_function(topic, additional_info)
                 json.dump(ai_result, file)
                 print(f"File created: {category_path}")
 
