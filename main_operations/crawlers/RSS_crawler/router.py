@@ -8,7 +8,7 @@ from main_operations.router import scraper_fun
 router = APIRouter()
 
 
-@router.post("/crawler_by_RSS", tags=["RSS crawler"])
+@router.post("/crawler_by_rss", tags=["RSS crawler"])
 async def crawler_by_rss_or_feed(topic: str = Query(..., description="Topic"), google: bool = Query(False)):
     list_of_feeds = await extract_all_rss_function(topic)
     new_links_number = 0
@@ -37,6 +37,11 @@ async def crawler_by_rss_or_feed(topic: str = Query(..., description="Topic"), g
 
     print(f"RSS list was scraped. New - {new_links_number}")
     return f"RSS scraped. New - {new_links_number}"
+
+
+@router.post("/show_all_topics", tags=["RSS crawler"])
+async def show_all_topics():
+    return await show_all_topics_function()
 
 
 @router.post("/add_rss_url", tags=["RSS config"])
