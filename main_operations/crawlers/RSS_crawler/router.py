@@ -68,3 +68,11 @@ async def delete_article_by_url(url: str = Query(..., description="URL slug to d
                                 language: str = Query(..., description="Language"),
                                 api_key: str = Depends(get_api_key)):
     return await delete_article_by_url_function(url, topic, language)
+
+
+@router.delete("/delete_all_article_by_url", tags=["RSS config"])
+async def delete_all_article_by_url(url: str = Query(..., description="URL slug to delete"),
+                                    topic: str = Query(..., description="Topic"),
+                                    language: str = Query(..., description="Language"),
+                                    api_key: str = Depends(get_api_key)):
+    return await delete_all_article_by_url_function(url, topic, language)
