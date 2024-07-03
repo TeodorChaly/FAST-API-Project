@@ -1,6 +1,7 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from fastapi.params import Query
 
+from languages.router import get_api_key
 from main_operations.crawlers.RSS_crawler.json_save import rss_list_saver
 from main_operations.crawlers.RSS_crawler.rss_crawler import *
 from main_operations.router import scraper_fun
@@ -59,3 +60,11 @@ async def extract_all_rss(topic: str):
 async def check_by_rss_by_url(url: str = Query(..., description="URL to RSS")):
     result = await check_by_rss_by_url_function(url)
     return result
+
+
+@router.delete("/delete_article_by_url", tags=["RSS config"])
+async def delete_article_by_url(url: str = Query(..., description="URL slug to delete"),
+                                topic: str = Query(..., description="Topic"),
+                                language: str = Query(..., description="Language"),
+                                api_key: str = Depends(get_api_key)):
+    return await delete_article_by_url_function(url, topic, language)

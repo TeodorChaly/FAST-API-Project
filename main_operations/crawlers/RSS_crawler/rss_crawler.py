@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from fastapi import HTTPException
 import aiofiles
 
+from content.news_file_extractor import get_language_name_by_code
 from main_operations.main_function import regenerate_function
 
 rss_list = "_rss_list"
@@ -122,3 +123,31 @@ async def check_by_rss_by_url_function(rss_url):
     except Exception as e:
         print(f"Problem with RSS: {e}")
         return "Problem with RSS url"
+
+
+async def delete_article_by_url_function(url_to_delete, topic, language):
+    topic = topic.lower()
+    language = language.lower()
+    language = get_language_name_by_code(language)
+    file_path = f"news_json/{topic}/{topic}_{language}.json"
+
+    if not os.path.isfile(file_path):
+        return {"error": "This topic does not exist. Use existing topic and language."}
+
+    with open(file_path, 'r', encoding='utf-8') as file:
+        articles = json.load(file)
+
+    length = len(articles)
+    for article in articles:
+        if article.get("url_part") == url_to_delete:
+            articles.remove(article)
+            break
+    new_length = len(articles)
+
+    if length == new_length:
+        return {"error": "Article not found."}
+    else:
+        with open(file_path, 'w', encoding='utf-8') as file:
+            json.dump(articles, file, indent=4)
+
+        return {"message": "Article deleted successfully"}
