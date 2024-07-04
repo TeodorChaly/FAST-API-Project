@@ -1,7 +1,7 @@
 name: Run automation tests
 
 on:
-  push:
+  workflow_dispatch:
 
 jobs:
   Test-Run:
@@ -10,4 +10,4 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Run Test
-        run: python automation_tests\test.py
+        run: python automation_tests/test.py

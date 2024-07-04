@@ -172,16 +172,16 @@ async def delete_all_article_by_url_function(url_to_delete, topic, language):
             url_to_del = article.get("url")
             break
 
+    article_del_count = 0
+
     if url_to_del:
         languages = await show_languages()
         for language in languages:
             file_path = f"news_json/{topic}/{topic}_{language}.json"
-            print(file_path)
-            if not os.path.isfile(file_path):
-                return {"error": "This topic does not exist. Use existing topic and language."}
 
             with open(file_path, 'r', encoding='utf-8') as file:
                 articles = json.load(file)
+
             length = len(articles)
             for article in articles:
                 if article.get("url") == url_to_del:
@@ -192,4 +192,10 @@ async def delete_all_article_by_url_function(url_to_delete, topic, language):
             with open(file_path, 'w', encoding='utf-8') as file:
                 json.dump(articles, file, indent=4)
             new_length = len(articles)
-            print(f"Length: {length} - {new_length}")
+            if length != new_length:
+                article_del_count += 1
+
+    if article_del_count > 0:
+        return {"message": f"Article deleted successfully in {article_del_count} languages."}
+    else:
+        return {"error": "Article not found."}
