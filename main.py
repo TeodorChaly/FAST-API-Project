@@ -1,8 +1,9 @@
 import json
 import os
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from starlette.staticfiles import StaticFiles
+from starlette.templating import Jinja2Templates
 
 from main_operations.router import router as scraping_router
 from content.router import router as topics_router
@@ -14,7 +15,7 @@ app = FastAPI(
     version="0.1"
 )
 
-app.mount("/static", StaticFiles(directory="templates/static"), name="static")
+app.mount("/assets", StaticFiles(directory="templates/assets"), name="assets")
 
 
 @app.on_event("startup")
@@ -35,6 +36,3 @@ app.include_router(topics_router)
 app.include_router(languages_router)
 
 
-@app.post("/smart_url/{question}", tags=["Smart URL"])
-def smart_url(question):
-    print(question)

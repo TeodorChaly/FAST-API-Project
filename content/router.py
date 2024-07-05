@@ -94,3 +94,26 @@ async def show_content_json(topic: str, language: str = "en", limit: int = None)
         return await news_extractor(topic, language_name, limit)
     except Exception:
         return "Topic or language incorrect"
+
+
+@router.get("/smart_url", tags=["Smart URL"])
+async def smart_url(request: Request, topic: str, language: str = "en", limit: int = None):
+    print(f"Requested topic: {topic}, {language} language.")
+    json_data = await show_content_json(topic, language, limit)
+
+    if isinstance(json_data, dict) and "error" in json_data:
+        return templates.TemplateResponse("error.html", {"request": request, "error": json_data["error"]})
+
+    articles_with_index = []
+    languages = languages_to_code()
+
+    for article in json_data:
+        if "rewritten_content" in article:
+            article["rewritten_content"] = Markup(article["rewritten_content"])
+        articles_with_index.append(article)
+
+    categories = get_list_of_categories_for_language(articles_with_index)
+
+    return templates.TemplateResponse("news.html",
+                                      {"request": request, "topic": topic, "articles": articles_with_index,
+                                       "language": language, "languages": languages, "categories": categories})
