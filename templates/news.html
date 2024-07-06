@@ -351,88 +351,25 @@
                 <div class="trending__slider">
                     <div class="swiper-container popular-active">
                         <div class="swiper-wrapper">
+                            {% for item in articles %}
                             <div class="swiper-slide">
                                 <div class="trending__post">
                                     <div class="trending__post-thumb tgImage__hover">
                                         <a href="#" class="addWish"><i class="fal fa-heart"></i></a>
-                                        <a href="blog-details.html"><img src="assets/img/nft/nft_blog01.jpg" alt="img"></a>
+                                        <a href="blog-details.html"><img src="{{ item.image }}" alt="Image for {{ item.seo_title }}"></a>
                                         <span class="is_trend"><i class="fas fa-bolt"></i></span>
                                     </div>
                                     <div class="trending__post-content">
                                         <ul class="tgbanner__content-meta list-wrap">
                                             <li class="category"><a href="blog.html">Gaming</a></li>
                                             <li><span class="by">By</span> <a href="blog.html">miranda h.</a></li>
-                                            <li>nov 21, 2022</li>
+                                            <li>{{ item.date_published }}</li>
                                         </ul>
-                                        <h4 class="title tgcommon__hover"><a href="blog-details.html">Why we need guidelines for brain scan data to real data.</a></h4>
+                                        <h4 class="title tgcommon__hover"><a href="blog-details.html">{{ item.seo_title }}</a></h4>
                                     </div>
                                 </div>
                             </div>
-                            <div class="swiper-slide">
-                                <div class="trending__post">
-                                    <div class="trending__post-thumb tgImage__hover">
-                                        <a href="#" class="addWish"><i class="fal fa-heart"></i></a>
-                                        <a href="blog-details.html"><img src="assets/img/nft/nft_blog02.jpg" alt="img"></a>
-                                    </div>
-                                    <div class="trending__post-content">
-                                        <ul class="tgbanner__content-meta list-wrap">
-                                            <li class="category"><a href="blog.html">tech</a></li>
-                                            <li><span class="by">By</span> <a href="blog.html">miranda h.</a></li>
-                                            <li>nov 21, 2022</li>
-                                        </ul>
-                                        <h4 class="title tgcommon__hover"><a href="blog-details.html">The Multiverse is the collection of alternate universes</a></h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="trending__post">
-                                    <div class="trending__post-thumb tgImage__hover">
-                                        <a href="#" class="addWish"><i class="fal fa-heart"></i></a>
-                                        <a href="blog-details.html"><img src="assets/img/nft/nft_blog03.jpg" alt="img"></a>
-                                        <span class="is_trend"><i class="fas fa-bolt"></i></span>
-                                    </div>
-                                    <div class="trending__post-content">
-                                        <ul class="tgbanner__content-meta list-wrap">
-                                            <li class="category"><a href="blog.html">movie</a></li>
-                                            <li><span class="by">By</span> <a href="blog.html">miranda h.</a></li>
-                                            <li>nov 21, 2022</li>
-                                        </ul>
-                                        <h4 class="title tgcommon__hover"><a href="blog-details.html">That share a universal hierarchy a large variety of these</a></h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="trending__post">
-                                    <div class="trending__post-thumb tgImage__hover">
-                                        <a href="#" class="addWish"><i class="fal fa-heart"></i></a>
-                                        <a href="blog-details.html"><img src="assets/img/nft/nft_blog04.jpg" alt="img"></a>
-                                    </div>
-                                    <div class="trending__post-content">
-                                        <ul class="tgbanner__content-meta list-wrap">
-                                            <li class="category"><a href="blog.html">sports</a></li>
-                                            <li><span class="by">By</span> <a href="blog.html">miranda h.</a></li>
-                                            <li>nov 21, 2022</li>
-                                        </ul>
-                                        <h4 class="title tgcommon__hover"><a href="blog-details.html">Universes were originated from another due to a major</a></h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="swiper-slide">
-                                <div class="trending__post">
-                                    <div class="trending__post-thumb tgImage__hover">
-                                        <a href="#" class="addWish"><i class="fal fa-heart"></i></a>
-                                        <a href="blog-details.html"><img src="assets/img/nft/nft_blog05.jpg" alt="img"></a>
-                                    </div>
-                                    <div class="trending__post-content">
-                                        <ul class="tgbanner__content-meta list-wrap">
-                                            <li class="category"><a href="blog.html">sports</a></li>
-                                            <li><span class="by">By</span> <a href="blog.html">miranda h.</a></li>
-                                            <li>nov 21, 2022</li>
-                                        </ul>
-                                        <h4 class="title tgcommon__hover"><a href="blog-details.html">A hypothetical collection of the potentially diverse</a></h4>
-                                    </div>
-                                </div>
-                            </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
