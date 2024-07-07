@@ -46,47 +46,7 @@
 
     <!-- header-area -->
     <header class="header__style-two header__style-three header__style-five">
-        <div class="header__top-bar">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-8 col-md-7 d-none d-md-block">
-                        <div class="header__top-right header__top-menu">
-                            <ul class="list-wrap">
-                                <li class="lang">
-                                    <div class="dropdown">
-                                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                            ENGLISH
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                            <li><a class="dropdown-item" href="#">SPAnish</a></li>
-                                            <li><a class="dropdown-item" href="#">Hindi</a></li>
-                                            <li><a class="dropdown-item" href="#">chinese</a></li>
-                                            <li><a class="dropdown-item" href="#">Arabic</a></li>
-                                        </ul>
-                                    </div>
-                                </li>
-                                <li><a href="#">About</a></li>
-                                <li><a href="#">Contacts</a></li>
-                                <li><a href="#">Advertise</a></li>
-                                <li class="buy-theme"><a href="#">Buy theme <span>$19</span></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-5">
-                        <div class="header__top-bar-right">
-                            <ul class="list-wrap top-bar-social">
-                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fab fa-behance"></i></a></li>
-                                <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
-                                <li><a href="#"><i class="fab fa-youtube"></i></a></li>
-                            </ul>
-                            <a href="#" class="sign-in"><i class="fas fa-user"></i> Sign in</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
         <div id="header-fixed-height"></div>
         <div id="sticky-header" class="tg-header__area">
             <div class="container">
@@ -95,58 +55,32 @@
                         <div class="tgmenu__wrap">
                             <nav class="tgmenu__nav">
                                 <div class="d-flex gap-4 align-items-center">
-                                    <div class="offcanvas-toggle">
-                                        <a href="#"><i class="flaticon-menu-bar"></i></a>
-                                    </div>
+
                                     <div class="logo">
                                         <a href="index.html"><img src="assets/img/logo/logo.png" alt="Logo"></a>
                                     </div>
                                 </div>
+
                                 <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-lg-flex">
-                                    <ul class="navigation">
-                                        <li class="active menu-item-has-children"><a href="#">Home</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="index.html">Home Default</a></li>
-                                                <li><a href="index-2.html">Home Interior</a></li>
-                                                <li><a href="index-3.html">Home Travel</a></li>
-                                                <li><a href="index-4.html">Home Technology</a></li>
-                                                <li class="active"><a href="index-5.html">Home NFT</a></li>
-                                                <li><a href="index-6.html">Home Fashion</a></li>
-                                                <li><a href="index-7.html">Home Adventure</a></li>
-                                                <li><a href="index-8.html">Home Minimal</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="lifestyle.html">Lifestyle</a></li>
-                                        <li><a href="travel.html">Travel</a></li>
-                                        <li class="menu-item-has-children"><a href="#">Post Type</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="blog.html">Our Blog</a></li>
-                                                <li><a href="blog-details.html">Blog Details</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="nft.html">NFT</a></li>
+                                   <ul class="navigation">
+                                        {% for category, count in categories %}
+                                        <li><a href="/{{ language }}/{{ category.url_part }}">{{ category }}</a></li>
+                                        {% endfor %}
                                     </ul>
+
                                 </div>
-                                <div class="tgmenu__action">
-                                    <ul class="list-wrap">
-                                        <li class="mode-switcher">
-                                            <nav class="switcher__tab">
-                                                <span class="switcher__btn light-mode"><i class="flaticon-sun"></i></span>
-                                                <span class="switcher__mode"></span>
-                                                <span class="switcher__btn dark-mode"><i class="flaticon-moon"></i></span>
-                                            </nav>
-                                        </li>
-                                        <li class="user"><a href="#"><i class="far fa-user"></i></a></li>
-                                        <li class="header-cart"><a href="#"><i class="far fa-shopping-basket"></i></a></li>
-                                        <li class="header-search"><a href="#"><i class="far fa-search"></i></a>
-                                            <div class="header__top-search">
-                                                <form action="#">
-                                                    <input type="text" placeholder="Search here...">
-                                                </form>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
+
+                                  <div class="dropdown">
+                                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                            {{ language.upper() }}
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                            {% for lang in languages %}
+                                            <li><a class="dropdown-item" href="?language={{ lang }}">{{ lang.upper() }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    </div>
+
                             </nav>
                             <div class="mobile-nav-toggler"><i class="fas fa-bars"></i></div>
                         </div>
@@ -234,86 +168,28 @@
         <section class="slider__area slider__style-two fix" data-background="assets/img/bg/banner_bg.jpg">
             <div class="container">
                 <div class="slider-active">
+                    {% for item in articles[:4] %}
                     <div class="slider__item">
                         <div class="row align-items-center">
                             <div class="col-lg-6">
                                 <div class="slider__content">
                                     <ul class="tgbanner__content-meta list-wrap" data-animation-in="tg-fadeInUp" data-delay-in=".2">
-                                        <li class="category"><a href="blog.html">bitcoin</a></li>
-                                        <li><span class="by">By</span> <a href="blog.html">alonso d.</a></li>
-                                        <li>nov 21, 2022</li>
+                                        <li class="category"><a href="">{{ item.category }}</a></li>
+                                        <li>{{ item.date_published }}</li>
                                     </ul>
-                                    <h2 class="title" data-animation-in="tg-fadeInUp" data-delay-in=".6">The Top Privacy Coin Saw Fewer Percentage Losses Than...</h2>
-                                    <a href="blog-details.html" class="btn border-btn" data-animation-in="tg-fadeInUp" data-delay-in="1"><span class="btn-text">Read More</span> <i class="far fa-long-arrow-right"></i></a>
+                                    <h2 class="title" data-animation-in="tg-fadeInUp" data-delay-in=".6">{{ item.seo_title }}</h2>
+                                    <a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail" class="btn border-btn" data-animation-in="tg-fadeInUp" data-delay-in="1"><span class="btn-text">Read More</span> <i class="far fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="slider__img-wrap">
-                                    <img src="assets/img/nft/nft_slider01.jpg" class="main-img" alt="img">
+                                    <img src="{{ item.image }}" class="main-img" alt="Image for {{ item.seo_title }}">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="slider__item">
-                        <div class="row align-items-center">
-                            <div class="col-lg-6">
-                                <div class="slider__content">
-                                    <ul class="tgbanner__content-meta list-wrap" data-animation-in="tg-fadeInUp" data-delay-in=".2">
-                                        <li class="category"><a href="blog.html">technology</a></li>
-                                        <li><span class="by">By</span> <a href="blog.html">alonso d.</a></li>
-                                        <li>nov 21, 2022</li>
-                                    </ul>
-                                    <h2 class="title" data-animation-in="tg-fadeInUp" data-delay-in=".6">Practical steps to build transparency in your remote business 3</h2>
-                                    <a href="blog-details.html" class="btn border-btn" data-animation-in="tg-fadeInUp" data-delay-in="1"><span class="btn-text">Read More</span> <i class="far fa-long-arrow-right"></i></a>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="slider__img-wrap">
-                                    <img src="assets/img/nft/nft_slider02.jpg" class="main-img" alt="img">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="slider__item">
-                        <div class="row align-items-center">
-                            <div class="col-lg-6">
-                                <div class="slider__content">
-                                    <ul class="tgbanner__content-meta list-wrap" data-animation-in="tg-fadeInUp" data-delay-in=".2">
-                                        <li class="category"><a href="blog.html">technology</a></li>
-                                        <li><span class="by">By</span> <a href="blog.html">alonso d.</a></li>
-                                        <li>nov 21, 2022</li>
-                                    </ul>
-                                    <h2 class="title" data-animation-in="tg-fadeInUp" data-delay-in=".6">Practical steps to build transparency in your remote business 3</h2>
-                                    <a href="blog-details.html" class="btn border-btn" data-animation-in="tg-fadeInUp" data-delay-in="1"><span class="btn-text">Read More</span> <i class="far fa-long-arrow-right"></i></a>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="slider__img-wrap">
-                                    <img src="assets/img/nft/nft_slider03.jpg" class="main-img" alt="img">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="slider__item">
-                        <div class="row align-items-center">
-                            <div class="col-lg-6">
-                                <div class="slider__content">
-                                    <ul class="tgbanner__content-meta list-wrap" data-animation-in="tg-fadeInUp" data-delay-in=".2">
-                                        <li class="category"><a href="blog.html">technology</a></li>
-                                        <li><span class="by">By</span> <a href="blog.html">alonso d.</a></li>
-                                        <li>nov 21, 2022</li>
-                                    </ul>
-                                    <h2 class="title" data-animation-in="tg-fadeInUp" data-delay-in=".6">Practical steps to build transparency in your remote business 4</h2>
-                                    <a href="blog-details.html" class="btn border-btn" data-animation-in="tg-fadeInUp" data-delay-in="1"><span class="btn-text">Read More</span> <i class="far fa-long-arrow-right"></i></a>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="slider__img-wrap">
-                                    <img src="assets/img/nft/nft_slider04.jpg" class="main-img" alt="img">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
+
                 </div>
                 <div class="slider__marquee clearfix">
                     <div class="marquee_mode">
