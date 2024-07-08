@@ -65,7 +65,7 @@
                                 <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-lg-flex">
                                    <ul class="navigation">
                                         {% for category in categories %}
-                                        <li><a href="/{{ language }}/{{ category.url_part }}">{{ category }}</a></li>
+                                        <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
                                         {% endfor %}
                                     </ul>
 
@@ -228,7 +228,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="section__read-more text-start text-sm-end">
-                                    <a href="blog.html">More Popular Post <i class="far fa-long-arrow-right"></i></a>
+                                    <a href="/{{ language }}/{{ topic }}/{{ category | lower }}">More Popular Post <i class="far fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -240,17 +240,16 @@
                                 <div class="swiper-slide">
                                     <div class="trending__post">
                                         <div class="trending__post-thumb tgImage__hover">
-                                            <a href="#" class="addWish"><i class="fal fa-heart"></i></a>
-                                            <a href="blog-details.html"><img src="{{ item.image }}" alt="Image for {{ item.seo_title }}"></a>
+                                            <a href="/{{ language }}/{{ topic }}/{{ item.url_part }}/detail"><img src="{{ item.image }}" alt="Image for {{ item.seo_title }}"></a>
                                             <span class="is_trend"><i class="fas fa-bolt"></i></span>
                                         </div>
                                         <div class="trending__post-content">
                                             <ul class="tgbanner__content-meta list-wrap">
-                                                <li class="category"><a href="blog.html">{{ category }}</a></li>
-                                                <li><span class="by">By</span> <a href="blog.html">miranda h.</a></li>
+<!--                                                <li class="category"><a href="blog.html">{{ category }}</a></li>-->
+<!--                                                <li><span class="by">By</span> <a href="blog.html">miranda h.</a></li>-->
                                                 <li>{{ item.date_published }}</li>
                                             </ul>
-                                            <h4 class="title tgcommon__hover"><a href="blog-details.html">{{ item.seo_title }}</a></h4>
+                                            <h4 class="title tgcommon__hover"><a href="/{{ language }}/{{ topic }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h4>
                                         </div>
                                     </div>
                                 </div>
@@ -273,7 +272,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="section__read-more text-start text-sm-end">
-                                    <a href="blog.html">More Post <i class="far fa-long-arrow-right"></i></a>
+                                    <a href="/{{ language }}/{{ topic }}/{{ category | lower }}">More Post <i class="far fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -308,145 +307,97 @@
         {% endfor %}
 
         <!-- Video-post-area -->
-        <section class="video-post-area nft-video-post section__hover-line pt-75 pb-80">
-            <div class="container">
-                <div class="section__title-wrap mb-40">
-                    <div class="row align-items-end">
-                        <div class="col-sm-6">
-                            <div class="section__title">
-                                <span class="section__sub-title">Stories</span>
-                                <h3 class="section__main-title">Popular Stories</h3>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="section__read-more text-start text-sm-end">
-                                <a href="blog.html">Stories Post <i class="far fa-long-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                  <div class="row row-gutters-40">
-                    <div class="col-md-6">
-                        <div class="stories-post__item">
-                            <div class="stories-post__thumb tgImage__hover">
-                                <a href="blog-details.html"><img src="assets/img/nft/nft_blog12.jpg" alt="img"></a>
-                            </div>
-                            <div class="stories-post__content video__post-content">
-                                <ul class="tgbanner__content-meta list-wrap">
-                                    <li class="category"><a href="blog.html">technology</a></li>
-                                    <li><span class="by">By</span> <a href="blog.html">alonso d.</a></li>
-                                    <li>nov 21, 2022</li>
-                                </ul>
-                                <h3 class="title tgcommon__hover"><a href="blog-details.html">The multiverse is a hypothetical group of the multiple universes.</a></h3>
-                            </div>
-                        </div>
-                    </div>
-                  </div>
-        </section>
-        <!-- Video-post-area-end -->
-
-        <!-- stories-post-area -->
-        <section class="stories-post-area white-bg section__hover-line pt-75 pb-40">
-
-
+<!--        <section class="video-post-area nft-video-post section__hover-line pt-75 pb-80">-->
+<!--            <div class="container">-->
+<!--                <div class="section__title-wrap mb-40">-->
+<!--                    <div class="row align-items-end">-->
+<!--                        <div class="col-sm-6">-->
+<!--                            <div class="section__title">-->
+<!--                                <span class="section__sub-title">Stories</span>-->
+<!--                                <h3 class="section__main-title">Popular Stories</h3>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="col-sm-6">-->
+<!--                            <div class="section__read-more text-start text-sm-end">-->
+<!--                                <a href="blog.html">Stories Post <i class="far fa-long-arrow-right"></i></a>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                  <div class="row row-gutters-40">-->
 <!--                    <div class="col-md-6">-->
 <!--                        <div class="stories-post__item">-->
 <!--                            <div class="stories-post__thumb tgImage__hover">-->
-<!--                                <a href="blog-details.html"><img src="assets/img/nft/nft_blog13.jpg" alt="img"></a>-->
+<!--                                <a href="blog-details.html"><img src="assets/img/nft/nft_blog12.jpg" alt="img"></a>-->
 <!--                            </div>-->
 <!--                            <div class="stories-post__content video__post-content">-->
 <!--                                <ul class="tgbanner__content-meta list-wrap">-->
 <!--                                    <li class="category"><a href="blog.html">technology</a></li>-->
 <!--                                    <li><span class="by">By</span> <a href="blog.html">alonso d.</a></li>-->
-<!--                                    <li>nov 22, 2022</li>-->
+<!--                                    <li>nov 21, 2022</li>-->
 <!--                                </ul>-->
-<!--                                <h3 class="title tgcommon__hover"><a href="blog-details.html">Experimentally accessible by a connection to the multiple communities</a></h3>-->
+<!--                                <h3 class="title tgcommon__hover"><a href="blog-details.html">The multiverse is a hypothetical group of the multiple universes.</a></h3>-->
 <!--                            </div>-->
 <!--                        </div>-->
 <!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="row">-->
-<!--                    <div class="col-xl-3 col-lg-4 col-md-6">-->
-<!--                        <div class="trending__post stories-small-post__item">-->
-<!--                            <div class="trending__post-thumb tgImage__hover">-->
-<!--                                <a href="#" class="addWish"><i class="fal fa-heart"></i></a>-->
-<!--                                <a href="blog-details.html"><img src="assets/img/nft/nft_blog14.jpg" alt="img"></a>-->
-<!--                            </div>-->
-<!--                            <div class="trending__post-content">-->
-<!--                                <ul class="tgbanner__content-meta list-wrap">-->
-<!--                                    <li class="category"><a href="blog.html">Gaming</a></li>-->
-<!--                                    <li><span class="by">By</span> <a href="blog.html">miranda h.</a></li>-->
-<!--                                </ul>-->
-<!--                                <h4 class="title tgcommon__hover"><a href="blog-details.html">Scientists speculate that ours might not be held</a></h4>-->
-<!--                                <ul class="post__activity list-wrap">-->
-<!--                                    <li><i class="fal fa-signal"></i> 1.5k</li>-->
-<!--                                    <li><a href="blog-details.html"><i class="fal fa-comment-dots"></i> 150</a></li>-->
-<!--                                    <li><i class="fal fa-share-alt"></i> 32</li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="col-xl-3 col-lg-4 col-md-6">-->
-<!--                        <div class="trending__post stories-small-post__item">-->
-<!--                            <div class="trending__post-thumb tgImage__hover">-->
-<!--                                <a href="#" class="addWish"><i class="fal fa-heart"></i></a>-->
-<!--                                <a href="blog-details.html"><img src="assets/img/nft/nft_blog15.jpg" alt="img"></a>-->
-<!--                            </div>-->
-<!--                            <div class="trending__post-content">-->
-<!--                                <ul class="tgbanner__content-meta list-wrap">-->
-<!--                                    <li class="category"><a href="blog.html">tech</a></li>-->
-<!--                                    <li><span class="by">By</span> <a href="blog.html">miranda h.</a></li>-->
-<!--                                </ul>-->
-<!--                                <h4 class="title tgcommon__hover"><a href="blog-details.html">The Multiverse is the collection of alternate universes</a></h4>-->
-<!--                                <ul class="post__activity list-wrap">-->
-<!--                                    <li><i class="fal fa-signal"></i> 1.5k</li>-->
-<!--                                    <li><a href="blog-details.html"><i class="fal fa-comment-dots"></i> 150</a></li>-->
-<!--                                    <li><i class="fal fa-share-alt"></i> 32</li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="col-xl-3 col-lg-4 col-md-6">-->
-<!--                        <div class="trending__post stories-small-post__item">-->
-<!--                            <div class="trending__post-thumb tgImage__hover">-->
-<!--                                <a href="#" class="addWish"><i class="fal fa-heart"></i></a>-->
-<!--                                <a href="blog-details.html"><img src="assets/img/nft/nft_blog11.jpg" alt="img"></a>-->
-<!--                            </div>-->
-<!--                            <div class="trending__post-content">-->
-<!--                                <ul class="tgbanner__content-meta list-wrap">-->
-<!--                                    <li class="category"><a href="blog.html">movie</a></li>-->
-<!--                                    <li><span class="by">By</span> <a href="blog.html">miranda h.</a></li>-->
-<!--                                </ul>-->
-<!--                                <h4 class="title tgcommon__hover"><a href="blog-details.html">That share a universal hierarchy a large variety of these</a></h4>-->
-<!--                                <ul class="post__activity list-wrap">-->
-<!--                                    <li><i class="fal fa-signal"></i> 1.2k</li>-->
-<!--                                    <li><a href="blog-details.html"><i class="fal fa-comment-dots"></i> 150</a></li>-->
-<!--                                    <li><i class="fal fa-share-alt"></i> 26</li>-->
-<!--                                </ul>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
+<!--                  </div>-->
+<!--        </section>-->
+        <!-- Video-post-area-end -->
+
+        <!-- stories-post-area -->
+ <section class="stories-post-area white-bg section__hover-line pt-75 pb-40">
+    <div class="container">
+        <div class="section__title-wrap mb-40">
+            <div class="row align-items-end">
+                <div class="col-sm-6">
+                    <div class="section__title">
+                        <span class="section__sub-title">Stories</span>
+                        <h3 class="section__main-title">Popular Stories</h3>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="row row-gutters-40">
+            {% for item in articles %}
+                {% if loop.index <= 2 %}
+                    <div class="col-md-6">
+                        <div class="stories-post__item">
+                            <div class="stories-post__thumb tgImage__hover">
+                                <a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail"><img src="{{ item.image }}" alt="img"></a>
+                            </div>
+                            <div class="stories-post__content video__post-content">
+                                <ul class="tgbanner__content-meta list-wrap">
+                                    <li class="category"><a href="/{{ language }}/{{ item.topic }}/{{ item.category }}">{{ item.category }}</a></li>
+                                    <li>{{ item.date_published }}</li>
+                                </ul>
+                                <h3 class="title tgcommon__hover"><a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h3>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
                     <div class="col-xl-3 col-lg-4 col-md-6">
                         <div class="trending__post stories-small-post__item">
                             <div class="trending__post-thumb tgImage__hover">
-                                <a href="#" class="addWish"><i class="fal fa-heart"></i></a>
-                                <a href="blog-details.html"><img src="assets/img/nft/nft_blog09.jpg" alt="img"></a>
+                                <a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail"><img src="{{ item.image }}" alt="img"></a>
                             </div>
                             <div class="trending__post-content">
                                 <ul class="tgbanner__content-meta list-wrap">
-                                    <li class="category"><a href="blog.html">sports</a></li>
-                                    <li><span class="by">By</span> <a href="blog.html">miranda h.</a></li>
+                                    <li class="category"><a href="/{{ language }}/{{ item.topic }}/{{ item.category }}">{{ item.category }}</a></li>
                                 </ul>
-                                <h4 class="title tgcommon__hover"><a href="blog-details.html">Universes were originated from another due to a major</a></h4>
+                                <h4 class="title tgcommon__hover"><a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h4>
                                 <ul class="post__activity list-wrap">
-                                    <li><i class="fal fa-signal"></i> 1.2k</li>
-                                    <li><a href="blog-details.html"><i class="fal fa-comment-dots"></i> 150</a></li>
-                                    <li><i class="fal fa-share-alt"></i> 26</li>
+                                    <li> {{ item.date_published }} </li>
                                 </ul>
                             </div>
                         </div>
                     </div>
-        </section>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
         <!-- stories-post-area-end -->
 
     </main>

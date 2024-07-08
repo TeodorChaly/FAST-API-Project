@@ -101,6 +101,8 @@ async def smart_url(request: Request, topic: str, language: str = "en", limit: i
     print(f"Requested topic: {topic}, {language} language.")
     json_data = await show_content_json(topic, language, limit)
 
+    print(json_data)
+
     if isinstance(json_data, dict) and "error" in json_data:
         return templates.TemplateResponse("error.html", {"request": request, "error": json_data["error"]})
 
@@ -112,18 +114,21 @@ async def smart_url(request: Request, topic: str, language: str = "en", limit: i
             article["rewritten_content"] = Markup(article["rewritten_content"])
         articles_with_index.append(article)
 
+    max_list_len = 5
 
     categories = {}
     for article in articles_with_index:
         category = article.get("category", "Uncategorized")
         if category not in categories:
             categories[category] = []
-        if len(categories[category]) < 5:
+        if len(categories[category]) < max_list_len:
             categories[category].append(article)
 
-    for category in categories:
-        print(category, len(categories[category]))
+    categories = {category: articles for category, articles in categories.items() if len(articles) >= max_list_len}
+    # limit articles to max_list_len
+    articles_with_index = articles_with_index[:max_list_len]
+
 
     return templates.TemplateResponse("news.html",
-                                      {"request": request, "topic": topic,
+                                      {"request": request, "topic": topic, "articles": articles_with_index,
                                        "language": language, "languages": languages, "categories": categories})
