@@ -106,14 +106,24 @@ async def smart_url(request: Request, topic: str, language: str = "en", limit: i
 
     articles_with_index = []
     languages = languages_to_code()
-
+    # Fix to many data!!!
     for article in json_data:
         if "rewritten_content" in article:
             article["rewritten_content"] = Markup(article["rewritten_content"])
         articles_with_index.append(article)
 
-    categories = get_list_of_categories_for_language(articles_with_index)
+
+    categories = {}
+    for article in articles_with_index:
+        category = article.get("category", "Uncategorized")
+        if category not in categories:
+            categories[category] = []
+        if len(categories[category]) < 5:
+            categories[category].append(article)
+
+    for category in categories:
+        print(category, len(categories[category]))
 
     return templates.TemplateResponse("news.html",
-                                      {"request": request, "topic": topic, "articles": articles_with_index,
+                                      {"request": request, "topic": topic,
                                        "language": language, "languages": languages, "categories": categories})
