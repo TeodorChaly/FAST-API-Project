@@ -67,14 +67,15 @@
                                         {% for category in top_categories %}
                                         <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
                                         {% endfor %}
+                                        {% if other_categories %}
                                         <li class="active menu-item-has-children"><a>Other</a>
                                             <ul class="sub-menu">
                                                 {% for category in other_categories %}
                                                     <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
                                                 {% endfor %}
-                                                <li class="active"><a href="blog-details.html">Blog Details</a></li>
                                             </ul>
                                         </li>
+                                        {% endif %}
                                     </ul>
 
                                 </div>
@@ -224,7 +225,7 @@
             </div>
         </section>
         <!-- slider-area-end -->
-        {% for category in categories %}
+        {% for category in all_content %}
             {% if loop.index is odd %}
             <section class="popular__post-area section__hover-line pt-75 pb-75">
                 <div class="container">
@@ -246,7 +247,7 @@
                     <div class="trending__slider">
                         <div class="swiper-container popular-active">
                             <div class="swiper-wrapper">
-                                {% for item in categories[category] %}
+                                {% for item in all_content[category] %}
                                 <div class="swiper-slide">
                                     <div class="trending__post">
                                         <div class="trending__post-thumb tgImage__hover">
@@ -290,7 +291,7 @@
                     <div class="trending__slider">
                         <div class="swiper-container trending-active">
                             <div class="swiper-wrapper">
-                                {% for item in categories[category] %}
+                                {% for item in all_content[category] %}
                                 <div class="swiper-slide">
                                     <div class="trending__post">
                                         <div class="trending__post-thumb tgImage__hover">

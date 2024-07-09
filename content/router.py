@@ -1,11 +1,11 @@
-from markupsafe import Markup
 from fastapi import APIRouter, Request
+from markupsafe import Markup
 from starlette.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
+from content.functions import content_all, get_categories
 from languages.language_json import languages_to_code
 from content.news_file_extractor import *
-from main_operations.scraper.json_save import categories_extractor
 
 router = APIRouter()
 
@@ -97,39 +97,35 @@ async def show_content_json(topic: str, language: str = "en", limit: int = None)
         return "Topic or language incorrect"
 
 
-@router.get("/smart_url", tags=["Smart URL"])
-async def smart_url(request: Request, topic: str, language: str = "en", limit: int = None):
+@router.get("/main_page", tags=["Smart URL"])
+async def main_page(request: Request, topic: str, language: str = "en", limit: int = None):
     print(f"Requested topic: {topic}, {language} language.")
+    languages = languages_to_code()
+
     json_data = await show_content_json(topic, language, limit)
 
     if isinstance(json_data, dict) and "error" in json_data:
         return templates.TemplateResponse("error.html", {"request": request, "error": json_data["error"]})
 
-    articles_with_index = []
-    languages = languages_to_code()
-    # Fix to many data!!!
-    for article in json_data:
-        if "rewritten_content" in article:
-            article["rewritten_content"] = Markup(article["rewritten_content"])
-        articles_with_index.append(article)
+    newest_news_len = 5
+    today_news_len = 10
 
-    max_list_len = 5
+    today_news_all = await show_content_json(topic, language, today_news_len + newest_news_len)
+    newest_news = today_news_all[:newest_news_len]
+    today_news = today_news_all[newest_news_len:]
 
-    categories = {}
-    for article in articles_with_index:
-        category = article.get("category", "Uncategorized")
-        if category not in categories:
-            categories[category] = []
-        if len(categories[category]) < max_list_len:
-            categories[category].append(article)
+    popular_categories, remaining_categories, all_categories = await get_categories(topic, json_data)
 
-    categories = {category: articles for category, articles in categories.items() if len(articles) >= max_list_len}
-    # limit articles to max_list_len
-    articles_with_index = articles_with_index[:max_list_len]
+    print("Top 5 categories:", popular_categories)
+    print("Remaining categories:", remaining_categories)
+
+    content = content_all(all_categories, json_data)
 
     return templates.TemplateResponse("main_page_news.html",
-                                      {"request": request, "topic": topic, "articles": articles_with_index,
-                                       "language": language, "languages": languages, "categories": categories})
+                                      {"request": request, "topic": topic, "language": language, "languages": languages,
+                                       "top_categories": popular_categories, "other_categories": remaining_categories,
+                                       "newest_news": newest_news, "all_content": content, "today_news": today_news
+                                       })
 
 
 @router.get("/language", tags=["Smart URL"])
@@ -164,52 +160,5 @@ async def smart_article_html(request: Request, topic: str, url_part: str, langua
     return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
 
 
-@router.get("/test", tags=["Smart URL"])
-async def test(request: Request, topic: str, language: str = "en", limit: int = None):
-    print(f"Requested topic: {topic}, {language} language.")
-    json_data = await show_content_json(topic, language, limit)
 
-    newest_news_len = 5
-    today_news_len = 10
 
-    today_news = await show_content_json(topic, language, today_news_len + newest_news_len)
-    newest_news = today_news[:newest_news_len]
-    today_news = today_news[newest_news_len:]
-
-    get_all_categories = await categories_extractor(topic)
-    items = [item.strip() for item in get_all_categories.splitlines()]
-    categories_list = [item.strip('",[]') for item in items if item.strip('",[]')]
-    article_res = get_list_of_categories_for_language_2(json_data, categories_list)
-
-    popular_categories, remaining_categories = split_categories_by_frequency(article_res)
-    print("Top 5 categories:", popular_categories)
-    print("Remaining categories:", remaining_categories)
-
-    if isinstance(json_data, dict) and "error" in json_data:
-        return templates.TemplateResponse("error.html", {"request": request, "error": json_data["error"]})
-
-    articles_with_index = []
-    languages = languages_to_code()
-    # Fix to many data!!!
-    for article in json_data:
-        if "rewritten_content" in article:
-            article["rewritten_content"] = Markup(article["rewritten_content"])
-        articles_with_index.append(article)
-
-    max_list_len = 5
-
-    categories = {}
-    for article in articles_with_index:
-        category = article.get("category", "Uncategorized")
-        if category not in categories:
-            categories[category] = []
-        if len(categories[category]) < max_list_len:
-            categories[category].append(article)
-
-    categories = {category: articles for category, articles in categories.items() if len(articles) >= max_list_len}
-
-    return templates.TemplateResponse("main_page_news.html",
-                                      {"request": request, "topic": topic, "language": language, "languages": languages,
-                                       "top_categories": popular_categories, "other_categories": remaining_categories,
-                                       "newest_news": newest_news, "categories": categories, "today_news": today_news
-                                       })
