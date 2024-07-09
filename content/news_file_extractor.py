@@ -73,3 +73,24 @@ def get_list_of_categories_for_language(articles):
 
     sorted_categories = sorted(category_counts.items(), key=lambda x: x[1], reverse=True)
     return sorted_categories
+
+
+def get_list_of_categories_for_language_2(articles, categories):
+    category_count = {category: 0 for category in categories}
+
+    for article in articles:
+        if 'category' in article and article['category'] in category_count:
+            category_count[article['category']] += 1
+
+    category_count = {category: count for category, count in category_count.items() if count > 0}
+
+    return category_count
+
+
+def split_categories_by_frequency(category_count):
+    sorted_categories = sorted(category_count.items(), key=lambda item: item[1], reverse=True)
+
+    top_5_categories = [category for category, count in sorted_categories[:5]]
+    remaining_categories = [category for category, count in sorted_categories[5:]]
+
+    return top_5_categories, remaining_categories

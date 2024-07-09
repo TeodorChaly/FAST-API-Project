@@ -5,6 +5,7 @@ from starlette.templating import Jinja2Templates
 
 from languages.language_json import languages_to_code
 from content.news_file_extractor import *
+from main_operations.scraper.json_save import categories_extractor
 
 router = APIRouter()
 
@@ -101,8 +102,6 @@ async def smart_url(request: Request, topic: str, language: str = "en", limit: i
     print(f"Requested topic: {topic}, {language} language.")
     json_data = await show_content_json(topic, language, limit)
 
-    print(json_data)
-
     if isinstance(json_data, dict) and "error" in json_data:
         return templates.TemplateResponse("error.html", {"request": request, "error": json_data["error"]})
 
@@ -128,7 +127,89 @@ async def smart_url(request: Request, topic: str, language: str = "en", limit: i
     # limit articles to max_list_len
     articles_with_index = articles_with_index[:max_list_len]
 
-
-    return templates.TemplateResponse("news.html",
+    return templates.TemplateResponse("main_page_news.html",
                                       {"request": request, "topic": topic, "articles": articles_with_index,
                                        "language": language, "languages": languages, "categories": categories})
+
+
+@router.get("/language", tags=["Smart URL"])
+async def smart_by_category(request: Request, topic: str, category: str, language: str = "en",
+                            limit: int = None):
+    language_name = get_language_name_by_code(language)
+    articles = await news_extractor(topic, language_name, limit)
+    languages = languages_to_code()
+
+    filtered_articles = [article for article in articles if article.get("category").lower() == category.lower()]
+
+    if not filtered_articles:
+        return templates.TemplateResponse("error.html",
+                                          {"request": request, "error": f"No articles found in category {category}."})
+
+    return templates.TemplateResponse("category_list_template.html",
+                                      {"request": request, "topic": topic, "articles": filtered_articles,
+                                       "language": language, "languages": languages})
+
+
+@router.get("/detail", tags=["Smart URL"])
+async def smart_article_html(request: Request, topic: str, url_part: str, language: str):
+    language_name = get_language_name_by_code(language)
+    articles = load_articles_from_json(topic, language_name)
+    languages = languages_to_code()
+
+    for article in articles:
+        if article.get("url_part") == url_part:
+            return templates.TemplateResponse("article-details.html",
+                                              {"request": request, "topic": topic, "article": article,
+                                               "language": language, "languages": languages})
+    return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
+
+
+@router.get("/test", tags=["Smart URL"])
+async def test(request: Request, topic: str, language: str = "en", limit: int = None):
+    print(f"Requested topic: {topic}, {language} language.")
+    json_data = await show_content_json(topic, language, limit)
+
+    newest_news_len = 5
+    today_news_len = 10
+
+    today_news = await show_content_json(topic, language, today_news_len + newest_news_len)
+    newest_news = today_news[:newest_news_len]
+    today_news = today_news[newest_news_len:]
+
+    get_all_categories = await categories_extractor(topic)
+    items = [item.strip() for item in get_all_categories.splitlines()]
+    categories_list = [item.strip('",[]') for item in items if item.strip('",[]')]
+    article_res = get_list_of_categories_for_language_2(json_data, categories_list)
+
+    popular_categories, remaining_categories = split_categories_by_frequency(article_res)
+    print("Top 5 categories:", popular_categories)
+    print("Remaining categories:", remaining_categories)
+
+    if isinstance(json_data, dict) and "error" in json_data:
+        return templates.TemplateResponse("error.html", {"request": request, "error": json_data["error"]})
+
+    articles_with_index = []
+    languages = languages_to_code()
+    # Fix to many data!!!
+    for article in json_data:
+        if "rewritten_content" in article:
+            article["rewritten_content"] = Markup(article["rewritten_content"])
+        articles_with_index.append(article)
+
+    max_list_len = 5
+
+    categories = {}
+    for article in articles_with_index:
+        category = article.get("category", "Uncategorized")
+        if category not in categories:
+            categories[category] = []
+        if len(categories[category]) < max_list_len:
+            categories[category].append(article)
+
+    categories = {category: articles for category, articles in categories.items() if len(articles) >= max_list_len}
+
+    return templates.TemplateResponse("main_page_news.html",
+                                      {"request": request, "topic": topic, "language": language, "languages": languages,
+                                       "top_categories": popular_categories, "other_categories": remaining_categories,
+                                       "newest_news": newest_news, "categories": categories, "today_news": today_news
+                                       })

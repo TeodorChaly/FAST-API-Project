@@ -64,9 +64,17 @@
 
                                 <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-lg-flex">
                                    <ul class="navigation">
-                                        {% for category in categories %}
+                                        {% for category in top_categories %}
                                         <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
                                         {% endfor %}
+                                        <li class="active menu-item-has-children"><a>Other</a>
+                                            <ul class="sub-menu">
+                                                {% for category in other_categories %}
+                                                    <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
+                                                {% endfor %}
+                                                <li class="active"><a href="blog-details.html">Blog Details</a></li>
+                                            </ul>
+                                        </li>
                                     </ul>
 
                                 </div>
@@ -175,9 +183,12 @@
 
         <!-- slider-area -->
         <section class="slider__area slider__style-two fix" data-background="assets/img/bg/banner_bg.jpg">
+
             <div class="container">
+                <div class="slider__marquee clearfix">
+
                 <div class="slider-active">
-                    {% for item in articles%}
+                    {% for item in newest_news %}
                     <div class="slider__item">
                         <div class="row align-items-center">
                             <div class="col-lg-6">
@@ -200,7 +211,6 @@
                     {% endfor %}
 
                 </div>
-<!--                <div class="slider__marquee clearfix">-->
 <!--                    <div class="marquee_mode">-->
 <!--                        <h6 class="item">BTC $20211.23 <span>+1.07%</span></h6>-->
 <!--                        <h6 class="item">eth $1533.56 <span>+3.12%</span></h6>-->
@@ -209,7 +219,7 @@
 <!--                        <h6 class="item minus">xrp $0.33 <span>-2.62%</span></h6>-->
 <!--                        <h6 class="item">ada $0.45 <span>+0.16%</span></h6>-->
 <!--                        <h6 class="item minus">sol $31.54 <span>-1.14%</span></h6>-->
-<!--                    </div>-->
+                    </div>
 <!--                </div>div-->
             </div>
         </section>
@@ -245,8 +255,8 @@
                                         </div>
                                         <div class="trending__post-content">
                                             <ul class="tgbanner__content-meta list-wrap">
-<!--                                                <li class="category"><a href="blog.html">{{ category }}</a></li>-->
-<!--                                                <li><span class="by">By</span> <a href="blog.html">miranda h.</a></li>-->
+<!--                                                <li class="category"><a href="category_list_template.html">{{ category }}</a></li>-->
+<!--                                                <li><span class="by">By</span> <a href="category_list_template.html">miranda h.</a></li>-->
                                                 <li>{{ item.date_published }}</li>
                                             </ul>
                                             <h4 class="title tgcommon__hover"><a href="/{{ language }}/{{ topic }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h4>
@@ -319,7 +329,7 @@
 <!--                        </div>-->
 <!--                        <div class="col-sm-6">-->
 <!--                            <div class="section__read-more text-start text-sm-end">-->
-<!--                                <a href="blog.html">Stories Post <i class="far fa-long-arrow-right"></i></a>-->
+<!--                                <a href="category_list_template.html">Stories Post <i class="far fa-long-arrow-right"></i></a>-->
 <!--                            </div>-->
 <!--                        </div>-->
 <!--                    </div>-->
@@ -328,15 +338,15 @@
 <!--                    <div class="col-md-6">-->
 <!--                        <div class="stories-post__item">-->
 <!--                            <div class="stories-post__thumb tgImage__hover">-->
-<!--                                <a href="blog-details.html"><img src="assets/img/nft/nft_blog12.jpg" alt="img"></a>-->
+<!--                                <a href="article-details.html"><img src="assets/img/nft/nft_blog12.jpg" alt="img"></a>-->
 <!--                            </div>-->
 <!--                            <div class="stories-post__content video__post-content">-->
 <!--                                <ul class="tgbanner__content-meta list-wrap">-->
-<!--                                    <li class="category"><a href="blog.html">technology</a></li>-->
-<!--                                    <li><span class="by">By</span> <a href="blog.html">alonso d.</a></li>-->
+<!--                                    <li class="category"><a href="category_list_template.html">technology</a></li>-->
+<!--                                    <li><span class="by">By</span> <a href="category_list_template.html">alonso d.</a></li>-->
 <!--                                    <li>nov 21, 2022</li>-->
 <!--                                </ul>-->
-<!--                                <h3 class="title tgcommon__hover"><a href="blog-details.html">The multiverse is a hypothetical group of the multiple universes.</a></h3>-->
+<!--                                <h3 class="title tgcommon__hover"><a href="article-details.html">The multiverse is a hypothetical group of the multiple universes.</a></h3>-->
 <!--                            </div>-->
 <!--                        </div>-->
 <!--                    </div>-->
@@ -359,7 +369,7 @@
             </div>
         </div>
         <div class="row row-gutters-40">
-            {% for item in articles %}
+            {% for item in today_news %}
                 {% if loop.index <= 2 %}
                     <div class="col-md-6">
                         <div class="stories-post__item">
