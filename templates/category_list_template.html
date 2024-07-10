@@ -69,13 +69,12 @@
                                 <li class="lang">
                                     <div class="dropdown">
                                         <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                                            ENG
+                                            {{ language }}
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                            <li><a class="dropdown-item" href="#">SPA</a></li>
-                                            <li><a class="dropdown-item" href="#">GRE</a></li>
-                                            <li><a class="dropdown-item" href="#">CIN</a></li>
-                                            <li><a class="dropdown-item" href="#">CIN</a></li>
+                                            {% for lang in languages %}
+                                                <li><a class="dropdown-item" href="/{{ lang }}/{{ topic }}/{{ category }}">{{ lang }}</a></li>
+                                            {% endfor %}
                                         </ul>
                                     </div>
                                 </li>
@@ -101,27 +100,18 @@
                                 </div>
                                 <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-lg-flex">
                                     <ul class="navigation">
-                                        <li class="menu-item-has-children"><a href="#">Home</a>
+                                       {% for category in top_categories %}
+                                        <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
+                                        {% endfor %}
+                                        {% if other_categories %}
+                                        <li class="active menu-item-has-children"><a>Other</a>
                                             <ul class="sub-menu">
-                                                <li><a href="index.html">Home Default</a></li>
-                                                <li><a href="index-2.html">Home Interior</a></li>
-                                                <li><a href="index-3.html">Home Travel</a></li>
-                                                <li><a href="index-4.html">Home Technology</a></li>
-                                                <li><a href="index-5.html">Home NFT</a></li>
-                                                <li><a href="index-6.html">Home Fashion</a></li>
-                                                <li><a href="index-7.html">Home Adventure</a></li>
-                                                <li><a href="index-8.html">Home Minimal</a></li>
+                                                {% for category in other_categories %}
+                                                    <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
+                                                {% endfor %}
                                             </ul>
                                         </li>
-                                        <li><a href="lifestyle.html">Lifestyle</a></li>
-                                        <li><a href="travel.html">Travel</a></li>
-                                        <li class="active menu-item-has-children"><a href="#">Post Type</a>
-                                            <ul class="sub-menu">
-                                                <li class="active"><a href="blog.html">Our Blog</a></li>
-                                                <li><a href="blog-details.html">Blog Details</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="nft.html">NFT</a></li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                                 <div class="tgmenu__action">
@@ -228,8 +218,9 @@
                         <div class="breadcrumb-content">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">Blog</li>
+                                    <li class="breadcrumb-item"><a href="{{ language}}/{{ topic }}">Main page</a></li>
+                                    <li class="breadcrumb-item"><a href="{{ language}}/{{ topic }}/{{ category }}"> {{ category }}</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">news</li>
                                 </ol>
                             </nav>
                         </div>
@@ -258,13 +249,15 @@
                         <div class="blog-post-wrapper">
                             {% for item in articles %}
                                 <div class="latest__post-item">
-                                    <div class="latest__post-thumb tgImage__hover" style="width: 820px; height: 440px; overflow: hidden;">
-                                        <a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail"><img src="{{ item.image }}" alt="img" style="width: 100%; height: 100%; object-fit: cover; object-position: center;"></a>
+                                    <div class="latest__post-thumb tgImage__hover" >
+                                        <a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail"><img src="{{ item.image }}" alt="img" ></a>
                                     </div>
                                     <div class="latest__post-content">
+
                                         <ul class="tgbanner__content-meta list-wrap">
+                                            <li class="category"><a href="#">{{category}}</a></li>
                                             <li><span class="by">By</span> <a href="blog.html">alonso d.</a></li>
-                                            <li> {{item.date_published}} </li>
+                                            <li>{{item.date_published}}</li>
                                         </ul>
                                         <h3 class="title tgcommon__hover"><a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h3>
                                         <p>{{ item.seo_description[:280] }}{% if item.seo_description|length > 280 %}...{% endif %}</p>
@@ -274,15 +267,30 @@
                                     </div>
                                 </div>
                             {% endfor %}
-                            <div class="pagination__wrap">
-                                <ul class="list-wrap">
-                                    <li class="active"><a href="#">01</a></li>
-                                    <li><a href="#">02</a></li>
-                                    <li><a href="#">...</a></li>
-                                    <li><a href="#">06</a></li>
-                                    <li><a href="#"><i class="fas fa-angle-double-right"></i></a></li>
-                                </ul>
-                            </div>
+                          <div class="pagination__wrap">
+                            <ul class="list-wrap">
+                                {% if page > 1 %}
+                                    <li><a href="?page=1&topic={{ topic }}&category={{ category }}&language={{ language }}">First</a></li>
+                                    <li><a href="?page={{ page - 1 }}&topic={{ topic }}&category={{ category }}&language={{ language }}"><i class="fas fa-angle-double-left"></i></a></li>
+                                {% endif %}
+
+                                <li class="active"><a href="?page={{ page }}&topic={{ topic }}&category={{ category }}&language={{ language }}">{{ page }}</a></li>
+
+                                {% if page < total_pages %}
+                                    {% if page + 1 <= total_pages %}
+                                        <li><a href="?page={{ page + 1 }}&topic={{ topic }}&category={{ category }}&language={{ language }}">{{ page + 1 }}</a></li>
+                                    {% endif %}
+                                    {% if page + 2 < total_pages %}
+                                        <li><a href="#">...</a></li>
+                                    {% endif %}
+                                    <li><a href="?page={{ total_pages }}&topic={{ topic }}&category={{ category }}&language={{ language }}">{{ total_pages }}</a></li>
+                                    <li><a href="?page={{ page + 1 }}&topic={{ topic }}&category={{ category }}&language={{ language }}"><i class="fas fa-angle-double-right"></i></a></li>
+                                    <li><a href="?page={{ total_pages }}&topic={{ topic }}&category={{ category }}&language={{ language }}">Last</a></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+
+
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-4 col-md-6">
@@ -306,54 +314,29 @@
                             </div>
                             <div class="widget sidebar-widget widget_categories">
                                 <h4 class="widget-title">Trending Category</h4>
+
                                 <ul class="list-wrap">
+                                     {% for category in trending_categories %}
                                     <li>
                                         <div class="thumb"><a href="blog.html"><img src="assets/img/category/side_category01.jpg" alt="img"></a></div>
-                                        <a href="blog.html">technology</a>
-                                        <span class="float-right">12</span>
+                                        <a href="{{ language }}/{{ topic }}/{{category}}">{{category}}</a>
+                                        <span class="float-right">{{trending_categories[category]}}</span>
                                     </li>
-                                    <li>
-                                        <div class="thumb"><a href="blog.html"><img src="assets/img/category/side_category02.jpg" alt="img"></a></div>
-                                        <a href="blog.html">business</a>
-                                        <span class="float-right">08</span>
-                                    </li>
-                                    <li>
-                                        <div class="thumb"><a href="blog.html"><img src="assets/img/category/side_category03.jpg" alt="img"></a></div>
-                                        <a href="blog.html">fitness</a>
-                                        <span class="float-right">13</span>
-                                    </li>
-                                    <li>
-                                        <div class="thumb"><a href="blog.html"><img src="assets/img/category/side_category04.jpg" alt="img"></a></div>
-                                        <a href="blog.html">Gadgets</a>
-                                        <span class="float-right">09</span>
-                                    </li>
-                                    <li>
-                                        <div class="thumb"><a href="blog.html"><img src="assets/img/category/side_category05.jpg" alt="img"></a></div>
-                                        <a href="blog.html">politics</a>
-                                        <span class="float-right">15</span>
-                                    </li>
+                                    {% endfor %}
+
                                 </ul>
                             </div>
                             <div class="widget sidebar-widget">
                                 <div class="sidePost-active">
-                                    <div class="sidePost__item" data-background="assets/img/category/side_post01.jpg">
+                                    {% for trending_article in trending_news%}
+                                    <div class="sidePost__item" data-background="{{trending_article.image}}">
                                         <div class="sidePost__content">
-                                            <a href="blog.html" class="tag">Technology</a>
-                                            <h5 class="title tgcommon__hover"><a href="blog-details.html">Tips for helping to make an your startup a success</a></h5>
+                                            <a href="blog.html" class="tag">{{trending_article.category}}</a>
+                                            <h5 class="title tgcommon__hover"><a href="blog-details.html">{{trending_article.seo_title}}</a></h5>
                                         </div>
                                     </div>
-                                    <div class="sidePost__item" data-background="assets/img/category/side_post02.jpg">
-                                        <div class="sidePost__content">
-                                            <a href="blog.html" class="tag">Travel</a>
-                                            <h5 class="title tgcommon__hover"><a href="blog-details.html">Tips for helping to make an your startup a success</a></h5>
-                                        </div>
-                                    </div>
-                                    <div class="sidePost__item" data-background="assets/img/category/side_post02.jpg">
-                                        <div class="sidePost__content">
-                                            <a href="blog.html" class="tag">Gaming</a>
-                                            <h5 class="title tgcommon__hover"><a href="blog-details.html">Tips for helping to make an your startup a success</a></h5>
-                                        </div>
-                                    </div>
+                                    {% endfor %}
+
                                 </div>
                             </div>
                             <div class="widget sidebar-widget">

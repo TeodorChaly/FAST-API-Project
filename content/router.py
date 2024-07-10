@@ -1,9 +1,11 @@
+from typing import Optional
+
 from fastapi import APIRouter, Request
 from markupsafe import Markup
 from starlette.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
-from content.functions import content_all, get_categories
+from content.functions import *
 from languages.language_json import languages_to_code
 from content.news_file_extractor import *
 
@@ -128,22 +130,32 @@ async def main_page(request: Request, topic: str, language: str = "en", limit: i
                                        })
 
 
-@router.get("/language", tags=["Smart URL"])
-async def smart_by_category(request: Request, topic: str, category: str, language: str = "en",
-                            limit: int = None):
+@router.get("/category_list", tags=["Smart URL"])
+async def category_list(request: Request, topic: str, category: str, language: str = "en",
+                            limit: Optional[int] = None, page: int = 1):
     language_name = get_language_name_by_code(language)
     articles = await news_extractor(topic, language_name, limit)
     languages = languages_to_code()
 
-    filtered_articles = [article for article in articles if article.get("category").lower() == category.lower()]
+    json_data = await show_content_json(topic, language, limit)
+    popular_categories, remaining_categories, all_categories = await get_categories(topic, json_data)
 
-    if not filtered_articles:
+    trending_categories = get_trending_categories(all_categories)
+
+    trending_news = await show_content_json(topic, language, 4)
+
+    filtered_articles, total_pages = get_all_articles(articles, category, page)
+
+    if not filtered_articles and page == 1 or page <= 0:
         return templates.TemplateResponse("error.html",
                                           {"request": request, "error": f"No articles found in category {category}."})
 
     return templates.TemplateResponse("category_list_template.html",
-                                      {"request": request, "topic": topic, "articles": filtered_articles,
-                                       "language": language, "languages": languages})
+                                      {"request": request, "topic": topic, "category": category, "language": language,
+                                       "articles": filtered_articles, "languages": languages,
+                                       "top_categories": popular_categories, "other_categories": remaining_categories,
+                                       "trending_categories": trending_categories, "trending_news": trending_news,
+                                       "page": page, "total_pages": total_pages})
 
 
 @router.get("/detail", tags=["Smart URL"])
@@ -158,7 +170,3 @@ async def smart_article_html(request: Request, topic: str, url_part: str, langua
                                               {"request": request, "topic": topic, "article": article,
                                                "language": language, "languages": languages})
     return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
-
-
-
-

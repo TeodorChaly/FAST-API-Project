@@ -3,6 +3,8 @@ from markupsafe import Markup
 from main_operations.scraper.json_save import categories_extractor
 
 
+# Main page functions
+
 def get_list_of_categories(articles, categories):
     category_count = {category: 0 for category in categories}
 
@@ -70,6 +72,20 @@ def content_all(all_categories, json_data):
     return content
 
 
+# Category functions
+def get_trending_categories(all_categories):
+    sorted_data = dict(sorted(all_categories.items(), key=lambda item: item[1]))
+    top_5_popular_categories = dict(list(sorted_data.items())[-5:])
+    trending_categories = dict(sorted(top_5_popular_categories.items(), key=lambda item: item[1], reverse=True))
+    return trending_categories
 
 
-
+def get_all_articles(articles, category, page):
+    page_articles_max = 5
+    filtered_articles = [article for article in articles if article.get("category").lower() == category.lower()]
+    total_articles = len(filtered_articles)
+    total_pages = (total_articles + page_articles_max - 1) // page_articles_max
+    start_index = (page - 1) * page_articles_max
+    end_index = start_index + page_articles_max
+    filtered_articles = filtered_articles[start_index:end_index]
+    return filtered_articles, total_pages
