@@ -118,8 +118,8 @@ async def main_page(request: Request, topic: str, language: str = "en", limit: i
 
     popular_categories, remaining_categories, all_categories = await get_categories(topic, json_data)
 
-    print("Top 5 categories:", popular_categories)
-    print("Remaining categories:", remaining_categories)
+    # print("Top 5 categories:", popular_categories)
+    # print("Remaining categories:", remaining_categories)
 
     content = content_all(all_categories, json_data)
 
@@ -132,7 +132,7 @@ async def main_page(request: Request, topic: str, language: str = "en", limit: i
 
 @router.get("/category_list", tags=["Smart URL"])
 async def category_list(request: Request, topic: str, category: str, language: str = "en",
-                            limit: Optional[int] = None, page: int = 1):
+                        limit: Optional[int] = None, page: int = 1):
     language_name = get_language_name_by_code(language)
     articles = await news_extractor(topic, language_name, limit)
     languages = languages_to_code()
@@ -159,14 +159,24 @@ async def category_list(request: Request, topic: str, category: str, language: s
 
 
 @router.get("/detail", tags=["Smart URL"])
-async def smart_article_html(request: Request, topic: str, url_part: str, language: str):
+async def article_detail(request: Request, topic: str, url_part: str, language: str):
     language_name = get_language_name_by_code(language)
     articles = load_articles_from_json(topic, language_name)
     languages = languages_to_code()
+
+    json_data = await show_content_json(topic, language, None) # Modify!!!
+    popular_categories, remaining_categories, all_categories = await get_categories(topic, json_data)
+
+    trending_categories = get_trending_categories(all_categories)
+    trending_news = await show_content_json(topic, language, 4)
 
     for article in articles:
         if article.get("url_part") == url_part:
             return templates.TemplateResponse("article-details.html",
                                               {"request": request, "topic": topic, "article": article,
-                                               "language": language, "languages": languages})
+                                               "language": language, "languages": languages,
+                                               "top_categories": popular_categories,
+                                               "other_categories": remaining_categories,
+                                               "trending_categories": trending_categories,
+                                               "trending_news": trending_news})
     return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})

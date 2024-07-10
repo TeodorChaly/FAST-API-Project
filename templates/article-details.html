@@ -101,27 +101,18 @@
                                 </div>
                                 <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-lg-flex">
                                     <ul class="navigation">
-                                        <li class="menu-item-has-children"><a href="#">Home</a>
+                                       {% for category in top_categories %}
+                                        <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
+                                        {% endfor %}
+                                        {% if other_categories %}
+                                        <li class="active menu-item-has-children"><a>Other</a>
                                             <ul class="sub-menu">
-                                                <li><a href="index.html">Home Default</a></li>
-                                                <li><a href="index-2.html">Home Interior</a></li>
-                                                <li><a href="index-3.html">Home Travel</a></li>
-                                                <li><a href="index-4.html">Home Technology</a></li>
-                                                <li><a href="index-5.html">Home NFT</a></li>
-                                                <li><a href="index-6.html">Home Fashion</a></li>
-                                                <li><a href="index-7.html">Home Adventure</a></li>
-                                                <li><a href="index-8.html">Home Minimal</a></li>
+                                                {% for category in other_categories %}
+                                                    <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
+                                                {% endfor %}
                                             </ul>
                                         </li>
-                                        <li><a href="lifestyle.html">Lifestyle</a></li>
-                                        <li><a href="travel.html">Travel</a></li>
-                                        <li class="active menu-item-has-children"><a href="#">Post Type</a>
-                                            <ul class="sub-menu">
-                                                <li><a href="blog.html">Our Blog</a></li>
-                                                <li class="active"><a href="blog-details.html">Blog Details</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a href="nft.html">NFT</a></li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                                 <div class="tgmenu__action">
@@ -294,38 +285,29 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="blog-avatar-wrap">
-                                <div class="blog-avatar-img">
-                                    <a href="#"><i class="far fa-check"></i><img src="assets/img/others/avatar.png" alt="img"></a>
-                                </div>
-                                <div class="blog-avatar-content">
-                                    <p>Monty Hython is a Writer at Sarsa and has been covering emerging technologies &
-                                    venture capital there since 2013. He covers a wide variety of news from early and late stage startups to massive tech behemoths.</p>
-                                    <h5 class="name">Alison Fiano</h5>
-                                    <span class="designation">OG Author</span>
-                                </div>
-                            </div>
+
                             <div class="blog-prev-next-posts">
                                 <div class="row">
                                     <div class="col-xl-6 col-lg-8 col-md-6">
                                         <div class="pn-post-item">
                                             <div class="thumb">
-                                                <a href="blog-details.html"><img src="assets/img/lifestyle/life_style06.jpg" alt="img"></a>
+                                                <a href="{{ language }}/{{topic}}/{{ trending_news[0].url_part }}/detail"><img src="{{ trending_news[0].image }}" alt="img"></a>
                                             </div>
                                             <div class="content">
                                                 <span>Prev Post</span>
-                                                <h5 class="title tgcommon__hover"><a href="blog-details.html">3 Stocks to Buy and Hold Through the Panic...</a></h5>
+
+                                                <h5 class="title tgcommon__hover"><a href="{{ language }}/{{topic}}/{{ trending_news[0].url_part }}/detail">{{ trending_news[0].seo_title[:45] }}{% if trending_news[0].seo_title|length > 45 %}...{% endif %}</a></h5>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-6">
                                         <div class="pn-post-item next-post">
                                             <div class="thumb">
-                                                <a href="blog-details.html"><img src="assets/img/lifestyle/life_style07.jpg" alt="img"></a>
+                                                <a href="{{ language }}/{{topic}}/{{ trending_news[1].url_part }}/detail"><img src="{{ trending_news[1].image }}" alt="img"></a>
                                             </div>
                                             <div class="content">
                                                 <span>Next Post</span>
-                                                <h5 class="title tgcommon__hover"><a href="blog-details.html">Mood Boards for Product Designers dome...</a></h5>
+                                                <h5 class="title tgcommon__hover"><a href="{{ language }}/{{topic}}/{{ trending_news[1].url_part }}/detail">{{ trending_news[1].seo_title[:45] }}{% if trending_news[1].seo_title|length > 45 %}...{% endif %}</a></h5>
                                             </div>
                                         </div>
                                     </div>
@@ -355,53 +337,25 @@
                             <div class="widget sidebar-widget widget_categories">
                                 <h4 class="widget-title">Trending Category</h4>
                                 <ul class="list-wrap">
+                                   {% for category in trending_categories %}
                                     <li>
                                         <div class="thumb"><a href="blog.html"><img src="assets/img/category/side_category01.jpg" alt="img"></a></div>
-                                        <a href="blog.html">technology</a>
-                                        <span class="float-right">12</span>
+                                        <a href="{{ language }}/{{ topic }}/{{category}}">{{category}}</a>
+                                        <span class="float-right">{{trending_categories[category]}}</span>
                                     </li>
-                                    <li>
-                                        <div class="thumb"><a href="blog.html"><img src="assets/img/category/side_category02.jpg" alt="img"></a></div>
-                                        <a href="blog.html">business</a>
-                                        <span class="float-right">08</span>
-                                    </li>
-                                    <li>
-                                        <div class="thumb"><a href="blog.html"><img src="assets/img/category/side_category03.jpg" alt="img"></a></div>
-                                        <a href="blog.html">fitness</a>
-                                        <span class="float-right">13</span>
-                                    </li>
-                                    <li>
-                                        <div class="thumb"><a href="blog.html"><img src="assets/img/category/side_category04.jpg" alt="img"></a></div>
-                                        <a href="blog.html">Gadgets</a>
-                                        <span class="float-right">09</span>
-                                    </li>
-                                    <li>
-                                        <div class="thumb"><a href="blog.html"><img src="assets/img/category/side_category05.jpg" alt="img"></a></div>
-                                        <a href="blog.html">politics</a>
-                                        <span class="float-right">15</span>
-                                    </li>
+                                    {% endfor %}
                                 </ul>
                             </div>
                             <div class="widget sidebar-widget">
                                 <div class="sidePost-active">
-                                    <div class="sidePost__item" data-background="assets/img/category/side_post01.jpg">
+                                    {% for trending_article in trending_news%}
+                                    <div class="sidePost__item" data-background="{{trending_article.image}}">
                                         <div class="sidePost__content">
-                                            <a href="blog.html" class="tag">Technology</a>
-                                            <h5 class="title tgcommon__hover"><a href="blog-details.html">Tips for helping to make an your startup a success</a></h5>
+                                            <a href="blog.html" class="tag">{{trending_article.category}}</a>
+                                            <h5 class="title tgcommon__hover"><a href="blog-details.html">{{trending_article.seo_title}}</a></h5>
                                         </div>
                                     </div>
-                                    <div class="sidePost__item" data-background="assets/img/category/side_post02.jpg">
-                                        <div class="sidePost__content">
-                                            <a href="blog.html" class="tag">Travel</a>
-                                            <h5 class="title tgcommon__hover"><a href="blog-details.html">Tips for helping to make an your startup a success</a></h5>
-                                        </div>
-                                    </div>
-                                    <div class="sidePost__item" data-background="assets/img/category/side_post02.jpg">
-                                        <div class="sidePost__content">
-                                            <a href="blog.html" class="tag">Gaming</a>
-                                            <h5 class="title tgcommon__hover"><a href="blog-details.html">Tips for helping to make an your startup a success</a></h5>
-                                        </div>
-                                    </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                             <div class="widget sidebar-widget">
