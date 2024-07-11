@@ -179,5 +179,5 @@ async def article_detail(request: Request, topic: str, url_part: str, language: 
                                                "top_categories": popular_categories,
                                                "other_categories": remaining_categories,
                                                "trending_categories": trending_categories,
-                                               "trending_news": trending_news})
+                                               "trending_news": trending_news, "tags":article["tags"].split(",")})
     return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
