@@ -8,20 +8,20 @@
     <meta name="description" content="Sarsa - News & Magazine HTML Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="shortcut icon" type="image/x-icon" href="assets/img/favicon.png">
+  <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('assets', path='/img/favicon.png') }}">
     <!-- Place favicon.ico in the root directory -->
 
     <!-- CSS here -->
-    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/animate.min.css">
-    <link rel="stylesheet" href="assets/css/magnific-popup.css">
-    <link rel="stylesheet" href="assets/css/fontawesome-all.min.css">
-    <link rel="stylesheet" href="assets/css/imageRevealHover.css">
-    <link rel="stylesheet" href="assets/css/swiper-bundle.css">
-    <link rel="stylesheet" href="assets/css/flaticon.css">
-    <link rel="stylesheet" href="assets/css/slick.css">
-    <link rel="stylesheet" href="assets/css/spacing.css">
-    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="{{ url_for('assets', path='/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('assets', path='/css/animate.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('assets', path='/css/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ url_for('assets', path='/css/fontawesome-all.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('assets', path='/css/imageRevealHover.css') }}">
+    <link rel="stylesheet" href="{{ url_for('assets', path='/css/swiper-bundle.css') }}">
+    <link rel="stylesheet" href="{{ url_for('assets', path='/css/flaticon.css') }}">
+    <link rel="stylesheet" href="{{ url_for('assets', path='/css/slick.css') }}">
+    <link rel="stylesheet" href="{{ url_for('assets', path='/css/spacing.css') }}">
+    <link rel="stylesheet" href="{{ url_for('assets', path='/css/main.css') }}">
 </head>
 
 <body>
@@ -58,8 +58,8 @@
                     </div>
                     <div class="col-lg-4 col-md-3 order-0 order-lg-2 d-none d-md-block">
                         <div class="header__top-logo logo text-lg-center">
-                            <a href="index.html" class="logo-dark"><img src="assets/img/logo/logo.png" alt="Logo"></a>
-                            <a href="index.html" class="logo-light"><img src="assets/img/logo/w_logo.png" alt="Logo"></a>
+                            <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
+                            <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-3 col-sm-6 order-3 d-none d-sm-block">
@@ -92,8 +92,8 @@
                         <div class="tgmenu__wrap">
                             <nav class="tgmenu__nav">
                                 <div class="logo d-block d-md-none">
-                                    <a href="index.html" class="logo-dark"><img src="assets/img/logo/logo.png" alt="Logo"></a>
-                                    <a href="index.html" class="logo-light"><img src="assets/img/logo/w_logo.png" alt="Logo"></a>
+                                    <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
+                                    <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
                                 </div>
                                 <div class="offcanvas-toggle">
                                     <a href="#"><i class="flaticon-menu-bar"></i></a>
@@ -135,8 +135,8 @@
                             <nav class="tgmobile__menu-box">
                                 <div class="close-btn"><i class="fas fa-times"></i></div>
                                 <div class="nav-logo">
-                                    <a href="index.html" class="logo-dark"><img src="assets/img/logo/logo.png" alt="Logo"></a>
-                                    <a href="index.html" class="logo-light"><img src="assets/img/logo/w_logo.png" alt="Logo"></a>
+                                    <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
+                                    <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
                                 </div>
                                 <div class="tgmobile__search">
                                     <form action="#">
@@ -170,18 +170,19 @@
             <div class="offCanvas__body">
                 <div class="offCanvas__toggle"><i class="flaticon-addition"></i></div>
                 <div class="offCanvas__content">
-                    <div class="offCanvas__logo logo">
-                        <a href="index.html" class="logo-dark"><img src="assets/img/logo/logo.png" alt="Logo"></a>
-                        <a href="index.html" class="logo-light"><img src="assets/img/logo/w_logo.png" alt="Logo"></a>
+                     <div class="offCanvas__logo logo">
+                         <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }} " alt="Logo"></a>
+                         <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/logo.png') }} " alt="Logo"></a>
+
                     </div>
                     <p>Change how the world works with Biotellus, made for ecology.</p>
                     <ul class="offCanvas__instagram list-wrap">
-                        <li><a href="assets/img/blog/blog01.jpg" class="popup-image"><img src="assets/img/blog/blog01.jpg" alt="img"></a></li>
-                        <li><a href="assets/img/blog/blog02.jpg" class="popup-image"><img src="assets/img/blog/blog02.jpg" alt="img"></a></li>
-                        <li><a href="assets/img/blog/blog03.jpg" class="popup-image"><img src="assets/img/blog/blog03.jpg" alt="img"></a></li>
-                        <li><a href="assets/img/blog/blog04.jpg" class="popup-image"><img src="assets/img/blog/blog04.jpg" alt="img"></a></li>
-                        <li><a href="assets/img/blog/blog05.jpg" class="popup-image"><img src="assets/img/blog/blog05.jpg" alt="img"></a></li>
-                        <li><a href="assets/img/blog/blog06.jpg" class="popup-image"><img src="assets/img/blog/blog06.jpg" alt="img"></a></li>
+                        <li><a href="{{ url_for('assets', path='/img/blog/blog01.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog01.jpg') }}" alt="img"></a></li>
+                        <li><a href="{{ url_for('assets', path='/img/blog/blog02.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog02.jpg') }}" alt="img"></a></li>
+                        <li><a href="{{ url_for('assets', path='/img/blog/blog03.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog03.jpg') }}" alt="img"></a></li>
+                        <li><a href="{{ url_for('assets', path='/img/blog/blog04.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog04.jpg') }}" alt="img"></a></li>
+                        <li><a href="{{ url_for('assets', path='/img/blog/blog05.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog05.jpg') }}" alt="img"></a></li>
+                        <li><a href="{{ url_for('assets', path='/img/blog/blog06.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog06.jpg') }}" alt="img"></a></li>
                     </ul>
                 </div>
                 <div class="offCanvas__contact">
@@ -218,8 +219,8 @@
                         <div class="breadcrumb-content">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="{{ language}}/{{ topic }}">Main page</a></li>
-                                    <li class="breadcrumb-item"><a href="{{ language}}/{{ topic }}/{{ category }}"> {{ category }}</a></li>
+                                    <li class="breadcrumb-item"><a href="/{{ language}}/{{ topic }}">Main page</a></li>
+                                    <li class="breadcrumb-item"><a href="/{{ language}}/{{ topic }}/{{ category }}"> {{ category }}</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">news</li>
                                 </ol>
                             </nav>
@@ -298,7 +299,7 @@
                             <div class="widget sidebar-widget">
                                 <div class="tgAbout-me">
                                     <div class="tgAbout-thumb">
-                                        <img src="assets/img/others/about_me.png" alt="me">
+                                        <img src="{{ url_for('assets', path='/img/others/about_me.png') }}" alt="me">
                                     </div>
                                     <div class="tgAbout-info">
                                         <p class="intro">Hi there, I’m <span>Rosalina D.</span></p>
@@ -318,8 +319,8 @@
                                 <ul class="list-wrap">
                                      {% for category in trending_categories %}
                                     <li>
-                                        <div class="thumb"><a href="blog.html"><img src="assets/img/category/side_category01.jpg" alt="img"></a></div>
-                                        <a href="{{ language }}/{{ topic }}/{{category}}">{{category}}</a>
+                                        <div class="thumb"><a href="blog.html"><img src="{{ url_for('assets', path='/img/category/side_category01.jpg') }}" alt="img"></a></div>
+                                        <a href="/{{ language }}/{{ topic }}/{{category}}">{{category}}</a>
                                         <span class="float-right">{{trending_categories[category]}}</span>
                                     </li>
                                     {% endfor %}
@@ -344,50 +345,50 @@
                                 <div class="sidebarInsta__wrap">
                                     <div class="sidebarInsta__top">
                                         <div class="sidebarInsta__logo">
-                                            <img src="assets/img/instagram/insta_logo.png" alt="img">
+                                            <img src="{{ url_for('assets', path='/img/instagram/insta_logo.png') }} " alt="img">
                                         </div>
                                         <div class="sidebarInsta__info">
                                             <h6 class="name"><a href="#">ins.co/sarso.co</a></h6>
                                             <span class="designation">Code Supply Co.</span>
                                         </div>
                                     </div>
-                                    <div class="sidebarInsta__slider-wrap">
-                                        <div class="swiper-container sidebarInsta-active">
-                                            <div class="swiper-wrapper">
-                                                <div class="swiper-slide">
-                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta01.jpg" alt="img"></a>
-                                                </div>
-                                                <div class="swiper-slide">
-                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta02.jpg" alt="img"></a>
-                                                </div>
-                                                <div class="swiper-slide">
-                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta03.jpg" alt="img"></a>
-                                                </div>
-                                                <div class="swiper-slide">
-                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta04.jpg" alt="img"></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="swiper-container sidebarInsta-active-2" dir="rtl">
-                                            <div class="swiper-wrapper">
-                                                <div class="swiper-slide">
-                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta05.jpg" alt="img"></a>
-                                                </div>
-                                                <div class="swiper-slide">
-                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta06.jpg" alt="img"></a>
-                                                </div>
-                                                <div class="swiper-slide">
-                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta07.jpg" alt="img"></a>
-                                                </div>
-                                                <div class="swiper-slide">
-                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta08.jpg" alt="img"></a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="sidebarInsta__bottom">
-                                        <a href="https://www.instagram.com/" target="_blank" class="btn"><i class="fab fa-instagram"></i><span class="text">Follow Me</span></a>
-                                    </div>
+<!--                                    <div class="sidebarInsta__slider-wrap">-->
+<!--                                        <div class="swiper-container sidebarInsta-active">-->
+<!--                                            <div class="swiper-wrapper">-->
+<!--                                                <div class="swiper-slide">-->
+<!--                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta01.jpg" alt="img"></a>-->
+<!--                                                </div>-->
+<!--                                                <div class="swiper-slide">-->
+<!--                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta02.jpg" alt="img"></a>-->
+<!--                                                </div>-->
+<!--                                                <div class="swiper-slide">-->
+<!--                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta03.jpg" alt="img"></a>-->
+<!--                                                </div>-->
+<!--                                                <div class="swiper-slide">-->
+<!--                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta04.jpg" alt="img"></a>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="swiper-container sidebarInsta-active-2" dir="rtl">-->
+<!--                                            <div class="swiper-wrapper">-->
+<!--                                                <div class="swiper-slide">-->
+<!--                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta05.jpg" alt="img"></a>-->
+<!--                                                </div>-->
+<!--                                                <div class="swiper-slide">-->
+<!--                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta06.jpg" alt="img"></a>-->
+<!--                                                </div>-->
+<!--                                                <div class="swiper-slide">-->
+<!--                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta07.jpg" alt="img"></a>-->
+<!--                                                </div>-->
+<!--                                                <div class="swiper-slide">-->
+<!--                                                    <a href="https://www.instagram.com/" target="_blank"><img src="assets/img/instagram/side_insta08.jpg" alt="img"></a>-->
+<!--                                                </div>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="sidebarInsta__bottom">-->
+<!--                                        <a href="https://www.instagram.com/" target="_blank" class="btn"><i class="fab fa-instagram"></i><span class="text">Follow Me</span></a>-->
+<!--                                    </div>-->
                                 </div>
                             </div>
                         </aside>
@@ -502,7 +503,8 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-md-4">
                         <div class="footer__logo logo">
-                            <a href="index.html"><img src="assets/img/logo/w_logo.png" alt="Logo"></a>
+                            <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }} " alt="Logo"></a>
+
                         </div>
                     </div>
                     <div class="col-lg-9 col-md-8">
@@ -542,19 +544,19 @@
 
 
     <!-- JS here -->
-    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
-    <script src="assets/js/bootstrap.min.js"></script>
-    <script src="assets/js/isotope.pkgd.min.js"></script>
-    <script src="assets/js/imagesloaded.pkgd.min.js"></script>
-    <script src="assets/js/jquery.magnific-popup.min.js"></script>
-    <script src="assets/js/jquery.marquee.min.js"></script>
-    <script src="assets/js/imageRevealHover.js"></script>
-    <script src="assets/js/swiper-bundle.js"></script>
-    <script src="assets/js/TweenMax.min.js"></script>
-    <script src="assets/js/slick.min.js"></script>
-    <script src="assets/js/ajax-form.js"></script>
-    <script src="assets/js/wow.min.js"></script>
-    <script src="assets/js/main.js"></script>
+    <script src="{{ url_for('assets', path='js/vendor/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('assets', path='js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('assets', path='js/isotope.pkgd.min.js') }}"></script>
+    <script src="{{ url_for('assets', path='js/imagesloaded.pkgd.min.js') }}"></script>
+    <script src="{{ url_for('assets', path='js/jquery.magnific-popup.min.js') }}"></script>
+    <script src="{{ url_for('assets', path='js/jquery.marquee.min.js') }}"></script>
+    <script src="{{ url_for('assets', path='js/imageRevealHover.js') }}"></script>
+    <script src="{{ url_for('assets', path='js/swiper-bundle.js') }}"></script>
+    <script src="{{ url_for('assets', path='js/TweenMax.min.js') }}"></script>
+    <script src="{{ url_for('assets', path='js/slick.min.js') }}"></script>
+    <script src="{{ url_for('assets', path='js/ajax-form.js') }}"></script>
+    <script src="{{ url_for('assets', path='js/wow.min.js') }}"></script>
+    <script src="{{ url_for('assets', path='js/main.js') }}"></script>
 </body>
 
 </html>
