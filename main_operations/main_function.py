@@ -65,12 +65,8 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
             await save_url(url)
         else:
             print("Check data.")
-            print("Title:", title)
-            print("Main text:", main_text)
-            print("Date:", date_published)
-            print("Img:", img_url)
-            print("URL:", url)
-            return {"Title": title, "Date": date_published, "Img": img_url, "URL": url}
+
+            return {"URL RSS status": "correct", "Info":{"Title": title, "Date": date_published, "Img": img_url, "URL": url}}
 
     except Exception as e:
         print("Error during regenerate:", e)

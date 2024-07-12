@@ -30,9 +30,10 @@ async def startup_event():
             json.dump([], file)
 
 
-app.include_router(scraping_router)
 app.include_router(crawler_router)
-app.include_router(topics_router)
 app.include_router(languages_router)
+
+app.include_router(topics_router)
+app.include_router(scraping_router)
 
 
