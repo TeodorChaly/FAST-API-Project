@@ -1,12 +1,10 @@
-import os
-
+# Celery application setup
 from celery import Celery
-from celery.schedules import crontab
+import os
 from dotenv import load_dotenv
 
 load_dotenv()
 
-""""Core celery task configuration"""
 celery = Celery(
     "tasks",
     broker=f"redis://{os.getenv('REDIS_HOST')}:{os.getenv('REDIS_PORT')}",
@@ -16,11 +14,12 @@ celery = Celery(
 celery.conf.beat_schedule = {
     'celery_beat_testing': {
         'task': 'bg_tasks.background_task.main_bg_function',
-        'schedule': crontab(minute='*/1')
-    }
+        'schedule': 13  # Time in seconds
+    },
+    # 'second_bg_task_every_15_minutes': {
+    #     'task': 'bg_tasks.background_task.second_task',
+    #     'schedule': 10,
+    # }
 }
-
-# celery -A bg_tasks.celery_task_core beat --loglevel=info
-# celery -A bg_tasks.celery_task_core worker --loglevel=info
 
 celery.conf.timezone = 'UTC'

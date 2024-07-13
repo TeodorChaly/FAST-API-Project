@@ -1,9 +1,8 @@
 import json
 import os
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
-from starlette.templating import Jinja2Templates
 
 from main_operations.router import router as scraping_router
 from content.router import router as topics_router
@@ -32,7 +31,6 @@ async def startup_event():
 
 app.include_router(crawler_router)
 app.include_router(languages_router)
-
 app.include_router(topics_router)
 app.include_router(scraping_router)
 

@@ -1,7 +1,7 @@
 from typing import Optional
 
 from fastapi import APIRouter, Request
-from starlette.responses import HTMLResponse
+from starlette.responses import HTMLResponse, RedirectResponse
 from starlette.templating import Jinja2Templates
 
 from content.functions import *
@@ -25,7 +25,13 @@ async def show_content_json(topic: str, language: str = "en", limit: int = None)
 
 
 @router.get("/", tags=["User content"], response_class=HTMLResponse)
-async def main_page(request: Request, topic: str = "latvia_google_news", language: str = "en", limit: int = None):
+async def main_page_redirect():
+    redirect = "latvia_google_news"
+    return RedirectResponse(url=f"/{redirect}")
+
+
+@router.get("/{topic}", tags=["User content"], response_class=HTMLResponse)
+async def main_page(request: Request, topic: str, language: str = "en", limit: int = None):
     print(f"Requested topic: {topic}, {language} language.")
     languages = languages_to_code()
 
