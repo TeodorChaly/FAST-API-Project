@@ -43,7 +43,7 @@ def get_first_n_articles_by_category(articles, category, n):
 
 
 async def get_categories(topic, json_data):
-    get_all_categories = await categories_extractor(topic)
+    get_all_categories = categories_extractor(topic)
     items = [item.strip() for item in get_all_categories.splitlines()]
     categories_list = [item.strip('",[]') for item in items if item.strip('",[]')]
     all_categories = get_list_of_categories(json_data, categories_list)

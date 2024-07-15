@@ -1,22 +1,22 @@
 import json
 import os
+from urllib.parse import urlparse, urlunparse
 
 from ai_regenerator.prompts import ai_category_function
 
 
-async def categories_extractor(topic):
+def categories_extractor(topic):
     try:
         current_file_path = os.path.abspath(__file__)
         main_directory = os.path.dirname((os.path.dirname(os.path.dirname(current_file_path))))
-
         folder_name = os.path.join(main_directory, "news_json")
-        sub_folder_name = os.path.join(folder_name, topic)
+        sub_folder_name = os.path.join(folder_name, str(topic))
         file_name = f"{topic}.json"
         file_path = os.path.join(sub_folder_name, file_name)
         with open(file_path, 'r', encoding='utf-8') as file:
             return json.load(file)
     except Exception as e:
-        print(e)
+        print("Error during categories:", e)
 
 
 async def folder_prep(topic, language, additional_info=None):
@@ -87,6 +87,12 @@ async def json_rewritten_news_saver(generated_json_data, topic, language, image,
         raise f"Error during saving new content: {e}"
 
 
+def normalize_url(url):
+    parsed_url = urlparse(url)
+    normalized_url = urlunparse((parsed_url.scheme, parsed_url.netloc, parsed_url.path, '', '', ''))
+    return normalized_url
+
+
 def check(url):
     try:
         with open("scraped_urls.json", "r", encoding="utf-8") as file:
@@ -94,7 +100,10 @@ def check(url):
     except (FileNotFoundError, json.JSONDecodeError):
         scraped_urls = []
 
-    if url in scraped_urls:
+    normalized_url = normalize_url(url)
+    normalized_scraped_urls = [normalize_url(scraped_url) for scraped_url in scraped_urls]
+
+    if normalized_url in normalized_scraped_urls:
         return False
     else:
         return True

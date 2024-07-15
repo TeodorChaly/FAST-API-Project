@@ -40,13 +40,6 @@ async def rss_list_saver(url, topic):
     with open(filename, 'w') as f:
         json.dump(combined_links, f, indent=4)
 
-    if new_links:
-        print(f"New RSS links: {len(new_links)}.")
-        if len(new_links) < 10:
-            for link in new_links:
-                await scraper_fun(link)
-        else:
-            print("Big list of new news.")
 
     return new_links
 

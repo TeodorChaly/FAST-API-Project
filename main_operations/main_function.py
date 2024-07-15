@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 import httpx
 from bs4 import BeautifulSoup
@@ -13,6 +14,7 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
     try:
         main_text = main_text_scraper(soup)
         img_url = img_path_scraper(soup)
+        time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         try:
             title = title_scraper(soup)
@@ -25,60 +27,54 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
             print("Error during scraping date,", e)
             date_published = str(datetime.now())
 
-        if main_text == "No main text found" or main_text == "Error":
-            print("Main content not scrapped.")
+        if main_text in ["No main text found", "Error"]:
             return {"Next_url": "This url wasn't scrapped correctly."}
 
         if date_published == "No date found":
             date_published = str(datetime.now())
 
-        content_to_generate = title + " " + main_text + " " + date_published
+        content_to_generate = f"{title} {main_text} {date_published}"
+        word_count = len(content_to_generate.split())
 
-        words = content_to_generate.split()
-        word_count = len(words)
-
-        print(word_count, "words in total.")
-
-        # with open("scraped_urls.html", "w", encoding="utf-8") as file:
-        #     file.write(str(soup))
+        print(f"{word_count} words in total.")
 
         if status == "scrape":
+            categories = json.loads(categories_extractor(topic))
             for language in languages:
                 await folder_prep(topic, language, additional_info)
-                categories = json.loads(await categories_extractor(topic))
-
+                print(f"Folder prepared for {language} language.")
                 regenerated_result = await ai_generator_function(content_to_generate, language, categories)
                 try:
-
                     regenerated_result_json = json.loads(regenerated_result)
-                except Exception as e:
-                    raise "Error during JSON parsing."
-
-                words = regenerated_result_json["rewritten_content"].split()
-                word_count = len(words)
-                print(word_count, f"for {language} language.")
+                    print(f"Content for {language}", regenerated_result_json["url_part"])
+                except json.JSONDecodeError as e:
+                    print("\n WARNING \nContent for", language, "not generated, because of\n", e,
+                          f"\n {regenerated_result} \n")
+                    continue
 
                 await json_rewritten_news_saver(regenerated_result_json, topic, language, img_url, url)
-
                 print(f"Data appended to JSON file for {language} language.")
 
             await save_url(url)
         else:
-            print("Check data.")
+            return {
+                "URL RSS status": "correct",
+                "Info": {"Title": title, "Date": date_published, "Img": img_url, "URL": url}
+            }
 
-            return {"URL RSS status": "correct", "Info":{"Title": title, "Date": date_published, "Img": img_url, "URL": url}}
 
     except Exception as e:
         print("Error during regenerate:", e)
+        logging.error("Error during regenerate: %s", e, exc_info=True)
 
         if not os.path.exists("logs_list"):
             os.makedirs("logs_list")
 
         now_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        log_filename = f"bug_{now_time}.log"
+        log_filename = f"logs_list/bug_{now_time}.log"
 
-        with open(f"logs_list/bug_{log_filename}", "w", encoding="utf-8") as file:
-            file.write(regenerated_result + "\n" + str(e))
+        with open(log_filename, "w", encoding="utf-8") as file:
+            file.write(str(e))
 
 
 async def scrape(url, topic, languages, status, bool_google=False, additional_info=None):
@@ -91,14 +87,14 @@ async def scrape(url, topic, languages, status, bool_google=False, additional_in
                 'Upgrade-Insecure-Requests': '1',
                 'Cache-Control': 'max-age=0'
             }
-
             if not bool_google:
+                print("Not Google news")
                 async with httpx.AsyncClient() as client:
                     response = await client.get(url, headers=headers)
                     response.raise_for_status()
                     soup = BeautifulSoup(response.content, 'html.parser')
             else:
-                print("Google search.")
+                print("Google news")
                 soup = await google_news_extractor(url)
 
             await regenerate_function(soup, languages, topic, url, status, additional_info)

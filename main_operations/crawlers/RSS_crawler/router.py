@@ -56,23 +56,20 @@ async def crawler_by_rss_or_feed(topic: str = Query(..., description="Topic"), g
         results = await rss_list_saver(feed["url"], feed["topic"])
         new_links_number += len(results)
         new_links.append(results)
-
     counter = 0
     for urls in new_links:
         for _ in urls:
             counter += 1
-
     # Fix
     if counter < 10:
         for urls in new_links:
             for url in urls:
+                print("New article:", google, url)
                 if google:
-                    print(f"Scraping for {url}")
                     await scraper_fun(url, topic, google=True)
                 else:
                     await scraper_fun(url, topic)
     else:
         print("Too many new links. Not scraping.")
 
-    print(f"RSS list was scraped. New - {new_links_number}")
     return f"RSS scraped. New - {new_links_number}"
