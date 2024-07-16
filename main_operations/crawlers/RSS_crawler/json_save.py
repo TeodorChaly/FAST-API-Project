@@ -5,7 +5,6 @@ from urllib.parse import urlparse
 import feedparser
 import requests
 
-from main_operations.router import scraper_fun
 
 
 async def rss_list_saver(url, topic):
@@ -24,7 +23,7 @@ async def rss_list_saver(url, topic):
         os.makedirs(f'RSS_news/{topic}_rss_sites')
 
     filename = f'RSS_news/{topic}_rss_sites/{domain}_rss.json'
-    max_entries = 1000 # Maximum number of entries to keep in the file
+    max_entries = 1000  # Maximum number of entries to keep in the file
 
     os.makedirs(os.path.dirname(filename), exist_ok=True)
 
@@ -40,8 +39,34 @@ async def rss_list_saver(url, topic):
     with open(filename, 'w') as f:
         json.dump(combined_links, f, indent=4)
 
-
     return new_links
+
+
+def process_json(input_json):
+    start_key = '"rewritten_content":'
+    end_key = '"seo_title":'
+
+    start_index = input_json.find(start_key) + len(start_key)
+    if start_index == -1:
+        print("Error no 'rewritten_content'")
+        return None
+
+    end_index = input_json.find(end_key, start_index)
+    if end_index == -1:
+        print("Error no 'seo_title'")
+        return None
+
+    value_start_index = input_json.find('"', start_index) + 1
+    value_end_index = input_json.find('"seo_title"', value_start_index) - 7
+    if value_start_index == -1 or value_end_index == -1:
+        print("Error no 'rewritten_content' content")
+        return None
+
+    content = input_json[value_start_index:value_end_index]
+    content = content.replace('"', r'\"')
+    fixed_json = (input_json[:value_start_index] + content +
+                  input_json[value_end_index:])
+    return fixed_json
 
 
 def test_rss(url):

@@ -5,8 +5,9 @@ from starlette.responses import HTMLResponse, RedirectResponse
 from starlette.templating import Jinja2Templates
 
 from content.functions import *
-from languages.language_json import languages_to_code
 from content.news_file_extractor import *
+from configs.config_setup import main_site_topic
+from languages.language_json import languages_to_code
 
 router = APIRouter()
 
@@ -15,7 +16,6 @@ templates = Jinja2Templates(directory="templates")
 templates.env.filters['language_name'] = language_to_code
 
 
-# @router.get("/api/v1/{language}/{topic}", tags=["API"], response_class=HTMLResponse)
 async def show_content_json(topic: str, language: str = "en", limit: int = None):
     try:
         language_name = get_language_name_by_code(language)
@@ -26,7 +26,7 @@ async def show_content_json(topic: str, language: str = "en", limit: int = None)
 
 @router.get("/", tags=["User content"], response_class=HTMLResponse)
 async def main_page_redirect():
-    redirect = "latvia_google_news"
+    redirect = main_site_topic
     return RedirectResponse(url=f"/{redirect}")
 
 

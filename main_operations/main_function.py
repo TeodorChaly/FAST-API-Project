@@ -6,8 +6,23 @@ from bs4 import BeautifulSoup
 
 from ai_regenerator.prompts import ai_generator_function
 from main_operations.crawlers.Google_news_crawler.google_search_crawler import google_news_extractor
+from main_operations.crawlers.RSS_crawler.json_save import process_json
 from main_operations.scraper.json_save import *
 from main_operations.scraper.page_scraper import *
+
+
+async def regenerate_again(content_to_generate, language, categories):
+    tries_count = 1
+    while tries_count < 3:
+        try:
+            regenerated_result = await ai_generator_function(content_to_generate, language, categories)
+            regenerated_result_json = json.loads(regenerated_result)
+            print(f"Try {tries_count} for {language}", regenerated_result_json["url_part"])
+            return regenerated_result_json
+        except json.JSONDecodeError as e:
+            print(f"Error during regeneration {tries_count}: {e}")
+            continue
+    return None
 
 
 async def regenerate_function(soup, languages, topic, url, status, additional_info=None):
@@ -48,9 +63,16 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
                     regenerated_result_json = json.loads(regenerated_result)
                     print(f"Content for {language}", regenerated_result_json["url_part"])
                 except json.JSONDecodeError as e:
-                    print("\n WARNING \nContent for", language, "not generated, because of\n", e,
-                          f"\n {regenerated_result} \n")
-                    continue
+                    try:
+                        json_content = process_json(regenerated_result)
+                        regenerated_result_json = json.loads(json_content)
+                    except Exception as e2:
+                        print("Mistake during regeneration. Trying again.")
+                        regenerated_result_json = await regenerate_again(content_to_generate, language, categories)
+                        if regenerated_result_json is None:
+                            print("\n WARNING \nContent for", language, "not generated, because of\n", e2,
+                                  f"\n {regenerated_result} \n")
+                            continue
 
                 await json_rewritten_news_saver(regenerated_result_json, topic, language, img_url, url)
                 print(f"Data appended to JSON file for {language} language.")
