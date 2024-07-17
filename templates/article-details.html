@@ -100,13 +100,13 @@
                                         {% endif %}
                                     </ul>
                                 </div>
-                                <div class="dropdown">
-                                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                <div >
+                                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: rgba(0, 0, 0, 0.0); border: 0.2px solid rgba(0, 0, 0, 0);">
                                             {{ language.upper() }}
                                         </button>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <ul class="dropdown-menu">
                                             {% for lang in languages %}
-                                            <li><a class="dropdown-item" href="?language={{ lang }}">{{ lang.upper() }}</a></li>
+                                            <li><a class="dropdown-item" href="/change_language/{{ language }}/{{topic}}/{{article.url_part}}?new_language={{lang}}">{{ lang.upper() }}</a></li>
                                             {% endfor %}
                                         </ul>
                                     </div>
@@ -318,7 +318,7 @@
                                 <ul class="list-wrap">
                                    {% for category in trending_categories %}
                                     <li>
-                                        <div class="thumb"><a href="/{{ language }}/{{ topic }}/{{category}}"><img src="{{ url_for('assets', path='/img/category/side_category01.jpg') }}" alt="img"></a></div>
+<!--                                        <div class="thumb"><a href="/{{ language }}/{{ topic }}/{{category}}"><img src="{{ url_for('assets', path='/img/category/categories.png') }}" alt="img"></a></div>-->
                                         <a href="/{{ language }}/{{ topic }}/{{category}}">{{category}}</a>
                                         <span class="float-right">{{trending_categories[category]}}</span>
                                     </li>

@@ -111,3 +111,23 @@ async def article_detail(request: Request, topic: str, url_part: str, language: 
                                                "trending_categories": trending_categories,
                                                "trending_news": trending_news, "tags": article["tags"].split(",")})
     return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
+
+
+@router.get("/change_language/{language}/{topic}/{url_part}", response_class=HTMLResponse, tags=["Content"])
+async def change_language(request: Request, topic: str, url_part: str, language: str, new_language: str):
+    language_name = get_language_name_by_code(language)
+    articles = load_articles_from_json(topic, language_name)
+
+    new_language_name = get_language_name_by_code(new_language)
+
+    article = next((a for a in articles if a.get("url_part") == url_part), None)
+    if article:
+        new_id = article.get("url")
+        json_response = await news_extractor(topic, new_language_name, None)
+        new_article = next((a for a in json_response if a.get("url") == new_id), None)
+
+        if new_article:
+            print(new_article["url_part"])
+            return RedirectResponse(url=f"/{new_language}/{topic}/{new_article['url_part']}/detail")
+        else:
+            return RedirectResponse(url=f"/{new_language}/{topic}/{article['category']}")

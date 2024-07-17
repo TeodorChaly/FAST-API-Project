@@ -20,8 +20,10 @@ def get_list_of_categories(articles, categories):
 def split_categories_by_frequency(category_count):
     sorted_categories = sorted(category_count.items(), key=lambda item: item[1], reverse=True)
 
-    top_5_categories = [category for category, count in sorted_categories[:5]]
-    remaining_categories = [category for category, count in sorted_categories[5:]]
+    max_categories_on_top = 5
+
+    top_5_categories = [category for category, count in sorted_categories[:max_categories_on_top]]
+    remaining_categories = [category for category, count in sorted_categories[max_categories_on_top:]]
 
     return top_5_categories, remaining_categories
 

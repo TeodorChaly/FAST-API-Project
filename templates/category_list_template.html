@@ -39,9 +39,9 @@
     <!-- preloader-end -->
 
     <!-- Scroll-top -->
-    <button class="scroll__top scroll-to-target" data-target="html">
-        <i class="fas fa-angle-up"></i>
-    </button>
+<!--    <button class="scroll__top scroll-to-target" data-target="html">-->
+<!--        <i class="fas fa-angle-up"></i>-->
+<!--    </button>-->
     <!-- Scroll-top-end-->
 
     <!-- header-area -->
@@ -102,12 +102,12 @@
                                     </ul>
                                 </div>
                                 <div class="dropdown">
-                                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: rgba(0, 0, 0, 0.0); border: 0.0px solid rgba(0, 0, 0, 0.3);">
                                             {{ language.upper() }}
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                             {% for lang in languages %}
-                                            <li><a class="dropdown-item" href="?language={{ lang }}">{{ lang.upper() }}</a></li>
+                                            <li><a class="dropdown-item" href="/{{ lang }}/{{topic}}/{{ category }}">{{ lang.upper() }}</a></li>
                                             {% endfor %}
                                         </ul>
                                     </div>
@@ -302,7 +302,7 @@
                                 <ul class="list-wrap">
                                      {% for category in trending_categories %}
                                     <li>
-                                        <div class="thumb"><a href="blog.html"><img src="{{ url_for('assets', path='/img/category/side_category01.jpg') }}" alt="img"></a></div>
+<!--                                        <div class="thumb"><a href="blog.html"><img src="{{ url_for('assets', path='/img/category/side_category01.jpg') }}" alt="img"></a></div>-->
                                         <a href="/{{ language }}/{{ topic }}/{{category}}">{{category}}</a>
                                         <span class="float-right">{{trending_categories[category]}}</span>
                                     </li>

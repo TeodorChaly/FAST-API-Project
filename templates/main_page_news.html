@@ -90,7 +90,7 @@
                                 </div>
 
                                   <div class="dropdown">
-                                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: rgba(0, 0, 0, 0.0); border: 0.0px solid rgba(0, 0, 0, 0.3);">
                                             {{ language.upper() }}
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
@@ -187,7 +187,6 @@
         <section class="slider__area slider__style-two fix" data-background="{{ url_for('assets', path='/img/bg/banner_bg.jpg') }}">
 
             <div class="container">
-                <div class="slider__marquee clearfix">
 
                 <div class="slider-active">
                     {% for item in newest_news %}
@@ -209,10 +208,10 @@
                                 </div>
                             </div>
                         </div>
+
                     </div>
                     {% endfor %}
 
-                </div>
 <!--                    <div class="marquee_mode">-->
 <!--                        <h6 class="item">BTC $20211.23 <span>+1.07%</span></h6>-->
 <!--                        <h6 class="item">eth $1533.56 <span>+3.12%</span></h6>-->
@@ -224,6 +223,9 @@
                     </div>
 <!--                </div>div-->
             </div>
+<!--             <div class="slider__marquee clearfix">-->
+
+<!--                </div>-->
         </section>
         <!-- slider-area-end -->
         {% for category in all_content %}
