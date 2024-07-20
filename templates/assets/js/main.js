@@ -202,8 +202,8 @@ $("#loadMore").on("click", function(e){
 =============================================*/
 function mainSlider() {
 	$('.slider-active').slick({
-		autoplay: false,
-		autoplaySpeed: 10000,
+		autoplay: true,
+		autoplaySpeed: 5000,
 		dots: true,
 		fade: true,
 		arrows: false,
@@ -370,6 +370,7 @@ var popularSwiper = new Swiper('.popular-active', {
     loop: true,
     slidesPerView: 3,
     spaceBetween: 30,
+    autoplay: true,
 
     breakpoints: {
         '1500': {
