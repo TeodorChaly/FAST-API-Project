@@ -9,7 +9,7 @@ celery = Celery('tasks')
 
 # @celery.task(name='bg_tasks.background_task.main_bg_function')
 def main_bg_function(param, param2):
-
+    print(f"Task started at {datetime.now()}.")
     async_to_sync(crawler_by_rss_or_feed)(param, param2)
     print(f"Task ended at {datetime.now()}.")
 

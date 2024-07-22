@@ -6,7 +6,6 @@ import feedparser
 import requests
 
 
-
 async def rss_list_saver(url, topic):
     domain = urlparse(url).netloc.replace('.', '_')
 
@@ -24,13 +23,16 @@ async def rss_list_saver(url, topic):
 
     filename = f'RSS_news/{topic}_rss_sites/{domain}_rss.json'
     max_entries = 1000  # Maximum number of entries to keep in the file
-
     os.makedirs(os.path.dirname(filename), exist_ok=True)
 
     existing_links = set()
     if os.path.exists(filename):
         with open(filename, 'r') as f:
-            existing_links = set(json.load(f))
+            try:
+                json_data = json.load(f)
+                existing_links = set(json_data)
+            except Exception as e:
+                print("File open error", e)
 
     new_links = list(unique_links - existing_links)
     combined_links = new_links + list(existing_links)
@@ -38,7 +40,6 @@ async def rss_list_saver(url, topic):
 
     with open(filename, 'w') as f:
         json.dump(combined_links, f, indent=4)
-
     return new_links
 
 
