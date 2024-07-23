@@ -1,8 +1,7 @@
 import asyncio
-import time
 
+from configs.config_setup import *
 from bg_tasks.background_task import main_bg_function
-from configs.config_setup import bg_time, task_name, task_google
 from main_operations.crawlers.RSS_crawler.rss_crawler import show_all_topics_function
 
 
@@ -17,18 +16,21 @@ def category_exist(name):
         return None
 
 
-print("-------")
-try:
-    param = task_name
-    param2 = task_google
-    if category_exist(param):
+def run_crawler(categories_list_bg, is_google=True):
+    for category_name in categories_list_bg:
+        print("-------")
         try:
-            main_bg_function(param, param2)
+            if category_exist(category_name):
+                try:
+                    main_bg_function(category_name, is_google)
+                except Exception as e:
+                    print("Error during background task:", e)
+            else:
+                print(f"Category '{category_name}' doesn't exist. Config it in config.py")
         except Exception as e:
-            print("Error during background task:", e)
-    else:
-        print("Category doesn't exist.")
-except Exception as e:
-    print("Error", e)
-finally:
-    print()
+            print("Error", e)
+        finally:
+            print()
+
+
+run_crawler(dict_of_tasks)

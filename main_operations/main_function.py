@@ -43,6 +43,7 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
             date_published = str(datetime.now())
 
         if main_text in ["No main text found", "Error"]:
+            print(f"No main text found for {url}")
             return {"Next_url": "This url wasn't scrapped correctly."}
 
         if date_published == "No date found":

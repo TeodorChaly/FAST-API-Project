@@ -8,6 +8,7 @@ from content.functions import *
 from content.news_file_extractor import *
 from configs.config_setup import main_site_topic
 from languages.language_json import languages_to_code
+from main_operations.crawlers.RSS_crawler.rss_crawler import show_all_topics_function
 
 router = APIRouter()
 
@@ -27,7 +28,11 @@ async def show_content_json(topic: str, language: str = "en", limit: int = None)
 @router.get("/", tags=["User content"], response_class=HTMLResponse)
 async def main_page_redirect():
     redirect = main_site_topic
-    return RedirectResponse(url=f"/{redirect}")
+    all_topic = await show_all_topics_function()
+    if redirect not in all_topic:
+        return f"Not correct topic {redirect}. \nGo to config_setup.py and change it. \nYou can see all topics: {all_topic}"
+    else:
+        return RedirectResponse(url=f"/{redirect}")
 
 
 @router.get("/{topic}", tags=["User content"], response_class=HTMLResponse)

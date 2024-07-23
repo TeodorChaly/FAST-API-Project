@@ -61,8 +61,9 @@ async def crawler_by_rss_or_feed(topic: str = Query(..., description="Topic"), g
         for urls in new_links:
             for _ in urls:
                 counter += 1
-        # Fix
-        if counter < 10:
+
+        print("Counter:", counter)
+        if counter < 9:
             for urls in new_links:
                 for url in urls:
                     print("New article:", google, url)
