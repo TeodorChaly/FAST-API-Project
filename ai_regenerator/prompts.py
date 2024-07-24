@@ -24,7 +24,7 @@ async def ai_generator_function(text, language, list_of_categories):
         Output should only be in {language} (except for names) language and in JSON format.""
         """
         completion = API_endpoint.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system",
                  "content": system_fine_tuning},

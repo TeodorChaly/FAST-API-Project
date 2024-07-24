@@ -30,7 +30,6 @@ def main_text_scraper(soup):
         comments = soup.findAll(text=lambda text: isinstance(text, Comment))
         for comment in comments:
             comment.extract()
-
         candidates = [
             ('div', {'class': 'article-content'}),
             ('div', {'id': 'main-content'}),
@@ -41,21 +40,26 @@ def main_text_scraper(soup):
             ('main', {}),
         ]
 
+        elements = soup.find_all(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'], recursive=True)
+        combined_text = '\n'.join(
+            el.get_text(separator='\n').strip() for el in elements if
+            len(el.get_text().strip()) > 50 or el.name.startswith('h'))
+
+        if combined_text.strip():
+            # print(combined_text.strip())
+            return clean_text(combined_text.strip())
+
         for tag, attrs in candidates:
             main_content = soup.find(tag, **attrs)
+
             if main_content and len(main_content.get_text(separator='\n').strip()) > 100:
-                return clean_text(main_content.get_text(separator='\n').strip())
+                raw_text = main_content.get_text(separator='\n').strip()
+                return clean_text(raw_text)
 
         other_divs = soup.find_all('div', class_='content')
         for div in other_divs:
             if len(div.get_text(separator='\n').strip()) > 100:
                 return clean_text(div.get_text(separator='\n').strip())
-
-        paragraphs = soup.find_all('p')
-        combined_text = '\n'.join(
-            p.get_text(separator='\n').strip() for p in paragraphs if len(p.get_text().strip()) > 50)
-        if combined_text.strip():
-            return clean_text(combined_text.strip())
 
         return "No main text found"
 
