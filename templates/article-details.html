@@ -53,8 +53,8 @@
                     </div>
                     <div class="col-lg-4 col-md-3 order-0 order-lg-2 d-none d-md-block">
                         <div class="header__top-logo logo text-lg-center">
-                            <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
-                            <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
+                            <a href="/{{topic}}?language={{language}}" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
+                            <a href="/{{topic}}?language={{language}}" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
                         </div>
                     </div>
 
@@ -81,8 +81,8 @@
                                 </div>
 
                                 <div class="logo d-block d-md-none">
-                                    <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
-                                    <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
+                                    <a href="/{{topic}}?language={{language}}" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
+                                    <a href="/{{topic}}?language={{language}}" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
                                 </div>
                                 <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-lg-flex">
                                     <ul class="navigation">
@@ -117,8 +117,8 @@
                             <nav class="tgmobile__menu-box">
                                 <div class="close-btn"><i class="fas fa-times"></i></div>
                                 <div class="nav-logo">
-                                    <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
-                                    <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
+                                    <a href="/{{topic}}?language={{language}}" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
+                                    <a href="/{{topic}}?language={{language}}" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
                                 </div>
                                 <div class="tgmobile__search">
                                     <form action="#">
@@ -153,8 +153,8 @@
                 <div class="offCanvas__toggle"><i class="flaticon-addition"></i></div>
                 <div class="offCanvas__content">
                     <div class="offCanvas__logo logo">
-                        <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
-                        <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
+                        <a href="/{{topic}}?language={{language}}" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
+                        <a href="/{{topic}}?language={{language}}" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
                     </div>
                     <p>Change how the world works with Biotellus, made for ecology.</p>
                     <ul class="offCanvas__instagram list-wrap">
@@ -200,7 +200,7 @@
                         <div class="breadcrumb-content">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="/{{topic}}?language={{language}}">Home</a></li>
                                     <li class="breadcrumb-item"><a href="/{{language}}/{{topic}}/{{article.category}}">{{ article.category }}</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">{{article.seo_title}}</li>
                                 </ol>
@@ -231,7 +231,7 @@
                         <div class="blog-details-wrap">
                             <ul class="tgbanner__content-meta list-wrap">
                                 <li class="category"><a href="/{{language}}/{{topic}}/{{category}}">{{ article.category }}</a></li>
-                                <li><span class="by">By</span> <a href="/">A. Intelligence</a></li>
+                                <li><span class="by">By</span> <a href="/{{topic}}?language={{language}}">A. Intelligence</a></li>
                                 <li>{{ article.date_published }}</li>
                             </ul>
                             <h2 class="title">{{ article.seo_title }}</h2>
@@ -270,23 +270,23 @@
                                     <div class="col-xl-6 col-lg-8 col-md-6">
                                         <div class="pn-post-item">
                                             <div class="thumb">
-                                                <a href="/{{ language }}/{{topic}}/{{ trending_news[0].url_part }}/detail"><img src="{{ trending_news[0].image }}" alt="img"></a>
+                                                <a href="/{{ language }}/{{topic}}/{{ previous_and_next_news[0].url_part }}/detail"><img src="{{ previous_and_next_news[0].image }}" alt="img"></a>
                                             </div>
                                             <div class="content">
                                                 <span>Prev Post</span>
 
-                                                <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{topic}}/{{ trending_news[0].url_part }}/detail">{{ trending_news[1].seo_title[:45] }}{% if trending_news[0].seo_title|length > 45 %}...{% endif %}</a></h5>
+                                                <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{topic}}/{{ previous_and_next_news[0].url_part }}/detail">{{ previous_and_next_news[1].seo_title[:45] }}{% if previous_and_next_news[0].seo_title|length > 45 %}...{% endif %}</a></h5>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-6">
                                         <div class="pn-post-item next-post">
                                             <div class="thumb">
-                                                <a href="/{{ language }}/{{topic}}/{{ trending_news[1].url_part }}/detail"><img src="{{ trending_news[1].image }}" alt="img"></a>
+                                                <a href="/{{ language }}/{{topic}}/{{ previous_and_next_news[1].url_part }}/detail"><img src="{{ previous_and_next_news[1].image }}" alt="img"></a>
                                             </div>
                                             <div class="content">
                                                 <span>Next Post</span>
-                                                <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{topic}}/{{ trending_news[1].url_part }}/detail">{{ trending_news[2].seo_title[:45] }}{% if trending_news[1].seo_title|length > 45 %}...{% endif %}</a></h5>
+                                                <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{topic}}/{{ previous_and_next_news[1].url_part }}/detail">{{ previous_and_next_news[2].seo_title[:45] }}{% if previous_and_next_news[1].seo_title|length > 45 %}...{% endif %}</a></h5>
                                             </div>
                                         </div>
                                     </div>

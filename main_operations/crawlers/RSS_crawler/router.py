@@ -63,6 +63,7 @@ async def crawler_by_rss_or_feed(topic: str = Query(..., description="Topic"), g
                 counter += 1
 
         print("Counter:", counter)
+        # max_counter = len(list_of_feeds) * 10
         if counter < 9:
             for urls in new_links:
                 for url in urls:
@@ -76,4 +77,3 @@ async def crawler_by_rss_or_feed(topic: str = Query(..., description="Topic"), g
         return f"RSS scraped. New - {new_links_number}"
     except Exception as e:
         print("Error crawler by rss:", e)
-

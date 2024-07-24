@@ -26,7 +26,7 @@ async def show_content_json(topic: str, language: str = "en", limit: int = None)
 
 
 @router.get("/", tags=["User content"], response_class=HTMLResponse)
-async def main_page_redirect():
+async def main_page_redirect(language: str = "en"):
     redirect = main_site_topic
     all_topic = await show_all_topics_function()
     if redirect not in all_topic:
@@ -104,8 +104,9 @@ async def article_detail(request: Request, topic: str, url_part: str, language: 
     popular_categories, remaining_categories, all_categories = await get_categories(topic, json_data)
 
     trending_categories = get_trending_categories(all_categories)
-    trending_news = await show_content_json(topic, language, 4)
-
+    trending_news = await show_content_json(topic, language, 6)
+    previous_and_next_news = trending_news[:3]
+    trending_news = trending_news[2:6]
     for article in articles:
         if article.get("url_part") == url_part:
             return templates.TemplateResponse("article-details.html",
@@ -114,8 +115,9 @@ async def article_detail(request: Request, topic: str, url_part: str, language: 
                                                "top_categories": popular_categories,
                                                "other_categories": remaining_categories,
                                                "trending_categories": trending_categories,
-                                               "trending_news": trending_news, "tags": article["tags"].split(",")})
-    return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
+                                               "trending_news": trending_news, "tags": article["tags"].split(","),
+                                               "previous_and_next_news": previous_and_next_news})
+        return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
 
 
 @router.get("/change_language/{language}/{topic}/{url_part}", response_class=HTMLResponse, tags=["Content"])
