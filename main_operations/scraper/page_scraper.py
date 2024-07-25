@@ -22,6 +22,31 @@ def title_scraper(soup):
     return "No title"
 
 
+def additional_info_scraper(soup):
+    candidates = [
+        ('div', {'class': 'article-content'}),
+        ('div', {'id': 'main-content'}),
+        ('div', {'class': 'main-content'}),
+        ('div', {'id': 'article-content'}),
+        ('article', {}),
+        ('section', {'class': 'main-section'}),
+        ('main', {}),
+    ]
+
+    images = []
+    for tag, attrs in candidates:
+        main_content = soup.find(tag, **attrs)
+        if main_content:
+            imgs = main_content.find_all('img', recursive=True)
+            images.extend(imgs)
+
+    image_info = [
+        f"[Image: {img.get('src')}, alt: {img.get('alt', '')}]" for img in images if img.get('src')
+    ]
+    print(image_info)
+    return '\n'.join(image_info)
+
+
 def main_text_scraper(soup):
     try:
         for element in soup(["script", "style"]):
@@ -42,8 +67,9 @@ def main_text_scraper(soup):
 
         elements = soup.find_all(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'], recursive=True)
         combined_text = '\n'.join(
-            el.get_text(separator='\n').strip() for el in elements if
-            len(el.get_text().strip()) > 50 or el.name.startswith('h'))
+            el.get_text(separator='\n').strip()
+            for el in elements if len(el.get_text().strip()) > 50 or el.name.startswith('h')
+        )
 
         if combined_text.strip():
             # print(combined_text.strip())

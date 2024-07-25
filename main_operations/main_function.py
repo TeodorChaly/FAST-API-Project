@@ -49,6 +49,11 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
         if date_published == "No date found":
             date_published = str(datetime.now())
 
+        try:
+            additional_article_params = additional_info_scraper(soup)
+        except Exception as e:
+            additional_article_params = "No additional info"
+
         content_to_generate = f"{title} {main_text} {date_published}"
         word_count = len(content_to_generate.split())
 
@@ -76,7 +81,8 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
                             continue
 
                 await json_rewritten_news_saver(regenerated_result_json, topic, language, img_url, url)
-                print(f"Data appended to JSON file for {language} language with {len(regenerated_result_json['rewritten_content'])} words.")
+                print(
+                    f"Data appended to JSON file for {language} language with {len(regenerated_result_json['rewritten_content'])} words.")
 
             await save_url(url)
         else:
