@@ -13,7 +13,7 @@ def json_loader():
 
 async def ai_generator_function(text, language, list_of_categories):
     try:
-        system_fine_tuning = create_prompt(text, language, list_of_categories)
+        system_fine_tuning = create_prompt(language, list_of_categories)
         completion = API_endpoint.chat.completions.create(
             model="gpt-4o-mini",
             messages=[

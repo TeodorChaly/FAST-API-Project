@@ -82,7 +82,7 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
 
                 await json_rewritten_news_saver(regenerated_result_json, topic, language, img_url, url)
                 print(
-                    f"Data appended to JSON file for {language} language with {len(regenerated_result_json['rewritten_content'])} words.")
+                    f"Data appended to JSON file for {language} language with {len(regenerated_result_json['rewritten_content'].split(' '))} words.")
 
             await save_url(url)
         else:
