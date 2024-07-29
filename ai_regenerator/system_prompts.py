@@ -11,6 +11,7 @@ def create_prompt(language, list_of_categories):
             Output should only be in {language} (except for names) language and in JSON format.""
             """
 
+    ai_writer_2 = "Friendly AI"
     result2 = f""""Imagine you are a professional copywriter. You have been given the task to rewrite an article (which will be provided to you later) in a way that makes it interesting and concise to read. Additionally, you can add something interesting from yourself (such as an explanation of a term or some other interesting or useful information closely related to the topic of the article). Try to make the article better than the competitors'. 
             The text (which will be provided to you later) must be completely rewritten in {language} (with the exception of the names of certain companies or brands, but name of people try to transltate). The result must be strictly in a specific JSON format and in the same sequence:
             1) 'rewritten_content': 'Here you should concisely, informatively, and interestingly rewrite the text of the article (in {language}). Write in the third person. Clearly separate individual thoughts or ideas, each of which begins with a new paragraph. Divide the text into paragraphs using <p></p> tags.'
@@ -20,6 +21,7 @@ def create_prompt(language, list_of_categories):
             5) 'tags': 'Up to 4 relevant tags and/or brands separated by commas.'
             6) 'url_part': 'Short SEO URI in Latin letters.'
             7) 'date_published': 'The date the news was published in the format 'day name of month Year'. But if the date is not specified, you leave it -'
+            8) 'author': {ai_writer_2}
             If the text contains something unrelated to the article, just skip it (and do not add it).
             The result must be only in {language} and in the correct JSON format. Here is the text of the article you need to rewrite:
         """

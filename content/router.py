@@ -109,6 +109,8 @@ async def article_detail(request: Request, topic: str, url_part: str, language: 
     trending_news = trending_news[2:6]
     for article in articles:
         if article.get("url_part") == url_part:
+            author = article.get("author", "A. Intelligence")
+            print(author)
             return templates.TemplateResponse("article-details.html",
                                               {"request": request, "topic": topic, "article": article,
                                                "language": language, "languages": languages,
@@ -116,7 +118,7 @@ async def article_detail(request: Request, topic: str, url_part: str, language: 
                                                "other_categories": remaining_categories,
                                                "trending_categories": trending_categories,
                                                "trending_news": trending_news, "tags": article["tags"].split(","),
-                                               "previous_and_next_news": previous_and_next_news})
+                                               "previous_and_next_news": previous_and_next_news, "author": author})
         return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
 
 

@@ -230,8 +230,8 @@
                     <div class="col-xl-8 col-lg-7">
                         <div class="blog-details-wrap">
                             <ul class="tgbanner__content-meta list-wrap">
-                                <li class="category"><a href="/{{language}}/{{topic}}/{{category}}">{{ article.category }}</a></li>
-                                <li><span class="by">By</span> <a href="/{{topic}}?language={{language}}">A. Intelligence</a></li>
+                                <li class="category"><a href="/{{language}}/{{topic}}/{{article.category}}">{{ article.category }}</a></li>
+                                <li><span class="by">By</span> <a href="/{{topic}}?language={{language}}">{{ author}}</a></li>
                                 <li>{{ article.date_published }}</li>
                             </ul>
                             <h2 class="title">{{ article.seo_title }}</h2>
@@ -302,7 +302,7 @@
                                         <img src="{{ url_for('assets', path='/img/others/content_writer.png') }}"  style="height:100%" alt="me">
                                     </div>
                                     <div class="tgAbout-info">
-                                        <p class="intro">Hi there, I’m <span>A. Intelligence</span></p>
+                                        <p class="intro">Hi there, I’m <span>{{author}}</span></p>
                                         <span class="designation">Content Writer</span>
                                     </div>
 <!--                                    <div class="tgAbout-social">-->
