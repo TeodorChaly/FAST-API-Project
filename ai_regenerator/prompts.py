@@ -34,7 +34,7 @@ async def ai_category_function(topic_name, additional_info=None):
                      And you have to create a JSON-response list, that contains from 20 sub-categories of main category
                      /topic - {topic_name}.
                      (sub-categories must cover 100% of articles of the topic {topic_name}).
-                     Here is additional info about the topic:
+                     Here is additional info about the topic it it will help you to create sub-categories:
                      {additional_info} 
                      JSON result format:
                      [

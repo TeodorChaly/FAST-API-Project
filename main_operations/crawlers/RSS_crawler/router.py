@@ -1,34 +1,47 @@
 from fastapi import APIRouter, Depends
 from fastapi.params import Query
 
+from languages.language_json import language_json_read
 from languages.router import get_api_key
 from main_operations.crawlers.RSS_crawler.json_save import rss_list_saver
 from main_operations.crawlers.RSS_crawler.rss_crawler import *
 from main_operations.router import scraper_fun
+from main_operations.scraper.json_save import folder_prep
 
 router = APIRouter()
 
 
-@router.get("/show_all_topics", tags=["RSS config", "Testing"])
-async def show_all_topics():
-    return await show_all_topics_function()
+@router.get("/check_rss_url", tags=["RSS prepare"])
+async def check_by_rss_by_url(url: str = Query(..., description="URL to RSS")):
+    result = await check_by_rss_by_url_function(url)
+    return result
 
 
-@router.post("/add_rss_url", tags=["RSS config"])
+@router.post("/create_topic", tags=["RSS prepare"])
+async def create_topic(topic: str = Query(..., description="Name of topic"),
+                       additional_info: str = Query(..., description="Describe the topic")):
+    languages = language_json_read()
+
+    for language in languages:
+        await folder_prep(topic, language, additional_info)
+
+    return f"Topic {topic} created."
+
+
+@router.post("/add_rss_url", tags=["RSS prepare"])
 async def add_by_rss_by_url(url: str = Query(..., description="URL to RSS"),
                             topic: str = Query(..., description="Topic")):
     return await add_by_rss_function(url, topic)
 
 
-@router.get("/list_of_rss", tags=["RSS config"])
+@router.get("/list_of_rss", tags=["RSS prepare"])
 async def extract_all_rss(topic: str):
     return await extract_all_rss_function(topic)
 
 
-@router.get("/check_rss_url", tags=["RSS config"])
-async def check_by_rss_by_url(url: str = Query(..., description="URL to RSS")):
-    result = await check_by_rss_by_url_function(url)
-    return result
+@router.get("/show_all_topics", tags=["Testing"])
+async def show_all_topics():
+    return await show_all_topics_function()
 
 
 @router.delete("/delete_article_by_url", tags=["Articles admin"])

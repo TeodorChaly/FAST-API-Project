@@ -60,9 +60,9 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
         print(f"{word_count} words in total.")
 
         if status == "scrape":
-            categories = json.loads(categories_extractor(topic))
             for language in languages:
                 await folder_prep(topic, language, additional_info)
+                categories = json.loads(categories_extractor(topic))
                 print(f"Folder prepared for {language} language.")
                 regenerated_result = await ai_generator_function(content_to_generate, language, categories)
                 try:
