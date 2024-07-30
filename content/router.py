@@ -119,7 +119,7 @@ async def article_detail(request: Request, topic: str, url_part: str, language: 
                                                "trending_categories": trending_categories,
                                                "trending_news": trending_news, "tags": article["tags"].split(","),
                                                "previous_and_next_news": previous_and_next_news, "author": author})
-        return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
+    return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
 
 
 @router.get("/change_language/{language}/{topic}/{url_part}", response_class=HTMLResponse, tags=["Content"])

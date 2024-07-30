@@ -21,10 +21,13 @@ def create_prompt(language, list_of_categories):
             5) 'tags': 'Up to 4 relevant tags and/or brands separated by commas.'
             6) 'url_part': 'Short SEO URI in Latin letters.'
             7) 'date_published': 'The date the news was published in the format 'day name of month Year'. But if the date is not specified, you leave it -'
-            8) 'author': {ai_writer_2}
+            8) 'author': {ai_writer_2} (and don t translate it)
             If the text contains something unrelated to the article, just skip it (and do not add it).
             The result must be only in {language} and in the correct JSON format. Here is the text of the article you need to rewrite:
         """
+
     return result2
+
+
 
 
