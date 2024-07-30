@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from ai_regenerator.prompts import ai_generator_function
 from main_operations.crawlers.Google_news_crawler.google_search_crawler import google_news_extractor
 from main_operations.crawlers.RSS_crawler.json_save import process_json
+from main_operations.images_function import is_image_url_valid
 from main_operations.scraper.json_save import *
 from main_operations.scraper.page_scraper import *
 
@@ -53,6 +54,8 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
             additional_article_params = additional_info_scraper(soup)
         except Exception as e:
             additional_article_params = "No additional info"
+
+        is_image_url_valid(img_url)
 
         content_to_generate = f"{title} {main_text} {date_published}"
         word_count = len(content_to_generate.split())

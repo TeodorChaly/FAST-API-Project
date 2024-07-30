@@ -7,40 +7,45 @@ import requests
 
 
 async def rss_list_saver(url, topic):
-    domain = urlparse(url).netloc.replace('.', '_')
+    try:
+        domain = urlparse(url).netloc.replace('.', '_')
 
-    rss_url = url
+        rss_url = url
 
-    feed = feedparser.parse(rss_url)
+        response = requests.get(rss_url, timeout=10)
+        response.raise_for_status()
+        feed = feedparser.parse(response.content)
 
-    unique_links = set()
+        unique_links = set()
 
-    for entry in feed.entries:
-        unique_links.add(entry.link)
+        for entry in feed.entries:
+            unique_links.add(entry.link)
 
-    if not os.path.exists(f'RSS_news/{topic}_rss_sites'):
-        os.makedirs(f'RSS_news/{topic}_rss_sites')
+        if not os.path.exists(f'RSS_news/{topic}_rss_sites'):
+            os.makedirs(f'RSS_news/{topic}_rss_sites')
 
-    filename = f'RSS_news/{topic}_rss_sites/{domain}_rss.json'
-    max_entries = 1000  # Maximum number of entries to keep in the file
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
+        filename = f'RSS_news/{topic}_rss_sites/{domain}_rss.json'
+        max_entries = 1000  # Maximum number of entries to keep in the file
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
 
-    existing_links = set()
-    if os.path.exists(filename):
-        with open(filename, 'r') as f:
-            try:
-                json_data = json.load(f)
-                existing_links = set(json_data)
-            except Exception as e:
-                print("File open error", e)
+        existing_links = set()
+        if os.path.exists(filename):
+            with open(filename, 'r') as f:
+                try:
+                    json_data = json.load(f)
+                    existing_links = set(json_data)
+                except Exception as e:
+                    print("File open error", e)
 
-    new_links = list(unique_links - existing_links)
-    combined_links = new_links + list(existing_links)
-    combined_links = combined_links[:max_entries]
+        new_links = list(unique_links - existing_links)
+        combined_links = new_links + list(existing_links)
+        combined_links = combined_links[:max_entries]
 
-    with open(filename, 'w') as f:
-        json.dump(combined_links, f, indent=4)
-    return new_links
+        with open(filename, 'w') as f:
+            json.dump(combined_links, f, indent=4)
+        return new_links
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
 
 def process_json(input_json):

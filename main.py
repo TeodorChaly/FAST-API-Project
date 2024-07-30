@@ -39,27 +39,27 @@ async def startup_event():
             json.dump([], file)
 
 
-# Middleware для логирования запросов
-@app.middleware("http")
-async def log_requests_middleware(request: Request, call_next):
-    client_ip = request.client.host
-    user_agent = request.headers.get('user-agent', 'Unknown')
-    method = request.method
-    path = request.url.path
-
-    # Логирование
-    logging.info(
-        '',
-        extra={
-            'clientip': client_ip,
-            'useragent': user_agent,
-            'method': method,
-            'path': path
-        }
-    )
-
-    response = await call_next(request)
-    return response
+# Middleware Prodaction
+# @app.middleware("http")
+# async def log_requests_middleware(request: Request, call_next):
+#     client_ip = request.client.host
+#     user_agent = request.headers.get('user-agent', 'Unknown')
+#     method = request.method
+#     path = request.url.path
+#
+#     # Логирование
+#     logging.info(
+#         '',
+#         extra={
+#             'clientip': client_ip,
+#             'useragent': user_agent,
+#             'method': method,
+#             'path': path
+#         }
+#     )
+#
+#     response = await call_next(request)
+#     return response
 
 
 # Подключение роутеров

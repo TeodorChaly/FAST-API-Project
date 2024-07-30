@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Sarsa - News & Magazine HTML Template</title>
-    <meta name="description" content="Sarsa - News & Magazine HTML Template">
+    <title> {{ article.seo_title }} | {{ article.category|capitalize }} news</title>
+    <meta name="description" content="{{ article.seo_description }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('assets', path='/img/favicon.png') }}">
@@ -330,8 +330,8 @@
                                     {% for trending_article in trending_news%}
                                     <div class="sidePost__item" data-background="{{trending_article.image}}">
                                         <div class="sidePost__content">
-                                            <a href="blog.html" class="tag">{{trending_article.category}}</a>
-                                            <h5 class="title tgcommon__hover"><a href="blog-details.html">{{trending_article.seo_title}}</a></h5>
+                                            <a href="/{{ language }}/{{ topic }}/{{trending_article.category}}" class="tag">{{trending_article.category}}</a>
+                                            <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{ topic }}/{{trending_article.url_part}}/detail">{{trending_article.seo_title}}</a></h5>
                                         </div>
                                     </div>
                                     {% endfor %}
@@ -386,8 +386,6 @@
 <!--                                    <div class="sidebarInsta__bottom">-->
 <!--                                        <a href="https://www.instagram.com/" target="_blank" class="btn"><i class="fab fa-instagram"></i><span class="text">Follow Me</span></a>-->
 <!--                                    </div>-->
-                                </div>
-                            </div>
                         </aside>
                     </div>
                 </div>

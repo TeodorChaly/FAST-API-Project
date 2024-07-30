@@ -100,7 +100,7 @@ async def article_detail(request: Request, topic: str, url_part: str, language: 
     articles = load_articles_from_json(topic, language_name)
     languages = languages_to_code()
 
-    json_data = await show_content_json(topic, language, None)  # Modify!!!
+    json_data = await show_content_json(topic, language, None)
     popular_categories, remaining_categories, all_categories = await get_categories(topic, json_data)
 
     trending_categories = get_trending_categories(all_categories)
@@ -110,7 +110,6 @@ async def article_detail(request: Request, topic: str, url_part: str, language: 
     for article in articles:
         if article.get("url_part") == url_part:
             author = article.get("author", "A. Intelligence")
-            print(author)
             return templates.TemplateResponse("article-details.html",
                                               {"request": request, "topic": topic, "article": article,
                                                "language": language, "languages": languages,
