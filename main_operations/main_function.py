@@ -55,7 +55,7 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
         except Exception as e:
             additional_article_params = "No additional info"
 
-        is_image_url_valid(img_url)
+        await is_image_url_valid(img_url)
 
         content_to_generate = f"{title} {main_text} {date_published}"
         word_count = len(content_to_generate.split())

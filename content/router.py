@@ -9,6 +9,7 @@ from content.news_file_extractor import *
 from configs.config_setup import main_site_topic
 from languages.language_json import languages_to_code
 from main_operations.crawlers.RSS_crawler.rss_crawler import show_all_topics_function
+from content.multi_language_categories import *
 
 router = APIRouter()
 
@@ -52,7 +53,7 @@ async def main_page(request: Request, topic: str, language: str = "en", limit: i
     newest_news = today_news_all[:newest_news_len]
     today_news = today_news_all[newest_news_len:]
 
-    popular_categories, remaining_categories, all_categories = await get_categories(topic, json_data)
+    popular_categories_dict, remaining_categories_dict, all_categories = await get_header(topic, language, json_data)
 
     # print("Top 5 categories:", popular_categories)
     # print("Remaining categories:", remaining_categories)
@@ -61,7 +62,8 @@ async def main_page(request: Request, topic: str, language: str = "en", limit: i
 
     return templates.TemplateResponse("main_page_news.html",
                                       {"request": request, "topic": topic, "language": language, "languages": languages,
-                                       "top_categories": popular_categories, "other_categories": remaining_categories,
+                                       "top_categories": popular_categories_dict,
+                                       "other_categories": remaining_categories_dict,
                                        "newest_news": newest_news, "all_content": content, "today_news": today_news
                                        })
 
@@ -71,16 +73,23 @@ async def category_list(request: Request, topic: str, category: str, language: s
                         limit: Optional[int] = None, page: int = 1):
     language_name = get_language_name_by_code(language)
     articles = await news_extractor(topic, language_name, limit)
+
     languages = languages_to_code()
 
     json_data = await show_content_json(topic, language, limit)
-    popular_categories, remaining_categories, all_categories = await get_categories(topic, json_data)
+
+    popular_categories_dict, remaining_categories_dict, all_categories = await get_header(topic, language, json_data)
 
     trending_categories = get_trending_categories(all_categories)
+    trending_categories_dict = get_translated_categories_name_and_count(topic, language, trending_categories)
 
     trending_news = await show_content_json(topic, language, 4)
 
     filtered_articles, total_pages = get_all_articles(articles, category, page)
+
+    about_category = get_category_meta_tags(topic, category, language)
+
+    print(about_category)
 
     if not filtered_articles and page == 1 or page <= 0:
         return templates.TemplateResponse("error.html",
@@ -89,9 +98,10 @@ async def category_list(request: Request, topic: str, category: str, language: s
     return templates.TemplateResponse("category_list_template.html",
                                       {"request": request, "topic": topic, "category": category, "language": language,
                                        "articles": filtered_articles, "languages": languages,
-                                       "top_categories": popular_categories, "other_categories": remaining_categories,
-                                       "trending_categories": trending_categories, "trending_news": trending_news,
-                                       "page": page, "total_pages": total_pages})
+                                       "top_categories": popular_categories_dict,
+                                       "other_categories": remaining_categories_dict,
+                                       "trending_categories": trending_categories_dict, "trending_news": trending_news,
+                                       "page": page, "total_pages": total_pages, "about_category": about_category})
 
 
 @router.get("/{language}/{topic}/{url_part}/detail", tags=["User content"], response_class=HTMLResponse)

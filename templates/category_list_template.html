@@ -4,11 +4,18 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title> {{ category|capitalize }} News | DeepWebNews </title>
-    <meta name="description" content="Sarsa - News & Magazine HTML Template">
+    <title>
+        {{ about_category[1].translated_category_seo_title }}
+        {% if page > 1 %}| Page {{ page }}
+        {% endif %}| DeepWebNews
+    </title>
+    <meta name="description" content="{{ about_category[1].translated_category_seo_description }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('assets', path='/img/favicon.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('assets', path='/img/favicon.png') }}">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- CSS here -->
     <!-- Place favicon.ico in the root directory -->
 
     <!-- CSS here -->
@@ -86,20 +93,21 @@
                                     <a href="/{{topic}}?language={{language}}" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
                                 </div>
                                 <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-lg-flex">
-                                    <ul class="navigation">
-                                       {% for category in top_categories %}
-                                        <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
+                                   <ul class="navigation">
+                                        {% for category, data in top_categories.items() %}
+                                            <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ data.translated_name }}</a></li>
                                         {% endfor %}
                                         {% if other_categories %}
-                                        <li class="active menu-item-has-children"><a>Other</a>
-                                            <ul class="sub-menu">
-                                                {% for category in other_categories %}
-                                                    <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
-                                                {% endfor %}
-                                            </ul>
-                                        </li>
+                                            <li class="active menu-item-has-children"><a>Other</a>
+                                                <ul class="sub-menu">
+                                                    {% for category, data in other_categories.items() %}
+                                                        <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ data.translated_name }}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
                                         {% endif %}
                                     </ul>
+
                                 </div>
                                 <div class="dropdown">
                                         <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: rgba(0, 0, 0, 0.0); border: 0.0px solid rgba(0, 0, 0, 0.3);">
@@ -203,7 +211,7 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="/{{topic}}?language={{language}}">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="/{{ language}}/{{ topic }}/{{ category }}"> {{ category }}</a></li>
+                                    <li class="breadcrumb-item"><a href="/{{ language}}/{{ topic }}/{{ category }}"> {{ about_category[1].translated_name }}</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">news</li>
                                 </ol>
                             </nav>
@@ -239,7 +247,7 @@
                                     <div class="latest__post-content">
 
                                         <ul class="tgbanner__content-meta list-wrap">
-                                            <li class="category"><a href="#">{{category}}</a></li>
+                                            <li class="category"><a href="#">{{ about_category[1].translated_name }}</a></li>
                                             <li><span class="by">By</span> <a href="/{{topic}}?language={{language}}">A. Intelligence</a></li>
                                             <li>{{item.date_published}}</li>
                                         </ul>
@@ -300,13 +308,14 @@
                                 <h4 class="widget-title">Trending Category</h4>
 
                                 <ul class="list-wrap">
-                                     {% for category in trending_categories %}
-                                    <li>
-<!--                                        <div class="thumb"><a href="blog.html"><img src="{{ url_for('assets', path='/img/category/side_category01.jpg') }}" alt="img"></a></div>-->
-                                        <a href="/{{ language }}/{{ topic }}/{{category}}">{{category}}</a>
-                                        <span class="float-right">{{trending_categories[category]}}</span>
-                                    </li>
+                                    {% for category, data in trending_categories.items() %}
+                                        <li>
+                                            <!-- <div class="thumb"><a href="blog.html"><img src="{{ url_for('assets', path='/img/category/side_category01.jpg') }}" alt="img"></a></div> -->
+                                            <a href="/{{ language }}/{{ topic }}/{{ category }}">{{ data.translated_name }}</a>
+                                            <span class="float-right">{{ data.count }}</span>
+                                        </li>
                                     {% endfor %}
+
 
                                 </ul>
                             </div>

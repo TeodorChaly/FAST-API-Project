@@ -73,17 +73,17 @@
 
                                 <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-lg-flex">
                                    <ul class="navigation">
-                                        {% for category in top_categories %}
-                                        <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
+                                       {% for category, data in top_categories.items() %}
+                                            <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ data.translated_name }}</a></li>
                                         {% endfor %}
                                         {% if other_categories %}
-                                        <li class="active menu-item-has-children"><a>Other</a>
-                                            <ul class="sub-menu">
-                                                {% for category in other_categories %}
-                                                    <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
-                                                {% endfor %}
-                                            </ul>
-                                        </li>
+                                            <li class="active menu-item-has-children"><a>Other</a>
+                                                <ul class="sub-menu">
+                                                    {% for category, data in other_categories.items() %}
+                                                        <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ data.translated_name }}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
                                         {% endif %}
                                     </ul>
 

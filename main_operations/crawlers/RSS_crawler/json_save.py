@@ -8,6 +8,7 @@ import requests
 
 async def rss_list_saver(url, topic):
     try:
+        print(f"Processing RSS feed: {url}")
         domain = urlparse(url).netloc.replace('.', '_')
 
         rss_url = url

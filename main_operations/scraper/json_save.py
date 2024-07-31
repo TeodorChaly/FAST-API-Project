@@ -2,7 +2,7 @@ import json
 import os
 from urllib.parse import urlparse, urlunparse
 
-from ai_regenerator.prompts import ai_category_function
+from ai_regenerator.prompts import ai_category_function, ai_category_for_multiple_languages
 
 
 def categories_extractor(topic):
@@ -15,6 +15,21 @@ def categories_extractor(topic):
         file_path = os.path.join(sub_folder_name, file_name)
         with open(file_path, 'r', encoding='utf-8') as file:
             return json.load(file)
+    except Exception as e:
+        print("Error during categories:", e)
+
+
+def multi_language_categories_extractor(topic, language):
+    try:
+        current_file_path = os.path.abspath(__file__)
+        main_directory = os.path.dirname((os.path.dirname(os.path.dirname(current_file_path))))
+        folder_name = os.path.join(main_directory, "news_json")
+        sub_folder_name = os.path.join(folder_name, str(topic))
+        file_name = f"{topic}__category__{language}.json"
+        file_path = os.path.join(sub_folder_name, file_name)
+        with open(file_path, 'r', encoding='utf-8') as file:
+            json_formatted = json.load(file)
+        return json_formatted
     except Exception as e:
         print("Error during categories:", e)
 
@@ -32,18 +47,40 @@ async def folder_prep(topic, language, additional_info=None):
         if not os.path.exists(folder_name):
             os.makedirs(folder_name)
 
+        main_category_path = os.path.join(sub_folder_name, f"{topic}.json")
         if not os.path.exists(sub_folder_name):
-            category_path = os.path.join(sub_folder_name, f"{topic}.json")
             os.makedirs(sub_folder_name)
-            with open(category_path, 'w', encoding='utf-8') as file:
+
+            with open(main_category_path, 'w', encoding='utf-8') as file:
                 ai_result = await ai_category_function(topic, additional_info)
                 json.dump(ai_result, file)
-                print(f"File created: {category_path}")
+                print(f"File created: {main_category_path}")
+
+        category_path = os.path.join(sub_folder_name, f"{topic}__category__{language}.json")
+        if not os.path.exists(category_path):
+            with open(main_category_path, 'r', encoding='utf-8') as file:
+                main_categories_list = file.read()
+
+            for i in range(3):
+                rewrite_categories_json = await ai_category_for_multiple_languages(language, main_categories_list, topic)
+                try:
+                    json.loads(rewrite_categories_json)
+                    language_category_path = os.path.join(sub_folder_name, f"{topic}__category__{language}.json")
+                    with open(language_category_path, 'w', encoding='utf-8') as file:
+                        json.dump(json.loads(rewrite_categories_json), file)
+                    break
+                except json.JSONDecodeError as e:
+                    print("Error during JSON decoding. Trying again.", e)
+                    continue
+
+        else:
+            print(True)
 
         if not os.path.exists(file_path):
             with open(file_path, 'w', encoding='utf-8') as file:
                 json.dump([], file)
                 print(f"File created: {file_path}")
+
     except Exception as e:
         print(f"Error during folder preparation: {e}")
         raise "Problem"
