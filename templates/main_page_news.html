@@ -194,11 +194,25 @@
                         <div class="row align-items-center">
                             <div class="col-lg-6">
                                 <div class="slider__content">
-                                    <ul class="tgbanner__content-meta list-wrap" data-animation-in="tg-fadeInUp" data-delay-in=".2">
-                                        <li class="category"><a href="/{{ language }}/{{ item.topic }}/{{ item.category[0] }}">{{ item.category[1][item.category[0]].translated_name }}
-</a></li>
-                                        <li>{{ item.date_published }}</li>
+                                   <ul class="tgbanner__content-meta list-wrap" data-animation-in="tg-fadeInUp" data-delay-in=".2">
+                                        {% if item.category and item.category[0] and item.category[1] and item.category[0] in item.category[1] %}
+                                            <li class="category">
+                                                <a href="/{{ language }}/{{ item.topic }}/{{ item.category[0] }}">
+                                                    {{ item.category[1][item.category[0]].translated_name | default('Default Category Name') }}
+                                                </a>
+                                            </li>
+                                        {% else %}
+                                            <li class="category">
+                                                <a href="#">
+                                                    Default Category Name
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        <li>
+                                            {{ item.date_published | default('Date not available') }}
+                                        </li>
                                     </ul>
+
                                     <h2 class="title" data-animation-in="tg-fadeInUp" data-delay-in=".3">{{ item.seo_title }}</h2>
                                     <a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail" class="btn border-btn" data-animation-in="tg-fadeInUp" data-delay-in=".6"><span class="btn-text">Read More</span> <i class="far fa-long-arrow-right"></i></a>
                                 </div>
@@ -337,7 +351,17 @@
                             </div>
                             <div class="stories-post__content video__post-content">
                                 <ul class="tgbanner__content-meta list-wrap">
-                                    <li class="category"><a href="/{{ language }}/{{ item.topic }}/{{ item.category[0] }}">{{ item.category[1][item.category[0]].translated_name }}</a></li>
+                                    <li class="category">
+                                        {% if item.category and item.category[0] and item.category[1] and item.category[0] in item.category[1] %}
+                                            <a href="/{{ language }}/{{ item.topic }}/{{ item.category[0] }}">
+                                                {{ item.category[1][item.category[0]].translated_name | default('Other') }}
+                                            </a>
+                                        {% else %}
+                                            <a href="#">
+                                                Other
+                                            </a>
+                                        {% endif %}
+                                    </li>
                                     <li>{{ item.date_published }}</li>
                                 </ul>
                                 <h3 class="title tgcommon__hover"><a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h3>
@@ -346,20 +370,41 @@
                     </div>
                 {% else %}
                     <div class="col-xl-3 col-lg-4 col-md-6">
-                        <div class="trending__post stories-small-post__item">
-                            <div class="trending__post-thumb tgImage__hover">
-                                <a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail"><img src="{{ item.image }}" alt="img"></a>
-                            </div>
-                            <div class="trending__post-content">
-                                <ul class="tgbanner__content-meta list-wrap">
-                                    <li class="category"><a href="/{{ language }}/{{ item.topic }}/{{ item.category[0] }}">{{ item.category[1][item.category[0]].translated_name }}</a></li>
-                                </ul>
-                                <h4 class="title tgcommon__hover"><a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h4>
-                                <ul class="post__activity list-wrap">
-                                    <li> {{ item.date_published }} </li>
-                                </ul>
-                            </div>
-                        </div>
+                       <div class="trending__post stories-small-post__item">
+    <div class="trending__post-thumb tgImage__hover">
+        <a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail">
+            <img src="{{ item.image }}" alt="img">
+        </a>
+    </div>
+    <div class="trending__post-content">
+        <ul class="tgbanner__content-meta list-wrap">
+            {% if item.category and item.category[0] and item.category[1] and item.category[0] in item.category[1] %}
+                <li class="category">
+                    <a href="/{{ language }}/{{ item.topic }}/{{ item.category[0] }}">
+                        {{ item.category[1][item.category[0]].translated_name | default('Other') }}
+                    </a>
+                </li>
+            {% else %}
+                <li class="category">
+                    <a href="/{{ language }}/{{ item.topic }}/{{ item.category[0] }}">
+                        News
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+        <h4 class="title tgcommon__hover">
+            <a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail">
+                {{ item.seo_title | default('Default Title') }}
+            </a>
+        </h4>
+        <ul class="post__activity list-wrap">
+            <li>
+                {{ item.date_published | default('Date not available') }}
+            </li>
+        </ul>
+    </div>
+</div>
+
                     </div>
                 {% endif %}
             {% endfor %}

@@ -4,7 +4,19 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title> {{ article.seo_title }} | {{ article.category[1][article.category[0]]['translated_name'] |capitalize }}</title>
+    <title>
+    {% if article.seo_title %}
+        {{ article.seo_title }}
+    {% else %}
+        Default Title
+    {% endif %}
+    {% if article.category and article.category[0] and article.category[1] and article.category[0] in article.category[1] %}
+        | {{ article.category[1][article.category[0]].translated_name | capitalize }}
+    {% else %}
+        | DeepWebNews
+    {% endif %}
+    </title>
+
     <meta name="description" content="{{ article.seo_description }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -201,7 +213,18 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="/{{topic}}?language={{language}}">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="/{{language}}/{{topic}}/{{article.category[0]}}">{{ article.category[1][article.category[0]]['translated_name'] }}</a></li>
+                                    <li class="breadcrumb-item">
+                                        {% if article.category and article.category[0] and article.category[1] and article.category[0] in article.category[1] %}
+                                            <a href="/{{ language }}/{{ topic }}/{{ article.category[0] }}">
+                                                {{ article.category[1][article.category[0]].translated_name | default('Other') }}
+                                            </a>
+                                        {% else %}
+                                            <a href="/">
+                                                Other
+                                            </a>
+                                        {% endif %}
+                                    </li>
+
                                     <li class="breadcrumb-item active" aria-current="page">{{article.seo_title}}</li>
                                 </ol>
                             </nav>
@@ -230,11 +253,22 @@
                     <div class="col-xl-8 col-lg-7">
                         <div class="blog-details-wrap">
                             <ul class="tgbanner__content-meta list-wrap">
-                                <li class="category"><a href="/{{language}}/{{topic}}/{{article.category[0]}}">{{ article.category[1][article.category[0]]['translated_name'] }}</a></li>
+                                <li class="category">
+                                    {% if article.category and article.category[0] and article.category[1] and article.category[0] in article.category[1] %}
+                                        <a href="/{{ language }}/{{ topic }}/{{ article.category[0] }}">
+                                            {{ article.category[1][article.category[0]].translated_name | default('Other') }}
+                                        </a>
+                                    {% else %}
+                                        <a href="/">
+                                            Other
+                                        </a>
+                                    {% endif %}
+                                </li>
+
                                 <li><span class="by">By</span> <a href="/{{topic}}?language={{language}}">{{ author}}</a></li>
                                 <li>{{ article.date_published }}</li>
                             </ul>
-                            <h2 class="title">{{ article.seo_title }}</h2>
+                            <h1 class="title">{{ article.seo_title }}</h1>
                             <div class="blog-details-thumb">
                                 <img src="{{ article.image }}" alt="">
                             </div>

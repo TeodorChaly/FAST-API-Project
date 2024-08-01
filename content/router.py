@@ -55,7 +55,6 @@ async def main_page(request: Request, topic: str, language: str = "en", limit: i
 
     newest_news = today_news_all[:newest_news_len]
     today_news = today_news_all[newest_news_len:]
-
     for i in newest_news:
         i["category"] = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
     for i in today_news:
@@ -71,8 +70,7 @@ async def main_page(request: Request, topic: str, language: str = "en", limit: i
                                       {"request": request, "topic": topic, "language": language, "languages": languages,
                                        "top_categories": popular_categories_dict,
                                        "other_categories": remaining_categories_dict,
-                                       "newest_news": newest_news, "all_content": new_content, "today_news": today_news
-                                       })
+                                       "newest_news": newest_news, "all_content": new_content, "today_news": today_news})
 
 
 @router.get("/{language}/{topic}/{category}", tags=["User content"], response_class=HTMLResponse)

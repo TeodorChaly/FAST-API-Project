@@ -10,11 +10,11 @@ from content.router import router as topics_router
 from languages.router import router as languages_router
 from main_operations.crawlers.RSS_crawler.router import router as crawler_router
 
-# logging.basicConfig(
-#     filename='access.log',
-#     level=logging.INFO,
-#     format='%(asctime)s - IP: %(clientip)s, User-Agent: %(useragent)s, Method: %(method)s, Path: %(path)s'
-# )
+logging.basicConfig(
+    filename='access.log',
+    level=logging.INFO,
+    format='%(asctime)s - IP: %(clientip)s, User-Agent: %(useragent)s, Method: %(method)s, Path: %(path)s'
+)
 
 app = FastAPI(
     title="News generator API",
@@ -37,25 +37,25 @@ async def startup_event():
 
 
 # Middleware production
-# @app.middleware("http")
-# async def log_requests_middleware(request: Request, call_next):
-#     client_ip = request.client.host
-#     user_agent = request.headers.get('user-agent', 'Unknown')
-#     method = request.method
-#     path = request.url.path
-#
-#     logging.info(
-#         '',
-#         extra={
-#             'clientip': client_ip,
-#             'useragent': user_agent,
-#             'method': method,
-#             'path': path
-#         }
-#     )
-#
-#     response = await call_next(request)
-#     return response
+@app.middleware("http")
+async def log_requests_middleware(request: Request, call_next):
+    client_ip = request.client.host
+    user_agent = request.headers.get('user-agent', 'Unknown')
+    method = request.method
+    path = request.url.path
+
+    logging.info(
+        '',
+        extra={
+            'clientip': client_ip,
+            'useragent': user_agent,
+            'method': method,
+            'path': path
+        }
+    )
+
+    response = await call_next(request)
+    return response
 
 
 app.include_router(crawler_router)
