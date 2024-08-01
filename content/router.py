@@ -49,22 +49,29 @@ async def main_page(request: Request, topic: str, language: str = "en", limit: i
     newest_news_len = 5
     today_news_len = 10
 
+    popular_categories_dict, remaining_categories_dict, all_categories = await get_header(topic, language, json_data)
+
     today_news_all = await show_content_json(topic, language, today_news_len + newest_news_len)
+
     newest_news = today_news_all[:newest_news_len]
     today_news = today_news_all[newest_news_len:]
 
-    popular_categories_dict, remaining_categories_dict, all_categories = await get_header(topic, language, json_data)
-
-    # print("Top 5 categories:", popular_categories)
-    # print("Remaining categories:", remaining_categories)
+    for i in newest_news:
+        i["category"] = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
+    for i in today_news:
+        i["category"] = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
 
     content = content_all(all_categories, json_data)
+    new_content = {}
+    for i in content:
+        new_content[get_translated_categories_name(topic, language, [i])[i]["translated_name"]] = content[i] + [
+            {"category": i}]
 
     return templates.TemplateResponse("main_page_news.html",
                                       {"request": request, "topic": topic, "language": language, "languages": languages,
                                        "top_categories": popular_categories_dict,
                                        "other_categories": remaining_categories_dict,
-                                       "newest_news": newest_news, "all_content": content, "today_news": today_news
+                                       "newest_news": newest_news, "all_content": new_content, "today_news": today_news
                                        })
 
 
@@ -114,18 +121,21 @@ async def article_detail(request: Request, topic: str, url_part: str, language: 
     popular_categories, remaining_categories, all_categories = await get_categories(topic, json_data)
 
     trending_categories = get_trending_categories(all_categories)
+    trending_categories_dict = get_translated_categories_name_and_count(topic, language, trending_categories)
+
     trending_news = await show_content_json(topic, language, 6)
     previous_and_next_news = trending_news[:3]
     trending_news = trending_news[2:6]
     for article in articles:
         if article.get("url_part") == url_part:
             author = article.get("author", "A. Intelligence")
+            article["category"] = [article["category"], get_translated_categories_name(topic, language, [article["category"]])]
             return templates.TemplateResponse("article-details.html",
                                               {"request": request, "topic": topic, "article": article,
                                                "language": language, "languages": languages,
                                                "top_categories": popular_categories,
                                                "other_categories": remaining_categories,
-                                               "trending_categories": trending_categories,
+                                               "trending_categories": trending_categories_dict,
                                                "trending_news": trending_news, "tags": article["tags"].split(","),
                                                "previous_and_next_news": previous_and_next_news, "author": author})
     return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})

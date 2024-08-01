@@ -1,3 +1,4 @@
+from content.functions import get_categories
 from content.news_file_extractor import get_language_name_by_code
 from main_operations.scraper.json_save import multi_language_categories_extractor
 

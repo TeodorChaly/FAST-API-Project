@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title> {{ article.seo_title }} | {{ article.category|capitalize }} news</title>
+    <title> {{ article.seo_title }} | {{ article.category[1][article.category[0]]['translated_name'] |capitalize }}</title>
     <meta name="description" content="{{ article.seo_description }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -201,7 +201,7 @@
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="/{{topic}}?language={{language}}">Home</a></li>
-                                    <li class="breadcrumb-item"><a href="/{{language}}/{{topic}}/{{article.category}}">{{ article.category }}</a></li>
+                                    <li class="breadcrumb-item"><a href="/{{language}}/{{topic}}/{{article.category[0]}}">{{ article.category[1][article.category[0]]['translated_name'] }}</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">{{article.seo_title}}</li>
                                 </ol>
                             </nav>
@@ -230,7 +230,7 @@
                     <div class="col-xl-8 col-lg-7">
                         <div class="blog-details-wrap">
                             <ul class="tgbanner__content-meta list-wrap">
-                                <li class="category"><a href="/{{language}}/{{topic}}/{{article.category}}">{{ article.category }}</a></li>
+                                <li class="category"><a href="/{{language}}/{{topic}}/{{article.category[0]}}">{{ article.category[1][article.category[0]]['translated_name'] }}</a></li>
                                 <li><span class="by">By</span> <a href="/{{topic}}?language={{language}}">{{ author}}</a></li>
                                 <li>{{ article.date_published }}</li>
                             </ul>
@@ -316,13 +316,14 @@
                             <div class="widget sidebar-widget widget_categories">
                                 <h4 class="widget-title">Trending Category</h4>
                                 <ul class="list-wrap">
-                                   {% for category in trending_categories %}
-                                    <li>
-<!--                                        <div class="thumb"><a href="/{{ language }}/{{ topic }}/{{category}}"><img src="{{ url_for('assets', path='/img/category/categories.png') }}" alt="img"></a></div>-->
-                                        <a href="/{{ language }}/{{ topic }}/{{category}}">{{category}}</a>
-                                        <span class="float-right">{{trending_categories[category]}}</span>
-                                    </li>
+                                       {% for category, data in trending_categories.items() %}
+                                        <li>
+                                            <!-- <div class="thumb"><a href="blog.html"><img src="{{ url_for('assets', path='/img/category/side_category01.jpg') }}" alt="img"></a></div> -->
+                                            <a href="/{{ language }}/{{ topic }}/{{ category }}">{{ data.translated_name }}</a>
+                                            <span class="float-right">{{ data.count }}</span>
+                                        </li>
                                     {% endfor %}
+
                                 </ul>
                             </div>
                             <div class="widget sidebar-widget">

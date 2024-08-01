@@ -195,7 +195,8 @@
                             <div class="col-lg-6">
                                 <div class="slider__content">
                                     <ul class="tgbanner__content-meta list-wrap" data-animation-in="tg-fadeInUp" data-delay-in=".2">
-                                        <li class="category"><a href="">{{ item.category }}</a></li>
+                                        <li class="category"><a href="/{{ language }}/{{ item.topic }}/{{ item.category[0] }}">{{ item.category[1][item.category[0]].translated_name }}
+</a></li>
                                         <li>{{ item.date_published }}</li>
                                     </ul>
                                     <h2 class="title" data-animation-in="tg-fadeInUp" data-delay-in=".3">{{ item.seo_title }}</h2>
@@ -236,7 +237,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="section__read-more text-start text-sm-end">
-                                    <a href="/{{ language }}/{{ topic }}/{{ category | lower }}">More Popular Post <i class="far fa-long-arrow-right"></i></a>
+                                    <a href="/{{ language }}/{{ topic }}/{{ all_content[category][0]['category'] }}">More Popular Post <i class="far fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -278,7 +279,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="section__read-more text-start text-sm-end">
-                                    <a href="/{{ language }}/{{ topic }}/{{ category | lower }}">More Post <i class="far fa-long-arrow-right"></i></a>
+                                    <a href="/{{ language }}/{{ topic }}/{{ all_content[category][0]['category'] }}">More Post <i class="far fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -336,7 +337,7 @@
                             </div>
                             <div class="stories-post__content video__post-content">
                                 <ul class="tgbanner__content-meta list-wrap">
-                                    <li class="category"><a href="/{{ language }}/{{ item.topic }}/{{ item.category }}">{{ item.category }}</a></li>
+                                    <li class="category"><a href="/{{ language }}/{{ item.topic }}/{{ item.category[0] }}">{{ item.category[1][item.category[0]].translated_name }}</a></li>
                                     <li>{{ item.date_published }}</li>
                                 </ul>
                                 <h3 class="title tgcommon__hover"><a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h3>
@@ -351,7 +352,7 @@
                             </div>
                             <div class="trending__post-content">
                                 <ul class="tgbanner__content-meta list-wrap">
-                                    <li class="category"><a href="/{{ language }}/{{ item.topic }}/{{ item.category }}">{{ item.category }}</a></li>
+                                    <li class="category"><a href="/{{ language }}/{{ item.topic }}/{{ item.category[0] }}">{{ item.category[1][item.category[0]].translated_name }}</a></li>
                                 </ul>
                                 <h4 class="title tgcommon__hover"><a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h4>
                                 <ul class="post__activity list-wrap">
