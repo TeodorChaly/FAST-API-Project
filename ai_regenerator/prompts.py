@@ -43,7 +43,7 @@ async def ai_category_function(topic_name, additional_info=None):
                      "other" # at the end necessary add category other 
                      ]
                      please try to think abstractive and use wide categories name
-                     all object must be in lower case.
+                     all object must be in lower case. Ouput must be in JSON format and  Without ```json.
                      Here is main topic:"""
         print("start")
         completion = API_endpoint.chat.completions.create(

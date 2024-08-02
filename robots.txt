@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /docs/
+Allow: /
+
+host: https://deepwebnews.tech
+sitemap: https://deepwebnews.tech/sitemap.xml

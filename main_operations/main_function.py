@@ -83,6 +83,9 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
                                   f"\n {regenerated_result} \n")
                             continue
 
+                if regenerated_result_json["date_published"] == "-":
+                    regenerated_result_json["date_published"] = datetime.now().strftime("%d %m %Y")
+
                 await json_rewritten_news_saver(regenerated_result_json, topic, language, img_url, url)
                 print(
                     f"Data appended to JSON file for {language} language with {len(regenerated_result_json['rewritten_content'].split(' '))} words.")
