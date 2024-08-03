@@ -145,7 +145,12 @@ def save_images_local(url, topic, quality=85, max_size=(1024, 1024)):
             jpg_check = os.path.join(save_directory, f"{random_filename}.jpg")
             png_check = os.path.join(save_directory, f"{random_filename}.png")
             if os.path.exists(jpg_check) or os.path.exists(png_check):
-                pass
+                if os.path.exists(jpg_check):
+                    result = f"/get_images/image?topic={topic}&img={random_filename}"
+                    return result
+                else:
+                    result = f"/get_images/image?topic={topic}&img={random_filename}"
+                    return result
             else:
                 with Image.open(temp_path) as img:
                     img_format = img.format.lower()
@@ -189,6 +194,7 @@ async def json_rewritten_news_saver(generated_json_data, topic, language, image,
         topic = topic.lower()
 
         new_img = save_images_local(image, topic)
+        print(new_img)
         generated_json_data["topic"] = topic
         generated_json_data["language"] = language
         generated_json_data["image"] = new_img
