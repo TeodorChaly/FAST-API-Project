@@ -77,7 +77,7 @@
                                             <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ data.translated_name }}</a></li>
                                         {% endfor %}
                                         {% if other_categories %}
-                                            <li class="active menu-item-has-children"><a>Other</a>
+                                            <li class="active menu-item-has-children"><a href="#">Other</a>
                                                 <ul class="sub-menu">
                                                     {% for category, data in other_categories.items() %}
                                                         <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ data.translated_name }}</a></li>

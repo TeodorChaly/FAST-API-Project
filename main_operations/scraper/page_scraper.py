@@ -112,8 +112,7 @@ def clean_text(text):
 
 def img_path_scraper(soup):
     try:
-        img_meta = soup.find('meta', attrs={'property': 'og:image'}) or soup.find('meta',
-                                                                                  attrs={'property': 'og:image'})
+        img_meta = soup.find('meta', attrs={'property': 'og:image'})
         if img_meta and img_meta.has_attr('content'):
             return img_meta['content'].strip()
 

@@ -2,6 +2,7 @@ import json
 import os
 import logging
 from datetime import datetime
+from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.responses import PlainTextResponse
@@ -41,6 +42,9 @@ async def startup_event():
     if not os.path.exists("scraped_urls.json"):
         with open("scraped_urls.json", 'w', encoding='utf-8') as file:
             json.dump([], file)
+
+    if not os.path.exists("news_json"):
+        os.makedirs("news_json")
 
 
 # Middleware production
@@ -139,6 +143,27 @@ async def sitemap_xml():
 async def robots_txt():
     file_path = os.path.join(os.getcwd(), "robots.txt")
     return FileResponse(file_path)
+
+
+@app.get('/get_images/image')
+async def serve_image(topic, img):
+    current_file_path = os.path.abspath(__file__)
+    main_directory = os.path.dirname(current_file_path)
+    folder_name = os.path.join(main_directory, "news_json")
+    reserve_directory = os.path.join(folder_name, topic)
+    save_directory = os.path.join(reserve_directory, "main_images")
+    name_file = img
+    result_directory = Path(os.path.join(save_directory, name_file).replace("/", "\\"))
+    print(img)
+    # rezult  = Path(f"C:/Users/User/Documents/GitHub/FAST-API-Projects/news_json/{topic}/main_images/ob09.jpg")
+    try:
+        if result_directory.exists():
+            return FileResponse(result_directory)
+        else:
+            return {"error": "File not found"}
+    except Exception as e:
+        print("Image error", e)
+        return {"error":"File don t exist"}
 
 
 app.include_router(crawler_router)

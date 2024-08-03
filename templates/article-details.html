@@ -102,7 +102,7 @@
                                         <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
                                         {% endfor %}
                                         {% if other_categories %}
-                                        <li class="active menu-item-has-children"><a>Other</a>
+                                        <li class="active menu-item-has-children"><a href="#">Other</a>
                                             <ul class="sub-menu">
                                                 {% for category in other_categories %}
                                                     <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
@@ -118,7 +118,7 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             {% for lang in languages %}
-                                            <li><a class="dropdown-item" href="/change_language/{{ language }}/{{topic}}/{{article.url_part}}?new_language={{lang}}">{{ lang.upper() }}</a></li>
+                                            <li><a class="dropdown-item" href="/change_language/{{ lang }}/{{topic}}/{{article.url_part}}?new_language={{lang}}">{{ lang.upper() }}</a></li>
                                             {% endfor %}
                                         </ul>
                                     </div>

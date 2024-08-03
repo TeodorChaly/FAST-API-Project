@@ -1,6 +1,13 @@
+import imghdr
+import io
 import json
 import os
+import random
+import string
 from urllib.parse import urlparse, urlunparse
+
+import requests
+from PIL import Image, UnidentifiedImageError
 
 from ai_regenerator.prompts import ai_category_function, ai_category_for_multiple_languages
 
@@ -63,7 +70,8 @@ async def folder_prep(topic, language, additional_info=None):
                 main_categories_list = file.read()
 
             for i in range(3):
-                rewrite_categories_json = await ai_category_for_multiple_languages(language, main_categories_list, topic)
+                rewrite_categories_json = await ai_category_for_multiple_languages(language, main_categories_list,
+                                                                                   topic)
                 try:
                     json.loads(rewrite_categories_json)
                     language_category_path = os.path.join(sub_folder_name, f"{topic}__category__{language}.json")
@@ -87,14 +95,103 @@ async def folder_prep(topic, language, additional_info=None):
         raise "Problem"
 
 
+def generate_random_filename(prefix="", length=10):
+    characters = string.ascii_letters + string.digits
+    random_string = ''.join(random.choices(characters, k=length))
+    return f"{prefix}_{random_string}"
+
+
+def extract_prefix_from_url(url):
+    filename = os.path.basename(url)
+    prefix = filename.split('.')[0]
+    return prefix
+
+
+def compress_image(image: Image.Image, quality: int, max_size: tuple) -> io.BytesIO:
+    buffered = io.BytesIO()
+
+    image.thumbnail(max_size, Image.Resampling.LANCZOS)
+
+    image.save(buffered, format=image.format, optimize=True, quality=quality)
+
+    buffered.seek(0)
+    return buffered
+
+
+def save_images_local(url, topic, quality=85, max_size=(1024, 1024)):
+    try:
+        current_file_path = os.path.abspath(__file__)
+        main_directory = os.path.dirname(os.path.dirname(os.path.dirname(current_file_path)))
+        folder_name = os.path.join(main_directory, "news_json")
+        reserve_directory = os.path.join(folder_name, topic)
+        save_directory = os.path.join(reserve_directory, "main_images")
+
+        response = requests.get(url, timeout=5)
+        response.raise_for_status()
+
+        os.makedirs(save_directory, exist_ok=True)
+
+        prefix = extract_prefix_from_url(url)
+        random_filename = prefix
+        # random_filename = generate_random_filename(prefix=prefix)
+
+        temp_path = os.path.join(save_directory, random_filename)
+
+        with open(temp_path, 'wb') as file:
+            for chunk in response.iter_content(1024):
+                file.write(chunk)
+
+        try:
+            jpg_check = os.path.join(save_directory, f"{random_filename}.jpg")
+            png_check = os.path.join(save_directory, f"{random_filename}.png")
+            if os.path.exists(jpg_check) or os.path.exists(png_check):
+                pass
+            else:
+                with Image.open(temp_path) as img:
+                    img_format = img.format.lower()
+
+                    compressed_image = compress_image(img, quality, max_size)
+                    print(img_format)
+                    if img_format == 'jpg':
+                        compressed_path = os.path.join(save_directory, f"{random_filename}.jpg")
+                        with open(compressed_path, 'wb') as f:
+                            f.write(compressed_image.getvalue())
+                        random_filename += ".jpg"
+                    elif img_format == 'png':
+                        compressed_path = os.path.join(save_directory, f"{random_filename}.png")
+                        with open(compressed_path, 'wb') as f:
+                            f.write(compressed_image.getvalue())
+                        random_filename += ".png"
+                    else:
+                        compressed_path = os.path.join(save_directory, f"{random_filename}.png")
+                        with open(compressed_path, 'wb') as f:
+                            f.write(compressed_image.getvalue())
+                        random_filename += ".png"
+                        compressed_path = temp_path
+
+            os.remove(temp_path)
+            result = f"/get_images/image?topic={topic}&img={random_filename}"
+            return result
+
+        except UnidentifiedImageError:
+            os.remove(temp_path)
+            print(f"File not image, {url}")
+            return None
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error via loading: {e}, {url}")
+        return None
+
+
 async def json_rewritten_news_saver(generated_json_data, topic, language, image, url):
     try:
         language = language.lower()
         topic = topic.lower()
 
+        new_img = save_images_local(image, topic)
         generated_json_data["topic"] = topic
         generated_json_data["language"] = language
-        generated_json_data["image"] = image
+        generated_json_data["image"] = new_img
         generated_json_data["url"] = url
 
         current_file_path = os.path.abspath(__file__)
@@ -102,6 +199,7 @@ async def json_rewritten_news_saver(generated_json_data, topic, language, image,
 
         folder_name = os.path.join(main_directory, "news_json")
         sub_folder_name = os.path.join(folder_name, topic)
+
         file_name = f"{topic}_{language}.json"
         file_path = os.path.join(sub_folder_name, file_name)
 

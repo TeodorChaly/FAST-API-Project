@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Request
@@ -38,6 +39,7 @@ async def main_page_redirect(language: str = "en"):
 
 @router.get("/{topic}", tags=["User content"], response_class=HTMLResponse)
 async def main_page(request: Request, topic: str, language: str = "en", limit: int = None):
+    time_now = datetime.now()
     print(f"Requested topic: {topic}, {language} language.")
     languages = languages_to_code()
 
@@ -65,7 +67,8 @@ async def main_page(request: Request, topic: str, language: str = "en", limit: i
     for i in content:
         new_content[get_translated_categories_name(topic, language, [i])[i]["translated_name"]] = content[i] + [
             {"category": i}]
-
+    time_after = datetime.now()
+    print(time_now-time_after)
     return templates.TemplateResponse("main_page_news.html",
                                       {"request": request, "topic": topic, "language": language, "languages": languages,
                                        "top_categories": popular_categories_dict,
