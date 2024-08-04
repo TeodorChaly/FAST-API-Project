@@ -1,7 +1,7 @@
 import os
+from starlette.responses import FileResponse
 
 from fastapi import APIRouter
-from starlette.responses import FileResponse
 
 router = APIRouter()
 

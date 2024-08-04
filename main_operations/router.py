@@ -13,8 +13,8 @@ async def scraper_fun(url, topic="Crypto", google=False, additional_ifo=None):
 
 @router.post("/scrape", tags=["Testing"])
 async def scraper_fun_test(url: str = Query(..., description="URL to scrape"),
-                               topic: str = Query("crypto"), google: bool = Query(False),
-                               additional_ifo: str = Query(None, description="Additional info")):
+                           topic: str = Query("crypto"), google: bool = Query(False),
+                           additional_ifo: str = Query(None, description="Additional info")):
     languages = language_json_read()
     result = await scrape(url, topic, languages, "scrape", google, additional_ifo)
     return result

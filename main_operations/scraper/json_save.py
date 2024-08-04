@@ -1,4 +1,3 @@
-import imghdr
 import io
 import json
 import os
@@ -133,7 +132,6 @@ def save_images_local(url, topic, quality=85, max_size=(1024, 1024)):
 
         prefix = extract_prefix_from_url(url)
         random_filename = prefix
-        # random_filename = generate_random_filename(prefix=prefix)
 
         temp_path = os.path.join(save_directory, random_filename)
 
@@ -194,7 +192,6 @@ async def json_rewritten_news_saver(generated_json_data, topic, language, image,
         topic = topic.lower()
 
         new_img = save_images_local(image, topic)
-        print(new_img)
         generated_json_data["topic"] = topic
         generated_json_data["language"] = language
         generated_json_data["image"] = new_img
