@@ -28,17 +28,22 @@ async def show_content_json(topic: str, language: str = "en", limit: int = None)
 
 
 @router.get("/", tags=["User content"], response_class=HTMLResponse)
-async def main_page_redirect(language: str = "en"):
-    redirect = main_site_topic
-    all_topic = await show_all_topics_function()
-    if redirect not in all_topic:
-        return f"Not correct topic {redirect}. \nGo to config_setup.py and change it. \nYou can see all topics: {all_topic}"
-    else:
-        return RedirectResponse(url=f"/{redirect}")
+async def main_page_redirect(request: Request, language: str = "en"):
+    try:
+        redirect = main_site_topic
+        all_topic = await show_all_topics_function()
+
+        if redirect not in all_topic:
+            return f"Not correct topic {redirect}. \nGo to config_setup.py and change it. \nYou can see all topics: {all_topic}"
+        else:
+            print(redirect)
+            return await main_page(request, redirect, language)
+    except Exception as e:
+        print(e)
 
 
-@router.get("/{topic}", tags=["User content"], response_class=HTMLResponse)
-async def main_page(request: Request, topic: str, language: str = "en", limit: int = None):
+@router.get("/{language}", tags=["User content"], response_class=HTMLResponse)
+async def main_page(request: Request, topic: str = main_site_topic, language: str = "en", limit: int = None):
     time_now = datetime.now()
     print(f"Requested topic: {topic}, {language} language.")
     languages = languages_to_code()
@@ -68,12 +73,13 @@ async def main_page(request: Request, topic: str, language: str = "en", limit: i
         new_content[get_translated_categories_name(topic, language, [i])[i]["translated_name"]] = content[i] + [
             {"category": i}]
     time_after = datetime.now()
-    print(time_now-time_after)
+    print(time_now - time_after)
     return templates.TemplateResponse("main_page_news.html",
                                       {"request": request, "topic": topic, "language": language, "languages": languages,
                                        "top_categories": popular_categories_dict,
                                        "other_categories": remaining_categories_dict,
-                                       "newest_news": newest_news, "all_content": new_content, "today_news": today_news})
+                                       "newest_news": newest_news, "all_content": new_content,
+                                       "today_news": today_news})
 
 
 @router.get("/{language}/{topic}/{category}", tags=["User content"], response_class=HTMLResponse)
@@ -130,7 +136,8 @@ async def article_detail(request: Request, topic: str, url_part: str, language: 
     for article in articles:
         if article.get("url_part") == url_part:
             author = article.get("author", "A. Intelligence")
-            article["category"] = [article["category"], get_translated_categories_name(topic, language, [article["category"]])]
+            article["category"] = [article["category"],
+                                   get_translated_categories_name(topic, language, [article["category"]])]
             return templates.TemplateResponse("article-details.html",
                                               {"request": request, "topic": topic, "article": article,
                                                "language": language, "languages": languages,
