@@ -99,13 +99,13 @@
                                 <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-lg-flex">
                                     <ul class="navigation">
                                        {% for category in top_categories %}
-                                        <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
+                                        <li><a href="/{{ language }}/{{ category }}">{{ category }}</a></li>
                                         {% endfor %}
                                         {% if other_categories %}
                                         <li class="active menu-item-has-children"><a href="#">Other</a>
                                             <ul class="sub-menu">
                                                 {% for category in other_categories %}
-                                                    <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ category }}</a></li>
+                                                    <li><a href="/{{ language }}/{{ category }}">{{ category }}</a></li>
                                                 {% endfor %}
                                             </ul>
                                         </li>
@@ -118,7 +118,9 @@
                                         </button>
                                         <ul class="dropdown-menu">
                                             {% for lang in languages %}
-                                            <li><a class="dropdown-item" href="/change_language/{{ lang }}/{{topic}}/{{article.url_part}}?new_language={{lang}}">{{ lang.upper() }}</a></li>
+                                            <li><a class="dropdown-item" href="/change_language/{{ language }}/{{article.url_part}}?new_language={{lang}}">{{ lang.upper() }}</a></li>
+<!--                                            <li><a class="dropdown-item" href="/{{ lang }}/{{article.url_part}}/detail?change_language=True&old_language={{language}}">{{ lang.upper() }} test</a></li>-->
+
                                             {% endfor %}
                                         </ul>
                                     </div>
@@ -215,7 +217,7 @@
                                     <li class="breadcrumb-item"><a href="/{{language}}">Home</a></li>
                                     <li class="breadcrumb-item">
                                         {% if article.category and article.category[0] and article.category[1] and article.category[0] in article.category[1] %}
-                                            <a href="/{{ language }}/{{ topic }}/{{ article.category[0] }}">
+                                            <a href="/{{ language }}/{{ article.category[0] }}">
                                                 {{ article.category[1][article.category[0]].translated_name | default('Other') }}
                                             </a>
                                         {% else %}
@@ -255,7 +257,7 @@
                             <ul class="tgbanner__content-meta list-wrap">
                                 <li class="category">
                                     {% if article.category and article.category[0] and article.category[1] and article.category[0] in article.category[1] %}
-                                        <a href="/{{ language }}/{{ topic }}/{{ article.category[0] }}">
+                                        <a href="/{{ language }}/{{ article.category[0] }}">
                                             {{ article.category[1][article.category[0]].translated_name | default('Other') }}
                                         </a>
                                     {% else %}
@@ -304,23 +306,23 @@
                                     <div class="col-xl-6 col-lg-8 col-md-6">
                                         <div class="pn-post-item">
                                             <div class="thumb">
-                                                <a href="/{{ language }}/{{topic}}/{{ previous_and_next_news[0].url_part }}/detail"><img src="{{ previous_and_next_news[0].image }}" alt="img"></a>
+                                                <a href="/{{ language }}/{{ previous_and_next_news[0].url_part }}/detail"><img src="{{ previous_and_next_news[0].image }}" alt="img"></a>
                                             </div>
                                             <div class="content">
                                                 <span>Prev Post</span>
 
-                                                <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{topic}}/{{ previous_and_next_news[0].url_part }}/detail">{{ previous_and_next_news[1].seo_title[:45] }}{% if previous_and_next_news[0].seo_title|length > 45 %}...{% endif %}</a></h5>
+                                                <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{ previous_and_next_news[0].url_part }}/detail">{{ previous_and_next_news[1].seo_title[:45] }}{% if previous_and_next_news[0].seo_title|length > 45 %}...{% endif %}</a></h5>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-6">
                                         <div class="pn-post-item next-post">
                                             <div class="thumb">
-                                                <a href="/{{ language }}/{{topic}}/{{ previous_and_next_news[1].url_part }}/detail"><img src="{{ previous_and_next_news[1].image }}" alt="img"></a>
+                                                <a href="/{{ language }}/{{ previous_and_next_news[1].url_part }}/detail"><img src="{{ previous_and_next_news[1].image }}" alt="img"></a>
                                             </div>
                                             <div class="content">
                                                 <span>Next Post</span>
-                                                <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{topic}}/{{ previous_and_next_news[1].url_part }}/detail">{{ previous_and_next_news[2].seo_title[:45] }}{% if previous_and_next_news[1].seo_title|length > 45 %}...{% endif %}</a></h5>
+                                                <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{ previous_and_next_news[1].url_part }}/detail">{{ previous_and_next_news[2].seo_title[:45] }}{% if previous_and_next_news[1].seo_title|length > 45 %}...{% endif %}</a></h5>
                                             </div>
                                         </div>
                                     </div>
@@ -353,7 +355,7 @@
                                        {% for category, data in trending_categories.items() %}
                                         <li>
                                             <!-- <div class="thumb"><a href="blog.html"><img src="{{ url_for('assets', path='/img/category/side_category01.jpg') }}" alt="img"></a></div> -->
-                                            <a href="/{{ language }}/{{ topic }}/{{ category }}">{{ data.translated_name }}</a>
+                                            <a href="/{{ language }}/{{ category }}">{{ data.translated_name }}</a>
                                             <span class="float-right">{{ data.count }}</span>
                                         </li>
                                     {% endfor %}
@@ -365,8 +367,8 @@
                                     {% for trending_article in trending_news%}
                                     <div class="sidePost__item" data-background="{{trending_article.image}}">
                                         <div class="sidePost__content">
-                                            <a href="/{{ language }}/{{ topic }}/{{trending_article.category}}" class="tag">{{trending_article.category}}</a>
-                                            <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{ topic }}/{{trending_article.url_part}}/detail">{{trending_article.seo_title}}</a></h5>
+                                            <a href="/{{ language }}/{{trending_article.category}}" class="tag">{{trending_article.category}}</a>
+                                            <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{trending_article.url_part}}/detail">{{trending_article.seo_title}}</a></h5>
                                         </div>
                                     </div>
                                     {% endfor %}

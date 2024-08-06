@@ -14,11 +14,11 @@ from main_operations.crawlers.RSS_crawler.router import router as crawler_router
 from configs.sitemap import router as sitemap_router
 from configs.robots import router as robots_router
 
-logging.basicConfig(
-    filename='access.log',
-    level=logging.INFO,
-    format='%(asctime)s - IP: %(clientip)s, User-Agent: %(useragent)s, Method: %(method)s, Path: %(path)s'
-)
+# logging.basicConfig(
+#     filename='access.log',
+#     level=logging.INFO,
+#     format='%(asctime)s - IP: %(clientip)s, User-Agent: %(useragent)s, Method: %(method)s, Path: %(path)s'
+# )
 
 app = FastAPI(
     title="News generator API",
@@ -44,25 +44,25 @@ async def startup_event():
 
 
 # Middleware production
-@app.middleware("http")
-async def log_requests_middleware(request: Request, call_next):
-    client_ip = request.client.host
-    user_agent = request.headers.get('user-agent', 'Unknown')
-    method = request.method
-    path = request.url.path
-
-    logging.info(
-        '',
-        extra={
-            'clientip': client_ip,
-            'useragent': user_agent,
-            'method': method,
-            'path': path
-        }
-    )
-
-    response = await call_next(request)
-    return response
+# @app.middleware("http")
+# async def log_requests_middleware(request: Request, call_next):
+#     client_ip = request.client.host
+#     user_agent = request.headers.get('user-agent', 'Unknown')
+#     method = request.method
+#     path = request.url.path
+#
+#     logging.info(
+#         '',
+#         extra={
+#             'clientip': client_ip,
+#             'useragent': user_agent,
+#             'method': method,
+#             'path': path
+#         }
+#     )
+#
+#     response = await call_next(request)
+#     return response
 
 
 @app.get('/get_images/image')
@@ -74,7 +74,7 @@ async def serve_image(topic, img):
     save_directory = os.path.join(reserve_directory, "main_images")
     name_file = img
     result_directory = Path(os.path.join(save_directory, name_file).replace("/", "\\"))
-    print(img)
+    # print(img)
     # rezult  = Path(f"C:/Users/User/Documents/GitHub/FAST-API-Projects/news_json/{topic}/main_images/ob09.jpg")
     try:
         if result_directory.exists():

@@ -74,13 +74,13 @@
                                 <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-lg-flex">
                                    <ul class="navigation">
                                        {% for category, data in top_categories.items() %}
-                                            <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ data.translated_name }}</a></li>
+                                            <li><a href="/{{ language }}/{{ category }}">{{ data.translated_name }}</a></li>
                                         {% endfor %}
                                         {% if other_categories %}
                                             <li class="active menu-item-has-children"><a href="#">Other</a>
                                                 <ul class="sub-menu">
                                                     {% for category, data in other_categories.items() %}
-                                                        <li><a href="/{{ language }}/{{topic}}/{{ category }}">{{ data.translated_name }}</a></li>
+                                                        <li><a href="/{{ language }}/{{ category }}">{{ data.translated_name }}</a></li>
                                                     {% endfor %}
                                                 </ul>
                                             </li>
@@ -197,7 +197,7 @@
                                    <ul class="tgbanner__content-meta list-wrap" data-animation-in="tg-fadeInUp" data-delay-in=".2">
                                         {% if item.category and item.category[0] and item.category[1] and item.category[0] in item.category[1] %}
                                             <li class="category">
-                                                <a href="/{{ language }}/{{ item.topic }}/{{ item.category[0] }}">
+                                                <a href="/{{ language }}/{{ item.category[0] }}">
                                                     {{ item.category[1][item.category[0]].translated_name | default('Default Category Name') }}
                                                 </a>
                                             </li>
@@ -214,7 +214,7 @@
                                     </ul>
 
                                     <h2 class="title" data-animation-in="tg-fadeInUp" data-delay-in=".3">{{ item.seo_title }}</h2>
-                                    <a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail" class="btn border-btn" data-animation-in="tg-fadeInUp" data-delay-in=".6"><span class="btn-text">Read More</span> <i class="far fa-long-arrow-right"></i></a>
+                                    <a href="/{{ language }}/{{ item.url_part }}/detail" class="btn border-btn" data-animation-in="tg-fadeInUp" data-delay-in=".6"><span class="btn-text">Read More</span> <i class="far fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -251,7 +251,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="section__read-more text-start text-sm-end">
-                                    <a href="/{{ language }}/{{ topic }}/{{ all_content[category][0]['category'] }}">More Popular Post <i class="far fa-long-arrow-right"></i></a>
+                                    <a href="/{{ language }}/{{ all_content[category][0]['category'] }}">More Popular Post <i class="far fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -263,14 +263,14 @@
                                 <div class="swiper-slide">
                                     <div class="trending__post">
                                         <div class="trending__post-thumb tgImage__hover">
-                                            <a href="/{{ language }}/{{ topic }}/{{ item.url_part }}/detail"><img src="{{ item.image }}" alt="Image for {{ item.seo_title }}"></a>
+                                            <a href="/{{ language }}/{{ item.url_part }}/detail"><img src="{{ item.image }}" alt="Image for {{ item.seo_title }}"></a>
                                             <span class="is_trend"><i class="fas fa-bolt"></i></span>
                                         </div>
                                         <div class="trending__post-content">
                                             <ul class="tgbanner__content-meta list-wrap">
                                                 <li>{{ item.date_published }}</li>
                                             </ul>
-                                            <h4 class="title tgcommon__hover"><a href="/{{ language }}/{{ topic }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h4>
+                                            <h4 class="title tgcommon__hover"><a href="/{{ language }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h4>
                                         </div>
                                     </div>
                                 </div>
@@ -293,7 +293,7 @@
                             </div>
                             <div class="col-sm-6">
                                 <div class="section__read-more text-start text-sm-end">
-                                    <a href="/{{ language }}/{{ topic }}/{{ all_content[category][0]['category'] }}">More Post <i class="far fa-long-arrow-right"></i></a>
+                                    <a href="/{{ language }}/{{ all_content[category][0]['category'] }}">More Post <i class="far fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -305,13 +305,13 @@
                                 <div class="swiper-slide">
                                     <div class="trending__post">
                                         <div class="trending__post-thumb tgImage__hover">
-                                            <a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail"><img src="{{ item.image }}" alt="Image for {{ item.seo_title }}"></a>
+                                            <a href="/{{ language }}/{{ item.url_part }}/detail"><img src="{{ item.image }}" alt="Image for {{ item.seo_title }}"></a>
                                         </div>
                                         <div class="trending__post-content">
 <!--                                            <ul class="tgbanner__content-meta list-wrap">-->
 <!--                                                <li class="category"><a href="blog.html">{{ item.category }}</a></li>-->
 <!--                                            </ul>-->
-                                            <h4 class="title tgcommon__hover"><a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h4>
+                                            <h4 class="title tgcommon__hover"><a href="/{{ language }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h4>
                                             <ul class="post__activity list-wrap">
                                                 {{ item.date_published }}
                                             </ul>
@@ -347,13 +347,13 @@
                     <div class="col-md-6">
                         <div class="stories-post__item">
                             <div class="stories-post__thumb tgImage__hover">
-                                <a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail"><img src="{{ item.image }}" alt="img"></a>
+                                <a href="/{{ language }}/{{ item.url_part }}/detail"><img src="{{ item.image }}" alt="img"></a>
                             </div>
                             <div class="stories-post__content video__post-content">
                                 <ul class="tgbanner__content-meta list-wrap">
                                     <li class="category">
                                         {% if item.category and item.category[0] and item.category[1] and item.category[0] in item.category[1] %}
-                                            <a href="/{{ language }}/{{ item.topic }}/{{ item.category[0] }}">
+                                            <a href="/{{ language }}/{{ item.category[0] }}">
                                                 {{ item.category[1][item.category[0]].translated_name | default('Other') }}
                                             </a>
                                         {% else %}
@@ -364,7 +364,7 @@
                                     </li>
                                     <li>{{ item.date_published }}</li>
                                 </ul>
-                                <h3 class="title tgcommon__hover"><a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h3>
+                                <h3 class="title tgcommon__hover"><a href="/{{ language }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h3>
                             </div>
                         </div>
                     </div>
@@ -372,7 +372,7 @@
                     <div class="col-xl-3 col-lg-4 col-md-6">
                        <div class="trending__post stories-small-post__item">
     <div class="trending__post-thumb tgImage__hover">
-        <a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail">
+        <a href="/{{ language }}/{{ item.url_part }}/detail">
             <img src="{{ item.image }}" alt="img">
         </a>
     </div>
@@ -380,20 +380,20 @@
         <ul class="tgbanner__content-meta list-wrap">
             {% if item.category and item.category[0] and item.category[1] and item.category[0] in item.category[1] %}
                 <li class="category">
-                    <a href="/{{ language }}/{{ item.topic }}/{{ item.category[0] }}">
+                    <a href="/{{ language }}/{{ item.category[0] }}">
                         {{ item.category[1][item.category[0]].translated_name | default('Other') }}
                     </a>
                 </li>
             {% else %}
                 <li class="category">
-                    <a href="/{{ language }}/{{ item.topic }}/{{ item.category[0] }}">
+                    <a href="/{{ language }}/#">
                         News
                     </a>
                 </li>
             {% endif %}
         </ul>
         <h4 class="title tgcommon__hover">
-            <a href="/{{ language }}/{{ item.topic }}/{{ item.url_part }}/detail">
+            <a href="/{{ language }}/{{ item.url_part }}/detail">
                 {{ item.seo_title | default('Default Title') }}
             </a>
         </h4>

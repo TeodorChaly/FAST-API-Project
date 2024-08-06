@@ -154,7 +154,6 @@ def save_images_local(url, topic, quality=85, max_size=(1024, 1024)):
                     img_format = img.format.lower()
 
                     compressed_image = compress_image(img, quality, max_size)
-                    print(img_format)
                     if img_format == 'jpg':
                         compressed_path = os.path.join(save_directory, f"{random_filename}.jpg")
                         with open(compressed_path, 'wb') as f:
