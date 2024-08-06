@@ -214,7 +214,7 @@
                         <div class="breadcrumb-content">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="/{{language}}">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="/{{language}}">{{info_translate.home}}</a></li>
                                     <li class="breadcrumb-item">
                                         {% if article.category and article.category[0] and article.category[1] and article.category[0] in article.category[1] %}
                                             <a href="/{{ language }}/{{ article.category[0] }}">
@@ -267,7 +267,7 @@
                                     {% endif %}
                                 </li>
 
-                                <li><span class="by">By</span> <a href="/{{language}}">{{ author}}</a></li>
+                                <li><span class="by">{{info_translate.by}} </span> <a href="/{{language}}">{{ author}}</a></li>
                                 <li>{{ article.date_published }}</li>
                             </ul>
                             <h1 class="title">{{ article.seo_title }}</h1>
@@ -309,7 +309,7 @@
                                                 <a href="/{{ language }}/{{ previous_and_next_news[0].url_part }}/detail"><img src="{{ previous_and_next_news[0].image }}" alt="img"></a>
                                             </div>
                                             <div class="content">
-                                                <span>Prev Post</span>
+                                                <span>{{info_translate.prev_post}}</span>
 
                                                 <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{ previous_and_next_news[0].url_part }}/detail">{{ previous_and_next_news[1].seo_title[:45] }}{% if previous_and_next_news[0].seo_title|length > 45 %}...{% endif %}</a></h5>
                                             </div>
@@ -321,7 +321,7 @@
                                                 <a href="/{{ language }}/{{ previous_and_next_news[1].url_part }}/detail"><img src="{{ previous_and_next_news[1].image }}" alt="img"></a>
                                             </div>
                                             <div class="content">
-                                                <span>Next Post</span>
+                                                <span>{{info_translate.next_post}}</span>
                                                 <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{ previous_and_next_news[1].url_part }}/detail">{{ previous_and_next_news[2].seo_title[:45] }}{% if previous_and_next_news[1].seo_title|length > 45 %}...{% endif %}</a></h5>
                                             </div>
                                         </div>
@@ -338,8 +338,8 @@
                                         <img src="{{ url_for('assets', path='/img/others/content_writer.png') }}"  style="height:100%" alt="me">
                                     </div>
                                     <div class="tgAbout-info">
-                                        <p class="intro">Hi there, I’m <span>{{author}}</span></p>
-                                        <span class="designation">Content Writer</span>
+                                        <p class="intro">{{info_translate.content_writer_text}} <span>{{author}}</span></p>
+                                        <span class="designation">{{info_translate.content_writer}}</span>
                                     </div>
 <!--                                    <div class="tgAbout-social">-->
 <!--                                        <a href="#"><i class="fab fa-facebook-f"></i></a>-->
@@ -350,7 +350,7 @@
                                 </div>
                             </div>
                             <div class="widget sidebar-widget widget_categories">
-                                <h4 class="widget-title">Trending Category</h4>
+                                <h4 class="widget-title">{{info_translate.trending_topic}}</h4>
                                 <ul class="list-wrap">
                                        {% for category, data in trending_categories.items() %}
                                         <li>

@@ -8,7 +8,8 @@ from urllib.parse import urlparse, urlunparse
 import requests
 from PIL import Image, UnidentifiedImageError
 
-from ai_regenerator.prompts import ai_category_function, ai_category_for_multiple_languages
+from ai_regenerator.prompts import *
+from content.news_file_extractor import get_language_name_by_code
 
 
 def categories_extractor(topic):
@@ -39,6 +40,31 @@ def multi_language_categories_extractor(topic, language):
         return json_formatted
     except Exception as e:
         print("Error during categories:", e)
+
+
+def multi_language_configs_extractor(topic, language):
+    try:
+        current_file_path = os.path.abspath(__file__)
+        main_directory = os.path.dirname((os.path.dirname(os.path.dirname(current_file_path))))
+        folder_name = os.path.join(main_directory, "news_json")
+        sub_folder_name = os.path.join(folder_name, str(topic))
+        file_name = f"{topic}__configs__{language}.json"
+        file_path = os.path.join(sub_folder_name, file_name)
+        with open(file_path, 'r', encoding='utf-8') as file:
+            json_formatted = json.load(file)
+        return json_formatted
+    except Exception as e:
+        print("Error during configs:", e)
+
+
+def get_main_info(language, topic):
+    try:
+        name_language = get_language_name_by_code(language)
+        info_translate = multi_language_configs_extractor(topic, name_language)
+    except Exception as e:
+        info_translate = None
+        print("Error in main page info translate", e)
+    return info_translate
 
 
 async def folder_prep(topic, language, additional_info=None):
@@ -81,8 +107,19 @@ async def folder_prep(topic, language, additional_info=None):
                     print("Error during JSON decoding. Trying again.", e)
                     continue
 
-        else:
-            print(True)
+        category_config_path = os.path.join(sub_folder_name, f"{topic}__configs__{language}.json")
+        if not os.path.exists(category_config_path):
+            for i in range(3):
+                rewrite_categories_json = await ai_main_config_for_multiple_languages(language, topic, additional_info)
+                try:
+                    json.loads(rewrite_categories_json)
+                    language_category_path = os.path.join(sub_folder_name, f"{topic}__configs__{language}.json")
+                    with open(language_category_path, 'w', encoding='utf-8') as file:
+                        json.dump(json.loads(rewrite_categories_json), file)
+                    break
+                except json.JSONDecodeError as e:
+                    print("Error during JSON decoding. Trying again.", e)
+                    continue
 
         if not os.path.exists(file_path):
             with open(file_path, 'w', encoding='utf-8') as file:

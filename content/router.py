@@ -11,6 +11,7 @@ from configs.config_setup import main_site_topic
 from languages.language_json import languages_to_code
 from main_operations.crawlers.RSS_crawler.rss_crawler import show_all_topics_function
 from content.multi_language_categories import *
+from main_operations.scraper.json_save import multi_language_configs_extractor, get_main_info
 
 router = APIRouter()
 
@@ -36,8 +37,8 @@ async def main_page_redirect(request: Request, language: str = "en"):
         if redirect not in all_topic:
             return f"Not correct topic {redirect}. \nGo to config_setup.py and change it. \nYou can see all topics: {all_topic}"
         else:
-            print(redirect)
-            return await main_page(request, redirect, language)
+            print(redirect, language, 1112)
+            return await main_page(request, topic=redirect, language=language)
     except Exception as e:
         print(e)
 
@@ -47,6 +48,8 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
     time_now = datetime.now()
     print(f"Requested topic: {topic}, {language} language.")
     languages = languages_to_code()
+
+    info_translate = get_main_info(language, topic)
 
     json_data = await show_content_json(topic, language, limit)
 
@@ -85,7 +88,8 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
                                       {"request": request, "topic": topic, "language": language, "languages": languages,
                                        "top_categories": popular_categories_dict,
                                        "other_categories": remaining_categories_dict, "all_content": new_content,
-                                       "today_news": today_news, "newest_news": newest_news})
+                                       "today_news": today_news, "newest_news": newest_news,
+                                       "info_translate": info_translate})
 
 
 @router.get("/{language}/{category}", tags=["User content"], response_class=HTMLResponse)
@@ -109,7 +113,7 @@ async def category_list(request: Request, category: str, language: str = "en",
 
     about_category = get_category_meta_tags(topic, category, language)
 
-    print(about_category)
+    info_translate = get_main_info(language, topic)
 
     if not filtered_articles and page == 1 or page <= 0:
         return templates.TemplateResponse("error.html",
@@ -121,7 +125,8 @@ async def category_list(request: Request, category: str, language: str = "en",
                                        "top_categories": popular_categories_dict,
                                        "other_categories": remaining_categories_dict,
                                        "trending_categories": trending_categories_dict, "trending_news": trending_news,
-                                       "page": page, "total_pages": total_pages, "about_category": about_category})
+                                       "page": page, "total_pages": total_pages, "about_category": about_category,
+                                       "info_translate": info_translate})
 
 
 @router.get("/{language}/{url_part}/detail", tags=["User content"], response_class=HTMLResponse)
@@ -135,6 +140,8 @@ async def article_detail(request: Request, url_part: str, language: str, topic: 
 
     trending_categories = get_trending_categories(all_categories)
     trending_categories_dict = get_translated_categories_name_and_count(topic, language, trending_categories)
+
+    info_translate = get_main_info(language, topic)
 
     trending_news = await show_content_json(topic, language, 6)
     previous_and_next_news = trending_news[:3]
@@ -151,12 +158,14 @@ async def article_detail(request: Request, url_part: str, language: str, topic: 
                                                "other_categories": remaining_categories,
                                                "trending_categories": trending_categories_dict,
                                                "trending_news": trending_news, "tags": article["tags"].split(","),
-                                               "previous_and_next_news": previous_and_next_news, "author": author})
+                                               "previous_and_next_news": previous_and_next_news, "author": author,
+                                               "info_translate": info_translate})
     return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
 
 
 @router.get("/change_language/{language}/{url_part}", response_class=HTMLResponse, tags=["Content"])
-async def change_language(request: Request, url_part: str, language: str, new_language: str, topic: str = main_site_topic):
+async def change_language(request: Request, url_part: str, language: str, new_language: str,
+                          topic: str = main_site_topic):
     language_name = get_language_name_by_code(language)
     articles = load_articles_from_json(topic, language_name)
 

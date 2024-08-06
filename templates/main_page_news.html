@@ -4,8 +4,8 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title> All news | DeepWebNews </title>
-    <meta name="description" content="Sarsa - News & Magazine HTML Template">
+    <title> {{info_translate.main_page.seo_title}} | DeepWebNews </title>
+    <meta name="description" content="{{info_translate.main_page.seo_description}}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('assets', path='/img/favicon.png') }}">
@@ -77,7 +77,7 @@
                                             <li><a href="/{{ language }}/{{ category }}">{{ data.translated_name }}</a></li>
                                         {% endfor %}
                                         {% if other_categories %}
-                                            <li class="active menu-item-has-children"><a href="#">Other</a>
+                                            <li class="active menu-item-has-children"><a href="#">{{ info_translate.other }}</a>
                                                 <ul class="sub-menu">
                                                     {% for category, data in other_categories.items() %}
                                                         <li><a href="/{{ language }}/{{ category }}">{{ data.translated_name }}</a></li>
@@ -214,7 +214,7 @@
                                     </ul>
 
                                     <h2 class="title" data-animation-in="tg-fadeInUp" data-delay-in=".3">{{ item.seo_title }}</h2>
-                                    <a href="/{{ language }}/{{ item.url_part }}/detail" class="btn border-btn" data-animation-in="tg-fadeInUp" data-delay-in=".6"><span class="btn-text">Read More</span> <i class="far fa-long-arrow-right"></i></a>
+                                    <a href="/{{ language }}/{{ item.url_part }}/detail" class="btn border-btn" data-animation-in="tg-fadeInUp" data-delay-in=".6"><span class="btn-text">{{info_translate.read_more}}</span> <i class="far fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -245,13 +245,13 @@
                         <div class="row align-items-end">
                             <div class="col-sm-6">
                                 <div class="section__title">
-                                    <span class="section__sub-title">Popular</span>
+                                    <span class="section__sub-title">{{info_translate.popular}}</span>
                                     <h3 class="section__main-title">{{ category | capitalize }}</h3>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="section__read-more text-start text-sm-end">
-                                    <a href="/{{ language }}/{{ all_content[category][0]['category'] }}">More Popular Post <i class="far fa-long-arrow-right"></i></a>
+                                    <a href="/{{ language }}/{{ all_content[category][0]['category'] }}">{{info_translate.more_popular_post}} <i class="far fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -287,13 +287,13 @@
                         <div class="row align-items-end">
                             <div class="col-sm-6">
                                 <div class="section__title">
-                                    <span class="section__sub-title">Popular Posts</span>
+                                    <span class="section__sub-title">{{info_translate.popular_posts}}</span>
                                     <h3 class="section__main-title">{{ category | capitalize }}</h3>
                                 </div>
                             </div>
                             <div class="col-sm-6">
                                 <div class="section__read-more text-start text-sm-end">
-                                    <a href="/{{ language }}/{{ all_content[category][0]['category'] }}">More Post <i class="far fa-long-arrow-right"></i></a>
+                                    <a href="/{{ language }}/{{ all_content[category][0]['category'] }}">{{info_translate.more_post}}<i class="far fa-long-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -334,8 +334,8 @@
             <div class="row align-items-end">
                 <div class="col-sm-6">
                     <div class="section__title">
-                        <span class="section__sub-title">Stories</span>
-                        <h3 class="section__main-title">Popular Stories</h3>
+                        <span class="section__sub-title">{{info_translate.popular_stories}}</span>
+                        <h3 class="section__main-title">{{info_translate.stories}}</h3>
                     </div>
                 </div>
 

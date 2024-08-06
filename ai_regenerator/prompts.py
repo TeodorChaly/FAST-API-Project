@@ -92,3 +92,50 @@ async def ai_category_for_multiple_languages(language, main_list_of_categories, 
     except Exception as e:
         print(f'Error during generation: {e}')
         raise f"Error during generation: {e}"
+
+
+async def ai_main_config_for_multiple_languages(language, topic, additional_info=None):
+    try:
+        system_fine_tuning = f"""I will give you language and you tusk is to translate (or generate) this text to given langauge (but don't translate word for word, but make the meaning clear.) and save it in this json format:
+         {{
+            "main_page":{{
+            "seo_title": "generate here SEO title about main page (list of news) in {topic} topic. And here is additional info if it is helpful - {additional_info}"
+            "seo_description":"generate here SEO description about main page (list of news) in {topic} topic. And here is additional info if it is helpful - {additional_info}"
+            }},
+            "other":"other",
+            "read_more": "read more",
+            "popular":"popular",
+            "more_popular_post":"More_popular_post",
+            "popular_posts":"Popular Posts",
+            "more_post":"More Post",
+            
+            
+            "read_more":"Read more",
+            "trending_topic": "Trending_topic",
+            "home": "Home",
+            "news": "News",
+            "stories": "Stories",
+            "popular_stories": "Popular Stories",
+            "prev_post":"Prev Post",
+            "next_post":"Next Post",
+            "by":"By",
+            "content_writer":"Content Writer",
+            "content_writer_text":"Hi there, i am"
+            }}
+         
+            Output must be in JSON format and Without ```json. Here is language"""
+        completion = API_endpoint.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system",
+                 "content": system_fine_tuning},
+
+                {"role": "user", "content": language},
+            ]
+        )
+        print(completion.choices[0].message.content)
+        return completion.choices[0].message.content
+
+    except Exception as e:
+        print(f'Error during generation: {e}')
+        raise f"Error during generation: {e}"

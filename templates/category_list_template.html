@@ -210,9 +210,9 @@
                         <div class="breadcrumb-content">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="/{{language}}">Home</a></li>
+                                    <li class="breadcrumb-item"><a href="/{{language}}">{{ info_translate.home }}</a></li>
                                     <li class="breadcrumb-item"><a href="/{{ language}}/{{ category }}"> {{ about_category[1].translated_name }}</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">news</li>
+                                    <li class="breadcrumb-item active" aria-current="page">{{ info_translate.news }}</li>
                                 </ol>
                             </nav>
                         </div>
@@ -254,7 +254,7 @@
                                         <h3 class="title tgcommon__hover"><a href="/{{ language }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h3>
                                         <p>{{ item.seo_description[:280] }}{% if item.seo_description|length > 280 %}...{% endif %}</p>
                                         <div class="latest__post-read-more">
-                                            <a href="/{{ language }}/{{ item.url_part }}/detail">Read More <i class="far fa-long-arrow-right"></i></a>
+                                            <a href="/{{ language }}/{{ item.url_part }}/detail">{{ info_translate.read_more }} <i class="far fa-long-arrow-right"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -305,7 +305,7 @@
                                 </div>
                             </div>
                             <div class="widget sidebar-widget widget_categories">
-                                <h4 class="widget-title">Trending Category</h4>
+                                <h4 class="widget-title">{{ info_translate.trending_topic }}</h4>
 
                                 <ul class="list-wrap">
                                     {% for category, data in trending_categories.items() %}
