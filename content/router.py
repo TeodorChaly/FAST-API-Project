@@ -7,7 +7,7 @@ from starlette.templating import Jinja2Templates
 
 from content.functions import *
 from content.news_file_extractor import *
-from configs.config_setup import main_site_topic
+from configs.config_setup import main_site_topic, SITE_DOMAIN
 from languages.language_json import languages_to_code
 from main_operations.crawlers.RSS_crawler.rss_crawler import show_all_topics_function
 from content.multi_language_categories import *
@@ -89,7 +89,7 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
                                        "top_categories": popular_categories_dict,
                                        "other_categories": remaining_categories_dict, "all_content": new_content,
                                        "today_news": today_news, "newest_news": newest_news,
-                                       "info_translate": info_translate})
+                                       "info_translate": info_translate, "site_domain": SITE_DOMAIN})
 
 
 @router.get("/{language}/{category}", tags=["User content"], response_class=HTMLResponse)
@@ -126,7 +126,7 @@ async def category_list(request: Request, category: str, language: str = "en",
                                        "other_categories": remaining_categories_dict,
                                        "trending_categories": trending_categories_dict, "trending_news": trending_news,
                                        "page": page, "total_pages": total_pages, "about_category": about_category,
-                                       "info_translate": info_translate})
+                                       "info_translate": info_translate, "site_domain": SITE_DOMAIN})
 
 
 @router.get("/{language}/{url_part}/detail", tags=["User content"], response_class=HTMLResponse)
@@ -136,7 +136,7 @@ async def article_detail(request: Request, url_part: str, language: str, topic: 
     languages = languages_to_code()
 
     json_data = await show_content_json(topic, language, None)
-    popular_categories, remaining_categories, all_categories = await get_categories(topic, json_data)
+    popular_categories, remaining_categories, all_categories = await get_header(topic, language, json_data)
 
     trending_categories = get_trending_categories(all_categories)
     trending_categories_dict = get_translated_categories_name_and_count(topic, language, trending_categories)
@@ -146,6 +146,12 @@ async def article_detail(request: Request, url_part: str, language: str, topic: 
     trending_news = await show_content_json(topic, language, 6)
     previous_and_next_news = trending_news[:3]
     trending_news = trending_news[2:6]
+    for i in trending_news:
+        i["category"] = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
+        print(i["category"])
+
+    languages_dict = await change_language(url_part, language, topic)
+
     for article in articles:
         if article.get("url_part") == url_part:
             author = article.get("author", "A. Intelligence")
@@ -159,26 +165,36 @@ async def article_detail(request: Request, url_part: str, language: str, topic: 
                                                "trending_categories": trending_categories_dict,
                                                "trending_news": trending_news, "tags": article["tags"].split(","),
                                                "previous_and_next_news": previous_and_next_news, "author": author,
-                                               "info_translate": info_translate})
+                                               "info_translate": info_translate, "languages_dict": languages_dict,
+                                               "site_domain": SITE_DOMAIN})
     return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
 
 
-@router.get("/change_language/{language}/{url_part}", response_class=HTMLResponse, tags=["Content"])
-async def change_language(request: Request, url_part: str, language: str, new_language: str,
+async def change_language(url_part: str, language: str,
                           topic: str = main_site_topic):
     language_name = get_language_name_by_code(language)
     articles = load_articles_from_json(topic, language_name)
 
-    new_language_name = get_language_name_by_code(new_language)
-
     article = next((a for a in articles if a.get("url_part") == url_part), None)
+    langauge_dict = {}
+
+    time_now = datetime.now()
     if article:
         new_id = article.get("url")
-        json_response = await news_extractor(topic, new_language_name, None)
-        new_article = next((a for a in json_response if a.get("url") == new_id), None)
 
-        if new_article:
-            print(new_article["url_part"])
-            return RedirectResponse(url=f"/{new_language}/{new_article['url_part']}/detail")
-        else:
-            return RedirectResponse(url=f"/{new_language}/{article['category']}")
+        languages = languages_to_code()
+
+        for new_language_name in languages:
+            json_response = await news_extractor(topic, get_language_name_by_code(new_language_name), None)
+            for response in json_response:
+                if response["url"] == new_id:
+                    langauge_dict[f"{new_language_name}"] = response['url_part']
+                    break
+                else:
+                    langauge_dict[f"{new_language_name}"] = None
+
+        print(langauge_dict)
+
+    time_after = datetime.now()
+    print(time_after - time_now)
+    return langauge_dict

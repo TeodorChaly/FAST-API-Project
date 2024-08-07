@@ -68,7 +68,7 @@ def get_urls_from_json_files(language):
             language = data.get('language', 'en')
             language_code = language_to_code(language)
 
-            url = f"http://127.0.0.1:8000/{language_code}/{main_site_topic}/{url_part}/detail"
+            url = f"{SITE_DOMAIN}/{language_code}/{main_site_topic}/{url_part}/detail"
             urls_list.append({
                 "loc": url,
                 "lastmod": date_obj,

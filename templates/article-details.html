@@ -34,6 +34,14 @@
     <link rel="stylesheet" href="{{ url_for('assets', path='/css/slick.css') }}">
     <link rel="stylesheet" href="{{ url_for('assets', path='/css/spacing.css') }}">
     <link rel="stylesheet" href="{{ url_for('assets', path='/css/main.css') }}">
+
+    {% for lang in languages_dict %}
+        {% if languages_dict[lang] is not none %}
+            <link rel="alternate" href="{{ site_domain }}/{{ lang }}/{{ languages_dict[lang] }}" hreflang="{{ lang }}">
+        {% endif %}
+    {% endfor %}
+
+
 </head>
 
 <body>
@@ -98,17 +106,17 @@
                                 </div>
                                 <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-lg-flex">
                                     <ul class="navigation">
-                                       {% for category in top_categories %}
-                                        <li><a href="/{{ language }}/{{ category }}">{{ category }}</a></li>
+                                        {% for category, data in top_categories.items() %}
+                                            <li><a href="/{{ language }}/{{ category }}">{{ data.translated_name }}</a></li>
                                         {% endfor %}
                                         {% if other_categories %}
-                                        <li class="active menu-item-has-children"><a href="#">Other</a>
-                                            <ul class="sub-menu">
-                                                {% for category in other_categories %}
-                                                    <li><a href="/{{ language }}/{{ category }}">{{ category }}</a></li>
-                                                {% endfor %}
-                                            </ul>
-                                        </li>
+                                            <li class="active menu-item-has-children"><a href="#">Other</a>
+                                                <ul class="sub-menu">
+                                                    {% for category, data in other_categories.items() %}
+                                                        <li><a href="/{{ language }}/{{ category }}">{{ data.translated_name }}</a></li>
+                                                    {% endfor %}
+                                                </ul>
+                                            </li>
                                         {% endif %}
                                     </ul>
                                 </div>
@@ -117,11 +125,12 @@
                                             {{ language.upper() }}
                                         </button>
                                         <ul class="dropdown-menu">
-                                            {% for lang in languages %}
-                                            <li><a class="dropdown-item" href="/change_language/{{ language }}/{{article.url_part}}?new_language={{lang}}">{{ lang.upper() }}</a></li>
-<!--                                            <li><a class="dropdown-item" href="/{{ lang }}/{{article.url_part}}/detail?change_language=True&old_language={{language}}">{{ lang.upper() }} test</a></li>-->
-
+                                           {% for lang in languages_dict %}
+                                                {% if languages_dict[lang] is not none %}
+                                                    <li><a class="dropdown-item" href="/{{ lang }}/{{ languages_dict[lang] }}/detail">{{ lang.upper() }} </a></li>
+                                                {% endif %}
                                             {% endfor %}
+
                                         </ul>
                                     </div>
                             </nav>
@@ -367,7 +376,7 @@
                                     {% for trending_article in trending_news%}
                                     <div class="sidePost__item" data-background="{{trending_article.image}}">
                                         <div class="sidePost__content">
-                                            <a href="/{{ language }}/{{trending_article.category}}" class="tag">{{trending_article.category}}</a>
+                                            <a href="/{{ language }}/{{trending_article.category[0]}}" class="tag">{{trending_article.category[1][trending_article.category[0]]['translated_name']}}</a>
                                             <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{trending_article.url_part}}/detail">{{trending_article.seo_title}}</a></h5>
                                         </div>
                                     </div>

@@ -85,9 +85,10 @@ async def serve_image(topic, img):
         print("Image error", e)
         return {"error": "File don t exist"}
 
+app.include_router(robots_router)
+app.include_router(sitemap_router)
+
 app.include_router(crawler_router)
 app.include_router(languages_router)
 app.include_router(topics_router)
 app.include_router(scraping_router)
-app.include_router(robots_router)
-app.include_router(sitemap_router)

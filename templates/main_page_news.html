@@ -22,6 +22,11 @@
     <link rel="stylesheet" href="{{ url_for('assets', path='/css/slick.css') }}">
     <link rel="stylesheet" href="{{ url_for('assets', path='/css/spacing.css') }}">
     <link rel="stylesheet" href="{{ url_for('assets', path='/css/main.css') }}">
+
+    {% for lang in languages %}
+        <link rel="alternate" href="{{ site_domain }}/{{lang}}" hreflang="{{lang}}">
+    {% endfor %}
+
 </head>
 
 <body>
