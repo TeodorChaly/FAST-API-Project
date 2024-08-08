@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from fastapi import APIRouter, Request
-from starlette.responses import HTMLResponse, RedirectResponse
+from starlette.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
 from content.functions import *
@@ -11,7 +11,7 @@ from configs.config_setup import main_site_topic, SITE_DOMAIN
 from languages.language_json import languages_to_code
 from main_operations.crawlers.RSS_crawler.rss_crawler import show_all_topics_function
 from content.multi_language_categories import *
-from main_operations.scraper.json_save import multi_language_configs_extractor, get_main_info
+from main_operations.scraper.json_save import get_main_info
 
 router = APIRouter()
 

@@ -4,7 +4,6 @@ import logging
 import httpx
 from bs4 import BeautifulSoup
 
-from ai_regenerator.prompts import ai_generator_function
 from main_operations.crawlers.Google_news_crawler.google_search_crawler import google_news_extractor
 from main_operations.crawlers.RSS_crawler.json_save import process_json
 from main_operations.images_function import is_image_url_valid

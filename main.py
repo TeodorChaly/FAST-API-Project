@@ -1,9 +1,8 @@
 import json
 import os
-import logging
 from pathlib import Path
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from starlette.responses import FileResponse
 from starlette.staticfiles import StaticFiles
 
@@ -74,8 +73,6 @@ async def serve_image(topic, img):
     save_directory = os.path.join(reserve_directory, "main_images")
     name_file = img
     result_directory = Path(os.path.join(save_directory, name_file).replace("/", "\\"))
-    # print(img)
-    # rezult  = Path(f"C:/Users/User/Documents/GitHub/FAST-API-Projects/news_json/{topic}/main_images/ob09.jpg")
     try:
         if result_directory.exists():
             return FileResponse(result_directory)
@@ -87,7 +84,6 @@ async def serve_image(topic, img):
 
 app.include_router(robots_router)
 app.include_router(sitemap_router)
-
 app.include_router(crawler_router)
 app.include_router(languages_router)
 app.include_router(topics_router)
