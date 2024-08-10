@@ -28,8 +28,10 @@ async def regenerate_again(content_to_generate, language, categories):
 async def regenerate_function(soup, languages, topic, url, status, additional_info=None):
     try:
         main_text = main_text_scraper(soup)
+        structure_text = structure_text_scraper(soup)
+        # print(000, structure_text)
+        print(111, main_text, 111)
         img_url = img_path_scraper(soup)
-        time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
         try:
             title = title_scraper(soup)
@@ -54,7 +56,8 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
         except Exception as e:
             additional_article_params = "No additional info"
 
-        print(is_image_url_valid(img_url))
+        # print(await is_image_url_valid(img_url))
+        # print(additional_article_params)
 
         content_to_generate = f"{title} {main_text} {date_published}"
         word_count = len(content_to_generate.split())

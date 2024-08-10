@@ -43,7 +43,6 @@ def additional_info_scraper(soup):
     image_info = [
         f"[Image: {img.get('src')}, alt: {img.get('alt', '')}]" for img in images if img.get('src')
     ]
-    print(image_info)
     return '\n'.join(image_info)
 
 
@@ -65,14 +64,14 @@ def main_text_scraper(soup):
             ('main', {}),
         ]
 
-        elements = soup.find_all(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'], recursive=True)
+        elements = soup.find_all(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'blockquote'],
+                                 recursive=True)  # , 'li', 'blockquote'
         combined_text = '\n'.join(
             el.get_text(separator='\n').strip()
             for el in elements if len(el.get_text().strip()) > 50 or el.name.startswith('h')
         )
 
         if combined_text.strip():
-            # print(combined_text.strip())
             return clean_text(combined_text.strip())
 
         for tag, attrs in candidates:
@@ -86,6 +85,76 @@ def main_text_scraper(soup):
         for div in other_divs:
             if len(div.get_text(separator='\n').strip()) > 100:
                 return clean_text(div.get_text(separator='\n').strip())
+
+        return "No main text found"
+
+    except Exception as e:
+        print(f"An error occurred: {str(e)}")
+        return "Error"
+
+
+def structure_text_scraper(soup):
+    try:
+        for element in soup(["script", "style"]):
+            element.decompose()
+
+        comments = soup.findAll(text=lambda text: isinstance(text, Comment))
+        for comment in comments:
+            comment.extract()
+
+        candidates = [
+            ('div', {'class': 'article-content'}),
+            ('div', {'id': 'main-content'}),
+            ('div', {'class': 'main-content'}),
+            ('div', {'id': 'article-content'}),
+            ('article', {}),
+            ('section', {'class': 'main-section'}),
+            ('main', {}),
+        ]
+
+        main_content = None
+        for tag, attrs in candidates:
+            main_content = soup.find(tag, attrs)
+            if main_content:
+                break
+
+        if not main_content:
+            main_content = soup.find('body')
+
+        for element in main_content.find_all(['nav', 'footer', 'aside', 'header']):
+            element.decompose()
+
+        elements = main_content.find_all(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'ul', 'li', 'blockquote'],
+                                         recursive=True)
+        combined_text = ''
+
+        for el in elements:
+            text_parts = []
+
+            if el.name == 'img':
+                src = el.get('src', '').strip()
+                alt = el.get('alt', '').strip()
+                if src:
+                    img_info = f'<img src="{src}" alt="{alt}">' if alt else f'<img src="{src}">'
+                    text_parts.append(img_info)
+            elif el.name == 'li':
+                li_text = el.get_text().strip()
+                text_parts.append(li_text)
+            else:
+                for child in el.children:
+                    if child.name == 'a' and 'href' in child.attrs:
+                        link_text = child.get_text().strip()
+                        href = child['href']
+                        text_parts.append(f'<a href="{href}">{link_text}</a>')
+                    elif isinstance(child, str):
+                        text_parts.append(child.strip())
+
+            text = ' '.join(text_parts).strip()
+            if len(text) > 50 or el.name in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'li', 'blockquote']:
+                combined_text += f'<{el.name}>{text}</{el.name}>\n'
+
+        if combined_text.strip():
+            return clean_text(combined_text.strip())
 
         return "No main text found"
 
