@@ -27,10 +27,9 @@ async def regenerate_again(content_to_generate, language, categories):
 
 async def regenerate_function(soup, languages, topic, url, status, additional_info=None):
     try:
-        main_text = main_text_scraper(soup)
-        structure_text = structure_text_scraper(soup)
-        # print(000, structure_text)
-        print(111, main_text, 111)
+        main_text = main_content_download(url)
+        main_text_with_url = add_links_to_text(main_text, soup)
+
         img_url = img_path_scraper(soup)
 
         try:
@@ -38,6 +37,12 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
         except Exception as e:
             print("Error during scraping title,", e)
             title = "No title"
+
+        try:
+            h1 = h1_scraper(soup)
+        except Exception as e:
+            print("Error during scraping title,", e)
+            h1 = "No h1"
         try:
             date_published = date_published_scraper(soup)
         except Exception as e:
@@ -59,8 +64,10 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
         # print(await is_image_url_valid(img_url))
         # print(additional_article_params)
 
-        content_to_generate = f"{title} {main_text} {date_published}"
+        content_to_generate = f"{title} {h1} {main_text} {date_published}"
         word_count = len(content_to_generate.split())
+
+        print(content_to_generate)
 
         print(f"{word_count} words in total.")
 

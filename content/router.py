@@ -41,8 +41,8 @@ async def main_page_redirect(request: Request, language: str = "en"):
             return await main_page(request, topic=redirect, language=language)
     except Exception as e:
         print(e)
-
-
+#
+#
 @router.get("/{language}", tags=["User content"], response_class=HTMLResponse)
 async def main_page(request: Request, topic: str = main_site_topic, language: str = "en", limit: int = None):
     time_now = datetime.now()
@@ -131,6 +131,7 @@ async def category_list(request: Request, category: str, language: str = "en",
 
 @router.get("/{language}/{url_part}/detail", tags=["User content"], response_class=HTMLResponse)
 async def article_detail(request: Request, url_part: str, language: str, topic: str = main_site_topic):
+
     language_name = get_language_name_by_code(language)
     articles = load_articles_from_json(topic, language_name)
     languages = languages_to_code()
@@ -148,10 +149,8 @@ async def article_detail(request: Request, url_part: str, language: str, topic: 
     trending_news = trending_news[2:6]
     for i in trending_news:
         i["category"] = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
-        print(i["category"])
 
     languages_dict = await change_language(url_part, language, topic)
-
     for article in articles:
         if article.get("url_part") == url_part:
             author = article.get("author", "A. Intelligence")

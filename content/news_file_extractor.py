@@ -9,7 +9,6 @@ async def news_extractor(topic: str, language: str, limit):
     file_path = f"news_json/{topic}/{topic}_{language.lower()}.json"
 
     if os.path.isfile(file_path):
-        print(f"Reading JSON file: {file_path}")
         json_result = await read_json(file_path, limit)
         return json_result
     else:

@@ -110,7 +110,7 @@
                                             <li><a href="/{{ language }}/{{ category }}">{{ data.translated_name }}</a></li>
                                         {% endfor %}
                                         {% if other_categories %}
-                                            <li class="active menu-item-has-children"><a href="#">Other</a>
+                                            <li class="active menu-item-has-children"><a href="#">{{info_translate.other}}</a>
                                                 <ul class="sub-menu">
                                                     {% for category, data in other_categories.items() %}
                                                         <li><a href="/{{ language }}/{{ category }}">{{ data.translated_name }}</a></li>

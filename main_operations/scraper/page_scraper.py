@@ -1,5 +1,6 @@
 from datetime import datetime
 from bs4 import Comment
+import trafilatura
 
 
 def title_scraper(soup):
@@ -11,6 +12,18 @@ def title_scraper(soup):
     if title_meta:
         return title_meta['content'].strip()
 
+    header_tag = soup.find('h1')
+    if header_tag:
+        return header_tag.text.strip()
+
+    header2_tag = soup.find('h2')
+    if header2_tag:
+        return header2_tag.text.strip()
+
+    return "No title"
+
+
+def h1_scraper(soup):
     header_tag = soup.find('h1')
     if header_tag:
         return header_tag.text.strip()
@@ -46,6 +59,37 @@ def additional_info_scraper(soup):
     return '\n'.join(image_info)
 
 
+def main_content_download(url):
+    downloaded = trafilatura.fetch_url(url)
+    text = trafilatura.extract(downloaded)
+    return text
+
+
+def extract_links_and_text(soup):
+    results = []
+
+    links = soup.find_all('a')
+    for link in links:
+        href = link.get('href')
+        text = link.get_text(strip=True)
+        if href:
+            results.append({
+                'link': href,
+                'text': text if text else None
+            })
+    return results
+
+
+def add_links_to_text(main_text, soup):
+    for i in extract_links_and_text(soup):
+        if i["text"] is not None:
+            if i["text"] in main_text:
+
+                if "http" in i["link"] or "https" in i["link"]:
+                    main_text = main_text.replace(i["text"], str(i["text"] + ", " + i["link"]), 1)
+    return main_text
+
+
 def main_text_scraper(soup):
     try:
         for element in soup(["script", "style"]):
@@ -64,7 +108,7 @@ def main_text_scraper(soup):
             ('main', {}),
         ]
 
-        elements = soup.find_all(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'li', 'blockquote'],
+        elements = soup.find_all(['p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote'],
                                  recursive=True)  # , 'li', 'blockquote'
         combined_text = '\n'.join(
             el.get_text(separator='\n').strip()
@@ -144,6 +188,7 @@ def structure_text_scraper(soup):
                 for child in el.children:
                     if child.name == 'a' and 'href' in child.attrs:
                         link_text = child.get_text().strip()
+
                         href = child['href']
                         text_parts.append(f'<a href="{href}">{link_text}</a>')
                     elif isinstance(child, str):
