@@ -127,7 +127,7 @@
                                         <ul class="dropdown-menu">
                                            {% for lang in languages_dict %}
                                                 {% if languages_dict[lang] is not none %}
-                                                    <li><a class="dropdown-item" href="/{{ lang }}/{{ languages_dict[lang] }}/detail">{{ lang.upper() }} </a></li>
+                                                    <li><a class="dropdown-item" href="/{{ lang }}/{{ languages_dict[lang] }}/">{{ lang.upper() }} </a></li>
                                                 {% endif %}
                                             {% endfor %}
 
@@ -315,23 +315,23 @@
                                     <div class="col-xl-6 col-lg-8 col-md-6">
                                         <div class="pn-post-item">
                                             <div class="thumb">
-                                                <a href="/{{ language }}/{{ previous_and_next_news[0].url_part }}/detail"><img src="{{ previous_and_next_news[0].image }}" alt="img"></a>
+                                                <a href="/{{ language }}/{{ previous_and_next_news[0].category }}/{{ previous_and_next_news[0].url_part }}"><img src="{{ previous_and_next_news[0].image }}" alt="img"></a>
                                             </div>
                                             <div class="content">
                                                 <span>{{info_translate.prev_post}}</span>
 
-                                                <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{ previous_and_next_news[0].url_part }}/detail">{{ previous_and_next_news[1].seo_title[:45] }}{% if previous_and_next_news[0].seo_title|length > 45 %}...{% endif %}</a></h5>
+                                                <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{ previous_and_next_news[0].category }}/{{ previous_and_next_news[0].url_part }}">{{ previous_and_next_news[0].seo_title[:45] }}{% if previous_and_next_news[0].seo_title|length > 45 %}...{% endif %}</a></h5>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-xl-6 col-lg-8 col-md-6">
                                         <div class="pn-post-item next-post">
                                             <div class="thumb">
-                                                <a href="/{{ language }}/{{ previous_and_next_news[1].url_part }}/detail"><img src="{{ previous_and_next_news[1].image }}" alt="img"></a>
+                                                <a href="/{{ language }}/{{ previous_and_next_news[1].category }}/{{ previous_and_next_news[1].url_part }}"><img src="{{ previous_and_next_news[1].image }}" alt="img"></a>
                                             </div>
                                             <div class="content">
                                                 <span>{{info_translate.next_post}}</span>
-                                                <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{ previous_and_next_news[1].url_part }}/detail">{{ previous_and_next_news[2].seo_title[:45] }}{% if previous_and_next_news[1].seo_title|length > 45 %}...{% endif %}</a></h5>
+                                                <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{ previous_and_next_news[1].category }}/{{ previous_and_next_news[1].url_part }}">{{ previous_and_next_news[1].seo_title[:45] }}{% if previous_and_next_news[1].seo_title|length > 45 %}...{% endif %}</a></h5>
                                             </div>
                                         </div>
                                     </div>
@@ -377,7 +377,7 @@
                                     <div class="sidePost__item" data-background="{{trending_article.image}}">
                                         <div class="sidePost__content">
                                             <a href="/{{ language }}/{{trending_article.category[0]}}" class="tag">{{trending_article.category[1][trending_article.category[0]]['translated_name']}}</a>
-                                            <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{trending_article.url_part}}/detail">{{trending_article.seo_title}}</a></h5>
+                                            <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{trending_article.category}}/{{trending_article.url_part}}/">{{trending_article.seo_title}}</a></h5>
                                         </div>
                                     </div>
                                     {% endfor %}

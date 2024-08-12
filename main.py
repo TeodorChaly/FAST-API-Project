@@ -72,6 +72,7 @@ async def serve_image(topic, img):
     reserve_directory = os.path.join(folder_name, topic)
     save_directory = os.path.join(reserve_directory, "main_images")
     name_file = img
+    # result_directory = Path(os.path.join(save_directory, name_file)) # For Linux
     result_directory = Path(os.path.join(save_directory, name_file).replace("/", "\\"))
     try:
         if result_directory.exists():

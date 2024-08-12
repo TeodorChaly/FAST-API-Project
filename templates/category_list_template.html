@@ -247,7 +247,7 @@
                             {% for item in articles %}
                                 <div class="latest__post-item">
                                     <div class="latest__post-thumb tgImage__hover" >
-                                        <a href="/{{ language }}/{{ item.url_part }}/detail"><img src="{{ item.image }}" alt="img" ></a>
+                                        <a href="/{{ language }}/{{ item.category }}/{{ item.url_part }}"><img src="{{ item.image }}" alt="img" ></a>
                                     </div>
                                     <div class="latest__post-content">
 
@@ -256,10 +256,10 @@
                                             <li><span class="by">By</span> <a href="/{{language}}">A. Intelligence</a></li>
                                             <li>{{item.date_published}}</li>
                                         </ul>
-                                        <h3 class="title tgcommon__hover"><a href="/{{ language }}/{{ item.url_part }}/detail">{{ item.seo_title }}</a></h3>
+                                        <h3 class="title tgcommon__hover"><a href="/{{ language }}/{{ item.category }}/{{ item.url_part }}">{{ item.seo_title }}</a></h3>
                                         <p>{{ item.seo_description[:280] }}{% if item.seo_description|length > 280 %}...{% endif %}</p>
                                         <div class="latest__post-read-more">
-                                            <a href="/{{ language }}/{{ item.url_part }}/detail">{{ info_translate.read_more }} <i class="far fa-long-arrow-right"></i></a>
+                                            <a href="/{{ language }}/{{ item.category }}/{{ item.url_part }}">{{ info_translate.read_more }} <i class="far fa-long-arrow-right"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -330,7 +330,7 @@
                                     <div class="sidePost__item" data-background="{{trending_article.image}}">
                                         <div class="sidePost__content">
                                             <a href="/{{ language }}/{{trending_article.category}}" class="tag">{{trending_article.category}}</a>
-                                            <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{trending_article.url_part}}/detail">{{trending_article.seo_title}}</a></h5>
+                                            <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{ category }}/{{trending_article.url_part}}">{{trending_article.seo_title}}</a></h5>
                                         </div>
                                     </div>
                                     {% endfor %}
