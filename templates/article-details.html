@@ -281,7 +281,7 @@
                             </ul>
                             <h1 class="title">{{ article.seo_title }}</h1>
                             <div class="blog-details-thumb">
-                                <img src="{{ article.image }}" alt="">
+                                <img src="{{ article.image }}" alt="{{article.seo_title}}">
                             </div>
                             <div class="blog-details-content">
                                 <p>{{ article.rewritten_content | safe}} </p>
@@ -310,33 +310,61 @@
                                 </div>
                             </div>
 
+                            {% set current_url_part = article.url_part %}
+
                             <div class="blog-prev-next-posts">
                                 <div class="row">
+                                    {% set prev_index = 0 %}
+                                    {% set next_index = 1 %}
+
+                                    {# Check if the previous post has the same url_part as the current one #}
+                                    {% if previous_and_next_news[prev_index].url_part == current_url_part %}
+                                        {% set prev_index = prev_index + 2 %}
+                                    {% endif %}
+
+                                    {# Check if the next post has the same url_part as the current one #}
+                                    {% if previous_and_next_news[next_index].url_part == current_url_part %}
+                                        {% set next_index = next_index + 2 %}
+                                    {% endif %}
+
                                     <div class="col-xl-6 col-lg-8 col-md-6">
                                         <div class="pn-post-item">
                                             <div class="thumb">
-                                                <a href="/{{ language }}/{{ previous_and_next_news[0].category }}/{{ previous_and_next_news[0].url_part }}"><img src="{{ previous_and_next_news[0].image }}" alt="img"></a>
+                                                <a href="/{{ language }}/{{ previous_and_next_news[prev_index].category }}/{{ previous_and_next_news[prev_index].url_part }}">
+                                                    <img src="{{ previous_and_next_news[prev_index].image }}" alt="{{ previous_and_next_news[prev_index].seo_title }}">
+                                                </a>
                                             </div>
                                             <div class="content">
-                                                <span>{{info_translate.prev_post}}</span>
-
-                                                <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{ previous_and_next_news[0].category }}/{{ previous_and_next_news[0].url_part }}">{{ previous_and_next_news[0].seo_title[:45] }}{% if previous_and_next_news[0].seo_title|length > 45 %}...{% endif %}</a></h5>
+                                                <span>{{info_translate.prev_post}} </span>
+                                                <h5 class="title tgcommon__hover">
+                                                    <a href="/{{ language }}/{{ previous_and_next_news[prev_index].category }}/{{ previous_and_next_news[prev_index].url_part }}">
+                                                        {{ previous_and_next_news[prev_index].seo_title[:45] }}{% if previous_and_next_news[prev_index].seo_title|length > 45 %}...{% endif %}
+                                                    </a>
+                                                </h5>
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="col-xl-6 col-lg-8 col-md-6">
                                         <div class="pn-post-item next-post">
                                             <div class="thumb">
-                                                <a href="/{{ language }}/{{ previous_and_next_news[1].category }}/{{ previous_and_next_news[1].url_part }}"><img src="{{ previous_and_next_news[1].image }}" alt="img"></a>
+                                                <a href="/{{ language }}/{{ previous_and_next_news[next_index].category }}/{{ previous_and_next_news[next_index].url_part }}">
+                                                    <img src="{{ previous_and_next_news[next_index].image }}" alt="{{ previous_and_next_news[next_index].seo_title }}">
+                                                </a>
                                             </div>
                                             <div class="content">
-                                                <span>{{info_translate.next_post}}</span>
-                                                <h5 class="title tgcommon__hover"><a href="/{{ language }}/{{ previous_and_next_news[1].category }}/{{ previous_and_next_news[1].url_part }}">{{ previous_and_next_news[1].seo_title[:45] }}{% if previous_and_next_news[1].seo_title|length > 45 %}...{% endif %}</a></h5>
+                                                <span>{{info_translate.next_post}} </span>
+                                                <h5 class="title tgcommon__hover">
+                                                    <a href="/{{ language }}/{{ previous_and_next_news[next_index].category }}/{{ previous_and_next_news[next_index].url_part }}">
+                                                        {{ previous_and_next_news[next_index].seo_title[:45] }}{% if previous_and_next_news[next_index].seo_title|length > 45 %}...{% endif %}
+                                                    </a>
+                                                </h5>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                     <div class="col-xl-3 col-lg-4 col-md-6">

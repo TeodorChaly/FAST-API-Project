@@ -93,8 +93,13 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
                                        "today_news": today_news, "newest_news": newest_news,
                                        "info_translate": info_translate, "site_domain": SITE_DOMAIN})
 
-
 @router.get("/{language}/{category}", tags=["User content"], response_class=HTMLResponse)
+async def category_list_normal(request: Request, category: str, language: str = "en",
+                        limit: Optional[int] = None, page: int = 1, topic: str = main_site_topic):
+    return await category_list(request, category, language, limit, page, topic)
+
+
+@router.get("/{language}/{category}/page_{page}", tags=["User content"], response_class=HTMLResponse)
 async def category_list(request: Request, category: str, language: str = "en",
                         limit: Optional[int] = None, page: int = 1, topic: str = main_site_topic):
     language_name = get_language_name_by_code(language)
@@ -147,7 +152,7 @@ async def article_detail(request: Request, url_part: str, language: str, topic: 
 
     try:
         trending_news = await show_content_json(topic, language, 6)
-        previous_and_next_news = trending_news[:3]
+        previous_and_next_news = trending_news[:4]
         trending_news = trending_news[2:6]
         for i in trending_news:
             i["category"] = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
