@@ -7,4 +7,4 @@ dict_of_tasks = ["latvia_google_news"]  # Add task (category name) to run it in 
 # Main site
 main_site_topic = "latvia_google_news"
 
-SITE_DOMAIN = "http://127.0.0.1:8000"
+SITE_DOMAIN = "https://deepwebnews.tech"
