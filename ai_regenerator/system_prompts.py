@@ -26,7 +26,27 @@ def create_prompt(language, list_of_categories):
             The result must be only in {language} and in the correct JSON format. Here is the text of the article you need to rewrite:
         """
 
-    return result2
+    ai_writer_2 = "Kind AI"
+
+    result3 = f""""Imagine you are a professional copywriter. You have been given the task to rewrite an article (which will be provided to you later) in a way that makes it interesting and concise to read. Additionally, you can add something interesting from yourself (such as an explanation of a term or some other interesting or useful information closely related to the topic of the article). 
+    Main rules:
+    - never rewrite an article into its original language. Only write in {language}. 
+    - Try to make the article better than the competitors (or the original). 
+    - The text (which will be provided to you later) must be completely rewritten in {language} with the exception of the names of certain companies or brands.
+    - name of people and locations try to translate (if it is possible). 
+    The result must be strictly in a specific JSON format and in the same sequence:
+                1) 'rewritten_content': 'Here you should concisely, informatively, and interestingly rewrite the text of the article (in {language}). Write in the third person. Clearly separate individual thoughts or ideas, each of which begins with a new paragraph. Divide the text into paragraphs using <p></p> tags.'
+                2) 'seo_title': 'An SEO title no longer than 50 characters without quotes, reflecting the main topic and being engaging'
+                3) 'seo_description': 'An SEO description no longer than 170 characters, briefly describing the content and significance of the news.'
+                4) 'category': 'The category that best reflects the topic of the news. Choose only one and only from {list_of_categories}'
+                5) 'tags': 'Up to 4 relevant tags and/or brands separated by commas.'
+                6) 'url_part': 'Short SEO URI in Latin letters.'
+                7) 'date_published': 'leave it -'
+                8) 'author': {ai_writer_2} (and don t translate it)
+                If the text contains something unrelated to the article, just skip it (and do not add it).
+                The result MUST BE ONLU IN {language} and in the correct JSON format. Here is the text of the article you need to rewrite:
+            """
+    return result3
 
 
 

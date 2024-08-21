@@ -64,7 +64,7 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
         # print(await is_image_url_valid(img_url))
         # print(additional_article_params)
 
-        content_to_generate = f"{title} {h1} {main_text} {date_published}"
+        content_to_generate = f"{title} | {h1} | {date_published} | {main_text} "
         word_count = len(content_to_generate.split())
 
         print(content_to_generate)
@@ -101,6 +101,8 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
 
             await save_url(url)
         else:
+            # categories = json.loads(categories_extractor(topic))
+            # print(languages[0], categories)
             return {
                 "URL RSS status": "correct",
                 "Info": {"Title": title, "Date": date_published, "Img": img_url, "URL": url}

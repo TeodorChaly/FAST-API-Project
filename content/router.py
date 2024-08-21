@@ -84,8 +84,16 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
     for i in content:
         new_content[get_translated_categories_name(topic, language, [i])[i]["translated_name"]] = content[i] + [
             {"category": i}]
-    # time_after = datetime.now()
-    # print(time_now - time_after)
+
+    for i in new_content:
+
+        for i2 in new_content[i]:
+            try:
+                if i2["url_part"] == "yes":
+                    pass
+            except Exception as e:
+                new_content[i].remove(i2)
+
     return templates.TemplateResponse("main_page_news.html",
                                       {"request": request, "topic": topic, "language": language, "languages": languages,
                                        "top_categories": popular_categories_dict,
@@ -174,7 +182,6 @@ async def article_detail(request: Request, url_part: str, language: str, topic: 
                                                "previous_and_next_news": previous_and_next_news, "author": author,
                                                "info_translate": info_translate, "languages_dict": languages_dict,
                                                "site_domain": SITE_DOMAIN})
-
 
     return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
 
