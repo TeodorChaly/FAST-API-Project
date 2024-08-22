@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from celery import Celery
+# from celery import Celery
 from asgiref.sync import async_to_sync
 from main_operations.crawlers.RSS_crawler.router import crawler_by_rss_or_feed
 
-celery = Celery('tasks')
+# celery = Celery('tasks')
 
 
 # @celery.task(name='bg_tasks.background_task.main_bg_function')
