@@ -111,7 +111,7 @@ async def check_by_rss_by_url_function(rss_url):
         session = requests.Session()
 
         try:
-            response = session.get(url)
+            response = session.get(url, timeout=10)
             response.raise_for_status()
 
             soup = BeautifulSoup(response.content, 'html.parser')

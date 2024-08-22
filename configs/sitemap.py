@@ -63,18 +63,21 @@ def get_urls_from_json_files(language):
             date_published = data.get('date_published')
             try:
                 date_obj = datetime.strptime(date_published, "%d %m %Y %H:%M")
+                lastmod = date_obj.strftime("%Y-%m-%dT%H:%M:%SZ")
             except Exception as e:
-                date_obj = date_published
+                lastmod = date_published
+
             language = data.get('language', 'en')
             language_code = language_to_code(language)
 
             url = f"{SITE_DOMAIN}/{language_code}/{main_site_topic}/{url_part}/detail"
             urls_list.append({
                 "loc": url,
-                "lastmod": date_obj,
+                "lastmod": lastmod,
                 "changefreq": "monthly",
                 "priority": "0.8"
             })
+
     return urls_list
 
 
