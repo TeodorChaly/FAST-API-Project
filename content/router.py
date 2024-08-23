@@ -49,7 +49,7 @@ async def main_page_redirect(request: Request, language: str = "en"):
 async def main_page(request: Request, topic: str = main_site_topic, language: str = "en", limit: int = None):
     time_now = datetime.now()
     print(f"Requested topic: {topic}, {language} language.")
-    languages = languages_to_code()
+    languages = await languages_to_code()
 
     info_translate = get_main_info(language, topic)
 
@@ -114,7 +114,7 @@ async def category_list(request: Request, category: str, language: str = "en",
     language_name = get_language_name_by_code(language)
     articles = await news_extractor(topic, language_name, limit)
 
-    languages = languages_to_code()
+    languages = await languages_to_code()
 
     json_data = await show_content_json(topic, language, limit)
 
@@ -149,7 +149,7 @@ async def category_list(request: Request, category: str, language: str = "en",
 async def article_detail(request: Request, url_part: str, language: str, topic: str = main_site_topic):
     language_name = get_language_name_by_code(language)
     articles = load_articles_from_json(topic, language_name)
-    languages = languages_to_code()
+    languages = await languages_to_code()
 
     json_data = await show_content_json(topic, language, None)
     popular_categories, remaining_categories, all_categories = await get_header(topic, language, json_data)
@@ -198,7 +198,7 @@ async def change_language(url_part: str, language: str,
     if article:
         new_id = article.get("url")
 
-        languages = languages_to_code()
+        languages = await languages_to_code()
 
         for new_language_name in languages:
             json_response = await news_extractor(topic, get_language_name_by_code(new_language_name), None)

@@ -2,12 +2,12 @@ import re
 import httpx
 
 
-def has_valid_scheme(url: str) -> bool:
+async def has_valid_scheme(url: str) -> bool:
     return re.match(r'^https?://', url) is not None
 
 
 async def is_image_url(url: str) -> bool:
-    if not has_valid_scheme(url):
+    if not await has_valid_scheme(url):
         return False
 
     async with httpx.AsyncClient() as client:

@@ -25,7 +25,7 @@ async def ai_generator_function(text, language, list_of_categories):
         return completion.choices[0].message.content
     except Exception as e:
         print(f'Error during generation: {e}')
-        raise f"Error during generation: {e}"
+        return None
 
 
 async def ai_category_function(topic_name, additional_info=None):
@@ -60,7 +60,7 @@ async def ai_category_function(topic_name, additional_info=None):
 
     except Exception as e:
         print(f'Error during generation: {e}')
-        raise f"Error during generation: {e}"
+        return None
 
 
 async def ai_category_for_multiple_languages(language, main_list_of_categories, topic):
@@ -91,7 +91,7 @@ async def ai_category_for_multiple_languages(language, main_list_of_categories, 
 
     except Exception as e:
         print(f'Error during generation: {e}')
-        raise f"Error during generation: {e}"
+        return None
 
 
 async def ai_main_config_for_multiple_languages(language, topic, additional_info=None):
@@ -138,4 +138,5 @@ async def ai_main_config_for_multiple_languages(language, topic, additional_info
 
     except Exception as e:
         print(f'Error during generation: {e}')
-        raise f"Error during generation: {e}"
+        return None
+

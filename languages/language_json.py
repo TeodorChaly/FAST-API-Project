@@ -3,22 +3,22 @@ import json
 from content.news_file_extractor import language_to_code
 
 
-def language_json_read():
+async def language_json_read():
     with open("languages/languages.json", "r", encoding="utf-8") as file:
         languages_list = json.load(file)
     return languages_list
 
 
-def languages_to_code():
-    languages = language_json_read()
+async def languages_to_code():
+    languages = await language_json_read()
     decoded_languages = []
     for i in languages:
         decoded_languages.append(language_to_code(i))
     return decoded_languages
 
 
-def del_append_language(language, action):
-    languages_list = language_json_read()
+async def del_append_language(language, action):
+    languages_list = await language_json_read()
 
     if action == "append":
         if language not in languages_list:

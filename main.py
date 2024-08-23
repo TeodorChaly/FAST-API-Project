@@ -1,10 +1,12 @@
 import json
+import logging
 import os
 from pathlib import Path
 
 from fastapi import FastAPI
 from starlette.responses import FileResponse
 from starlette.staticfiles import StaticFiles
+from starlette.requests import Request
 
 from main_operations.router import router as scraping_router
 from content.router import router as topics_router
@@ -13,11 +15,11 @@ from main_operations.crawlers.RSS_crawler.router import router as crawler_router
 from configs.sitemap import router as sitemap_router
 from configs.robots import router as robots_router
 
-# logging.basicConfig(
-#     filename='access.log',
-#     level=logging.INFO,
-#     format='%(asctime)s - IP: %(clientip)s, User-Agent: %(useragent)s, Method: %(method)s, Path: %(path)s'
-# )
+logging.basicConfig(
+    filename='access.log',
+    level=logging.INFO,
+    format='%(asctime)s - IP: %(clientip)s, User-Agent: %(useragent)s, Method: %(method)s, Path: %(path)s'
+)
 
 app = FastAPI(
     title="News generator API",
@@ -43,25 +45,25 @@ async def startup_event():
 
 
 # Middleware production
-# @app.middleware("http")
-# async def log_requests_middleware(request: Request, call_next):
-#     client_ip = request.client.host
-#     user_agent = request.headers.get('user-agent', 'Unknown')
-#     method = request.method
-#     path = request.url.path
-#
-#     logging.info(
-#         '',
-#         extra={
-#             'clientip': client_ip,
-#             'useragent': user_agent,
-#             'method': method,
-#             'path': path
-#         }
-#     )
-#
-#     response = await call_next(request)
-#     return response
+@app.middleware("http")
+async def log_requests_middleware(request: Request, call_next):
+    client_ip = request.client.host
+    user_agent = request.headers.get('user-agent', 'Unknown')
+    method = request.method
+    path = request.url.path
+
+    logging.info(
+        '',
+        extra={
+            'clientip': client_ip,
+            'useragent': user_agent,
+            'method': method,
+            'path': path
+        }
+    )
+
+    response = await call_next(request)
+    return response
 
 
 @app.get('/get_images/image')
@@ -72,8 +74,8 @@ async def serve_image(topic, img):
     reserve_directory = os.path.join(folder_name, topic)
     save_directory = os.path.join(reserve_directory, "main_images")
     name_file = img
-    # result_directory = Path(os.path.join(save_directory, name_file)) # For Linux
-    result_directory = Path(os.path.join(save_directory, name_file).replace("/", "\\"))
+    result_directory = Path(os.path.join(save_directory, name_file)) # For Linux
+    # result_directory = Path(os.path.join(save_directory, name_file).replace("/", "\\"))
     try:
         if result_directory.exists():
             return FileResponse(result_directory)

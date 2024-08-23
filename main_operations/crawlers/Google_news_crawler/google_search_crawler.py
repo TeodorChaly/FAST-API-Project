@@ -1,18 +1,20 @@
 import requests
 from bs4 import BeautifulSoup
+from httpx import AsyncClient
 
 
 async def google_news_extractor(another_url):
     url = 'https://www.google.com'
 
-    response = requests.get(url, timeout=10)
-    cookies = response.cookies
+    async with AsyncClient() as client:
+        response = await client.get(url, timeout=10)
+        cookies = response.cookies
+        response = await client.get(another_url, cookies=cookies, timeout=10)
 
-    response = requests.get(another_url, cookies=cookies, timeout=10)
+        with open("google_search.html", "w", encoding="utf-8") as file:
+            file.write(response.text)
 
-    with open("google_search.html", "w", encoding="utf-8") as file:
-        file.write(response.text)
-    soup = BeautifulSoup(response.text, 'html.parser')
+        soup = BeautifulSoup(response.text, 'html.parser')
     return soup
 
 
@@ -48,5 +50,3 @@ def google_search_extractor():
         print(f"Link: {result['link']}")
         print(f"Snippet: {result['snippet']}")
         print("-" * 10)
-
-
