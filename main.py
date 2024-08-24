@@ -74,8 +74,8 @@ async def serve_image(topic, img):
     reserve_directory = os.path.join(folder_name, topic)
     save_directory = os.path.join(reserve_directory, "main_images")
     name_file = img
-    result_directory = Path(os.path.join(save_directory, name_file)) # For Linux
-    # result_directory = Path(os.path.join(save_directory, name_file).replace("/", "\\"))
+    # result_directory = Path(os.path.join(save_directory, name_file))  # For Linux
+    result_directory = Path(os.path.join(save_directory, name_file).replace("/", "\\"))
     try:
         if result_directory.exists():
             return FileResponse(result_directory)
@@ -84,6 +84,7 @@ async def serve_image(topic, img):
     except Exception as e:
         print("Image error", e)
         return {"error": "File don t exist"}
+
 
 app.include_router(robots_router)
 app.include_router(sitemap_router)

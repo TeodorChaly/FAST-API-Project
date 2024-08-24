@@ -20,7 +20,7 @@ async def check_by_rss_by_url(url: str = Query(..., description="URL to RSS")):
 @router.post("/create_topic", tags=["RSS prepare"])
 async def create_topic(topic: str = Query(..., description="Name of topic"),
                        additional_info: str = Query(..., description="Describe the topic")):
-    languages = language_json_read()
+    languages = await language_json_read()
 
     for language in languages:
         await folder_prep(topic, language, additional_info)

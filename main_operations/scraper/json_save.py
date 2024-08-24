@@ -181,10 +181,10 @@ def save_images_local(url, topic, quality=85, max_size=(1024, 1024)):
             png_check = os.path.join(save_directory, f"{random_filename}.png")
             if os.path.exists(jpg_check) or os.path.exists(png_check):
                 if os.path.exists(jpg_check):
-                    result = f"/get_images/image?topic={topic}&img={random_filename}"
+                    result = f"/get_images/image?topic={topic}&img={random_filename}.jpg"
                     return result
                 else:
-                    result = f"/get_images/image?topic={topic}&img={random_filename}"
+                    result = f"/get_images/image?topic={topic}&img={random_filename}.png"
                     return result
             else:
                 with Image.open(temp_path) as img:
@@ -209,7 +209,10 @@ def save_images_local(url, topic, quality=85, max_size=(1024, 1024)):
                         compressed_path = temp_path
 
             os.remove(temp_path)
+            print(f"/get_images/image?topic={topic}&img={random_filename}", 43513)
+
             result = f"/get_images/image?topic={topic}&img={random_filename}"
+
             return result
 
         except UnidentifiedImageError:
