@@ -45,22 +45,27 @@ async def startup_event():
 
 
 # Middleware production
+# Middleware production
 @app.middleware("http")
 async def log_requests_middleware(request: Request, call_next):
+    # Определяем параметры запроса
     client_ip = request.client.host
     user_agent = request.headers.get('user-agent', 'Unknown')
     method = request.method
     path = request.url.path
 
-    logging.info(
-        '',
-        extra={
-            'clientip': client_ip,
-            'useragent': user_agent,
-            'method': method,
-            'path': path
-        }
-    )
+    blocked_paths = ["/Image not found", "/imagen/3923384"]
+
+    if not path.startswith("/get_images/") and not path.startswith("/assets") and path not in blocked_paths:
+        logging.info(
+            '',
+            extra={
+                'clientip': client_ip,
+                'useragent': user_agent,
+                'method': method,
+                'path': path
+            }
+        )
 
     response = await call_next(request)
     return response
