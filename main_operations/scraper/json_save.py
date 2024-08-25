@@ -21,7 +21,7 @@ def categories_extractor(topic):
         file_name = f"{topic}.json"
         file_path = os.path.join(sub_folder_name, file_name)
         with open(file_path, 'r', encoding='utf-8') as file:
-            print(type(file))
+            # print(type(file))
             return json.load(file)
     except Exception as e:
         print("Error during categories:", e)
@@ -54,7 +54,8 @@ def multi_language_configs_extractor(topic, language):
             json_formatted = json.load(file)
         return json_formatted
     except Exception as e:
-        print("Error during configs:", e)
+        # print("Error during configs:", e)
+        pass
 
 
 def get_main_info(language, topic):

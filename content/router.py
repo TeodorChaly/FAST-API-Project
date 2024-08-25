@@ -37,7 +37,6 @@ async def main_page_redirect(request: Request, language: str = "en"):
         if redirect not in all_topic:
             return f"Not correct topic {redirect}. \nGo to config_setup.py and change it. \nYou can see all topics: {all_topic}"
         else:
-            print(redirect, language, 1112)
             return await main_page(request, topic=redirect, language=language)
     except Exception as e:
         print(e)
@@ -47,59 +46,67 @@ async def main_page_redirect(request: Request, language: str = "en"):
 #
 @router.get("/{language}", tags=["User content"], response_class=HTMLResponse)
 async def main_page(request: Request, topic: str = main_site_topic, language: str = "en", limit: int = None):
-    time_now = datetime.now()
-    print(f"Requested topic: {topic}, {language} language.")
-    languages = await languages_to_code()
-
-    info_translate = get_main_info(language, topic)
-
-    json_data = await show_content_json(topic, language, limit)
-
-    if isinstance(json_data, dict) and "error" in json_data:
-        return templates.TemplateResponse("error.html", {"request": request, "error": json_data["error"]})
-
-    newest_news_len = 5
-    today_news_len = 10
-
-    popular_categories_dict, remaining_categories_dict, all_categories = await get_header(topic, language, json_data)
-
-    today_news_all = await show_content_json(topic, language, today_news_len + newest_news_len)
-
-    newest_news = today_news_all[:newest_news_len]
-    today_news = today_news_all[newest_news_len:]
     try:
-        for i in newest_news:
-            i["category"] = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
+        time_now = datetime.now()
+        languages = await languages_to_code()
+
+        info_translate = get_main_info(language, topic)
+        if info_translate is None:
+            return templates.TemplateResponse("error.html", {"request": request, "error": "Invalid language."})
+
+        print(f"Main page requested for {topic} in {language}.")
+
+        json_data = await show_content_json(topic, language, limit)
+
+        if isinstance(json_data, dict) and "error" in json_data:
+            return templates.TemplateResponse("error.html", {"request": request, "error": json_data["error"]})
+
+        newest_news_len = 5
+        today_news_len = 10
+
+        popular_categories_dict, remaining_categories_dict, all_categories = await get_header(topic, language,
+                                                                                              json_data)
+
+        today_news_all = await show_content_json(topic, language, today_news_len + newest_news_len)
+
+        newest_news = today_news_all[:newest_news_len]
+        today_news = today_news_all[newest_news_len:]
+        try:
+            for i in newest_news:
+                i["category"] = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
+        except Exception as e:
+            print("Newest news error", e)
+        try:
+            for i in today_news:
+                new_category = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
+                i["category"] = new_category
+        except Exception as e:
+            print("Today news error", e)
+
+        content = content_all(all_categories, json_data)
+        new_content = {}
+        for i in content:
+            new_content[get_translated_categories_name(topic, language, [i])[i]["translated_name"]] = content[i] + [
+                {"category": i}]
+
+        for i in new_content:
+
+            for i2 in new_content[i]:
+                try:
+                    if i2["url_part"] == "yes":
+                        pass
+                except Exception as e:
+                    new_content[i].remove(i2)
+
+        return templates.TemplateResponse("main_page_news.html",
+                                          {"request": request, "topic": topic, "language": language,
+                                           "languages": languages,
+                                           "top_categories": popular_categories_dict,
+                                           "other_categories": remaining_categories_dict, "all_content": new_content,
+                                           "today_news": today_news, "newest_news": newest_news,
+                                           "info_translate": info_translate, "site_domain": SITE_DOMAIN})
     except Exception as e:
-        print("Newest news error", e)
-    try:
-        for i in today_news:
-            new_category = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
-            i["category"] = new_category
-    except Exception as e:
-        print("Today news error", e)
-
-    content = content_all(all_categories, json_data)
-    new_content = {}
-    for i in content:
-        new_content[get_translated_categories_name(topic, language, [i])[i]["translated_name"]] = content[i] + [
-            {"category": i}]
-
-    for i in new_content:
-
-        for i2 in new_content[i]:
-            try:
-                if i2["url_part"] == "yes":
-                    pass
-            except Exception as e:
-                new_content[i].remove(i2)
-
-    return templates.TemplateResponse("main_page_news.html",
-                                      {"request": request, "topic": topic, "language": language, "languages": languages,
-                                       "top_categories": popular_categories_dict,
-                                       "other_categories": remaining_categories_dict, "all_content": new_content,
-                                       "today_news": today_news, "newest_news": newest_news,
-                                       "info_translate": info_translate, "site_domain": SITE_DOMAIN})
+        print(e, 54321)
 
 
 @router.get("/{language}/{category}", tags=["User content"], response_class=HTMLResponse)
@@ -111,79 +118,98 @@ async def category_list_normal(request: Request, category: str, language: str = 
 @router.get("/{language}/{category}/page_{page}", tags=["User content"], response_class=HTMLResponse)
 async def category_list(request: Request, category: str, language: str = "en",
                         limit: Optional[int] = None, page: int = 1, topic: str = main_site_topic):
-    language_name = get_language_name_by_code(language)
-    articles = await news_extractor(topic, language_name, limit)
+    try:
+        language_name = get_language_name_by_code(language)
+        if language_name is None:
+            return templates.TemplateResponse("error.html", {"request": request, "error": "Invalid language."})
 
-    languages = await languages_to_code()
+        print(f"Category {category} requested.")
 
-    json_data = await show_content_json(topic, language, limit)
+        articles = await news_extractor(topic, language_name, limit)
 
-    popular_categories_dict, remaining_categories_dict, all_categories = await get_header(topic, language, json_data)
+        languages = await languages_to_code()
 
-    trending_categories = get_trending_categories(all_categories)
-    trending_categories_dict = get_translated_categories_name_and_count(topic, language, trending_categories)
+        json_data = await show_content_json(topic, language, limit)
 
-    trending_news = await show_content_json(topic, language, 4)
+        popular_categories_dict, remaining_categories_dict, all_categories = await get_header(topic, language,
+                                                                                              json_data)
 
-    filtered_articles, total_pages = get_all_articles(articles, category, page)
+        trending_categories = get_trending_categories(all_categories)
+        trending_categories_dict = get_translated_categories_name_and_count(topic, language, trending_categories)
 
-    about_category = get_category_meta_tags(topic, category, language)
+        trending_news = await show_content_json(topic, language, 4)
 
-    info_translate = get_main_info(language, topic)
+        filtered_articles, total_pages = get_all_articles(articles, category, page)
 
-    # if not filtered_articles and page == 1 or page <= 0:
-    #     return templates.TemplateResponse("error.html",
-    #                                       {"request": request, "error": f"No articles found in category {category}."})
+        about_category = get_category_meta_tags(topic, category, language)
 
-    return templates.TemplateResponse("category_list_template.html",
-                                      {"request": request, "topic": topic, "category": category, "language": language,
-                                       "articles": filtered_articles, "languages": languages,
-                                       "top_categories": popular_categories_dict,
-                                       "other_categories": remaining_categories_dict,
-                                       "trending_categories": trending_categories_dict, "trending_news": trending_news,
-                                       "page": page, "total_pages": total_pages, "about_category": about_category,
-                                       "info_translate": info_translate, "site_domain": SITE_DOMAIN})
+        info_translate = get_main_info(language, topic)
+
+        # if not filtered_articles and page == 1 or page <= 0:
+        #     return templates.TemplateResponse("error.html",
+        #                                       {"request": request, "error": f"No articles found in category {category}."})
+
+        return templates.TemplateResponse("category_list_template.html",
+                                          {"request": request, "topic": topic, "category": category,
+                                           "language": language,
+                                           "articles": filtered_articles, "languages": languages,
+                                           "top_categories": popular_categories_dict,
+                                           "other_categories": remaining_categories_dict,
+                                           "trending_categories": trending_categories_dict,
+                                           "trending_news": trending_news,
+                                           "page": page, "total_pages": total_pages, "about_category": about_category,
+                                           "info_translate": info_translate, "site_domain": SITE_DOMAIN})
+    except Exception as e:
+        print(e, 7654)
 
 
 @router.get("/{language}/{category}/{url_part}/", tags=["User content"], response_class=HTMLResponse)
 async def article_detail(request: Request, url_part: str, language: str, topic: str = main_site_topic):
-    language_name = get_language_name_by_code(language)
-    articles = load_articles_from_json(topic, language_name)
-    languages = await languages_to_code()
+    try:
+        print(f"Article {url_part} requested.")
 
-    json_data = await show_content_json(topic, language, None)
-    popular_categories, remaining_categories, all_categories = await get_header(topic, language, json_data)
+        language_name = get_language_name_by_code(language)
+        if language_name is None:
+            return templates.TemplateResponse("error.html", {"request": request, "error": "Invalid language."})
+        articles = load_articles_from_json(topic, language_name)
+        languages = await languages_to_code()
 
-    trending_categories = get_trending_categories(all_categories)
-    trending_categories_dict = get_translated_categories_name_and_count(topic, language, trending_categories)
+        json_data = await show_content_json(topic, language, None)
+        popular_categories, remaining_categories, all_categories = await get_header(topic, language, json_data)
 
-    info_translate = get_main_info(language, topic)
+        trending_categories = get_trending_categories(all_categories)
+        trending_categories_dict = get_translated_categories_name_and_count(topic, language, trending_categories)
 
-    trending_news = await show_content_json(topic, language, 6)
-    previous_and_next_news = trending_news[:4]
-    trending_news = trending_news[2:6]
-    for i in trending_news:
-        i["category"] = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
+        info_translate = get_main_info(language, topic)
 
-    languages_dict = await change_language(url_part, language, topic)
-    for article in articles:
-        if article.get("url_part") == url_part:
-            author = article.get("author", "A. Intelligence")
-            article["category"] = [article["category"],
-                                   get_translated_categories_name(topic, language, [article["category"]])]
-            tags = article["tags"].split(",")
-            return templates.TemplateResponse("article-details.html",
-                                              {"request": request, "topic": topic, "article": article,
-                                               "language": language, "languages": languages,
-                                               "top_categories": popular_categories,
-                                               "other_categories": remaining_categories,
-                                               "trending_categories": trending_categories_dict,
-                                               "trending_news": trending_news, "tags": tags,
-                                               "previous_and_next_news": previous_and_next_news, "author": author,
-                                               "info_translate": info_translate, "languages_dict": languages_dict,
-                                               "site_domain": SITE_DOMAIN})
+        trending_news = await show_content_json(topic, language, 6)
+        previous_and_next_news = trending_news[:4]
+        trending_news = trending_news[2:6]
+        for i in trending_news:
+            i["category"] = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
 
-    return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
+        languages_dict = await change_language(url_part, language, topic)
+        for article in articles:
+            if article.get("url_part") == url_part:
+                author = article.get("author", "A. Intelligence")
+                article["category"] = [article["category"],
+                                       get_translated_categories_name(topic, language, [article["category"]])]
+                tags = article["tags"].split(",")
+
+                return templates.TemplateResponse("article-details.html",
+                                                  {"request": request, "topic": topic, "article": article,
+                                                   "language": language, "languages": languages,
+                                                   "top_categories": popular_categories,
+                                                   "other_categories": remaining_categories,
+                                                   "trending_categories": trending_categories_dict,
+                                                   "trending_news": trending_news, "tags": tags,
+                                                   "previous_and_next_news": previous_and_next_news, "author": author,
+                                                   "info_translate": info_translate, "languages_dict": languages_dict,
+                                                   "site_domain": SITE_DOMAIN})
+
+        return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
+    except Exception as e:
+        print(e, 4321)
 
 
 async def change_language(url_part: str, language: str,
@@ -209,9 +235,9 @@ async def change_language(url_part: str, language: str,
                 else:
                     langauge_dict[f"{new_language_name}"] = None
 
-        print(langauge_dict)
+        # print(langauge_dict)
 
     time_after = datetime.now()
     print(time_after - time_now)
-    print(langauge_dict, 11112)
+    # print(langauge_dict, 11112)
     return langauge_dict

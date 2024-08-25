@@ -32,5 +32,9 @@ async def run_crawler(categories_list_bg, is_google=True):
             print()
 
 
+async def main():
+    tasks = [asyncio.create_task(run_crawler(dict_of_tasks))]
+    await asyncio.gather(*tasks)
+
 if __name__ == "__main__":
-    asyncio.run(run_crawler(dict_of_tasks))
+    asyncio.run(main())

@@ -55,7 +55,7 @@ def get_language_name_by_code(language_code):
         language_name = "Unknown Language".lower()
 
     if language_name == "unknown language":
-        return {"error": "Invalid language."}
+        return None
 
     return language_name
 
