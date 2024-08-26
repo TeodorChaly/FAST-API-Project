@@ -6,9 +6,10 @@ from bs4 import BeautifulSoup
 
 from main_operations.crawlers.Google_news_crawler.google_search_crawler import google_news_extractor
 from main_operations.crawlers.RSS_crawler.json_save import process_json
-from main_operations.images_function import is_image_url_valid
 from main_operations.scraper.json_save import *
 from main_operations.scraper.page_scraper import *
+
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 
 async def regenerate_again(content_to_generate, language, categories):
@@ -123,6 +124,8 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
             file.write(str(e))
 
 
+
+
 async def scrape(url, topic, languages, status, bool_google=False, additional_info=None):
     try:
         if check(url):
@@ -135,7 +138,7 @@ async def scrape(url, topic, languages, status, bool_google=False, additional_in
             }
             if not bool_google:
                 print("Not Google news")
-                async with httpx.AsyncClient() as client:
+                async with httpx.AsyncClient(timeout=10) as client:
                     response = await client.get(url, headers=headers)
                     response.raise_for_status()
                     soup = BeautifulSoup(response.content, 'html.parser')
@@ -148,7 +151,6 @@ async def scrape(url, topic, languages, status, bool_google=False, additional_in
             return {"Success": "Data scraped successfully"}
         else:
             return {"Error": "URL already scraped."}
-
     except Exception as e:
         print(f'Error here: {e}')
         return {"Bad request": "Invalid URL or an error occurred during scraping"}

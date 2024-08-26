@@ -45,10 +45,8 @@ async def startup_event():
 
 
 # Middleware production
-# Middleware production
 @app.middleware("http")
 async def log_requests_middleware(request: Request, call_next):
-    # Определяем параметры запроса
     client_ip = request.client.host
     user_agent = request.headers.get('user-agent', 'Unknown')
     method = request.method
@@ -79,8 +77,8 @@ async def serve_image(topic, img):
     reserve_directory = os.path.join(folder_name, topic)
     save_directory = os.path.join(reserve_directory, "main_images")
     name_file = img
-    # result_directory = Path(os.path.join(save_directory, name_file))  # For Linux
-    result_directory = Path(os.path.join(save_directory, name_file).replace("/", "\\"))
+    result_directory = Path(os.path.join(save_directory, name_file))  # For Linux
+    # result_directory = Path(os.path.join(save_directory, name_file).replace("/", "\\"))
     try:
         if result_directory.exists():
             return FileResponse(result_directory)

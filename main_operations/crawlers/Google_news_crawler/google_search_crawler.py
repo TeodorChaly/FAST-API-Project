@@ -6,7 +6,7 @@ from httpx import AsyncClient
 async def google_news_extractor(another_url):
     url = 'https://www.google.com'
 
-    async with AsyncClient() as client:
+    async with AsyncClient(timeout=10) as client:
         response = await client.get(url, timeout=10)
         cookies = response.cookies
         response = await client.get(another_url, cookies=cookies, timeout=10)
