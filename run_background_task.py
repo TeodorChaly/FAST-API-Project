@@ -50,14 +50,17 @@ if __name__ == "__main__":
         logging.critical(f"Critical error running the crawler: {e}")
     finally:
         logging.info("Shutting down tasks...")
-        pending = asyncio.all_tasks()
-        for task in pending:
-            task.cancel()
-            logging.debug(f"Cancelled task: {task}")
         try:
-            loop = asyncio.get_event_loop()
-            loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
+            pending = asyncio.all_tasks()
+            for task in pending:
+                task.cancel()
+                logging.debug(f"Cancelled task: {task}")
+            try:
+                loop = asyncio.get_event_loop()
+                loop.run_until_complete(asyncio.gather(*pending, return_exceptions=True))
+            except Exception as e:
+                logging.error(f"Error shutting down tasks: {e}")
+            finally:
+                logging.info("All tasks completed and event loop closed.")
         except Exception as e:
-            logging.error(f"Error shutting down tasks: {e}")
-        finally:
-            logging.info("All tasks completed and event loop closed.")
+            logging.error(f"Error cancelling task: {e}")

@@ -14,7 +14,7 @@ router = APIRouter()
 
 @router.get("/sitemap.xml", response_class=PlainTextResponse)
 async def sitemap_xml():
-    languages = language_json_read()
+    languages = await language_json_read()
 
     sitemap = """<?xml version="1.0" encoding="UTF-8"?>\n"""
     sitemap += """<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n"""
@@ -34,7 +34,7 @@ async def sitemap_xml():
 
 @router.get("/sitemap_{language}.xml", response_class=PlainTextResponse)
 async def sitemap_language_xml(language: str):
-    languages = language_json_read()
+    languages = await language_json_read()
     encrypted_languages = []
     for full_language in languages:
         try:
