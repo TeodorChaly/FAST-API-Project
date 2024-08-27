@@ -52,14 +52,22 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
 
         info_translate = get_main_info(language, topic)
         if info_translate is None:
-            return templates.TemplateResponse("error.html", {"request": request, "error": "Invalid language."})
+            return templates.TemplateResponse(
+                "error.html",
+                {"request": request, "error": f"Invalid language."},
+                status_code=404
+            )
 
         print(f"Main page requested for {topic} in {language}.")
 
         json_data = await show_content_json(topic, language, limit)
 
         if isinstance(json_data, dict) and "error" in json_data:
-            return templates.TemplateResponse("error.html", {"request": request, "error": json_data["error"]})
+            return templates.TemplateResponse(
+                "error.html",
+                {"request": request, "error": json_data["error"]},
+                status_code=404
+            )
 
         newest_news_len = 5
         today_news_len = 10
@@ -121,7 +129,11 @@ async def category_list(request: Request, category: str, language: str = "en",
     try:
         language_name = get_language_name_by_code(language)
         if language_name is None:
-            return templates.TemplateResponse("error.html", {"request": request, "error": "Invalid language."})
+            return templates.TemplateResponse(
+                "error.html",
+                {"request": request, "error": f"Invalid language."},
+                status_code=404
+            )
 
         print(f"Category {category} requested.")
 
@@ -133,13 +145,19 @@ async def category_list(request: Request, category: str, language: str = "en",
 
         popular_categories_dict, remaining_categories_dict, all_categories = await get_header(topic, language,
                                                                                               json_data)
-
         trending_categories = get_trending_categories(all_categories)
         trending_categories_dict = get_translated_categories_name_and_count(topic, language, trending_categories)
 
         trending_news = await show_content_json(topic, language, 4)
 
         filtered_articles, total_pages = get_all_articles(articles, category, page)
+
+        if len(filtered_articles) == 0:
+            return templates.TemplateResponse(
+                "error.html",
+                {"request": request, "error": f"No articles found in category {category}."},
+                status_code=404
+            )
 
         about_category = get_category_meta_tags(topic, category, language)
 
@@ -163,10 +181,10 @@ async def category_list(request: Request, category: str, language: str = "en",
         print(e, 7654)
 
 
-@router.get("/{language}/{category}/{url_part}/", tags=["User content"], response_class=HTMLResponse)
-async def article_detail(request: Request, url_part: str, language: str, topic: str = main_site_topic):
+@router.get("/{language}/{category}/{url_part}", tags=["User content"], response_class=HTMLResponse)
+async def article_detail(request: Request, url_part: str, language: str, category: str, topic: str = main_site_topic):
     try:
-        print(f"Article {url_part} requested.")
+        print(f"Article {url_part} {category} requested .")
 
         language_name = get_language_name_by_code(language)
         if language_name is None:
@@ -190,7 +208,7 @@ async def article_detail(request: Request, url_part: str, language: str, topic: 
 
         languages_dict = await change_language(url_part, language, topic)
         for article in articles:
-            if article.get("url_part") == url_part:
+            if article.get("url_part") == url_part and article.get("category") == category:
                 author = article.get("author", "A. Intelligence")
                 article["category"] = [article["category"],
                                        get_translated_categories_name(topic, language, [article["category"]])]
@@ -207,7 +225,11 @@ async def article_detail(request: Request, url_part: str, language: str, topic: 
                                                    "info_translate": info_translate, "languages_dict": languages_dict,
                                                    "site_domain": SITE_DOMAIN})
 
-        return templates.TemplateResponse("error.html", {"request": request, "error": "Article not found."})
+        return templates.TemplateResponse(
+            "error.html",
+            {"request": request, "error": f"No articles found with url part {url_part} in category {category}."},
+            status_code=404
+        )
     except Exception as e:
         print(e, 4321)
 
