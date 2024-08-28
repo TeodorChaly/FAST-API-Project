@@ -60,6 +60,7 @@ def get_urls_from_json_files(language):
         data_list = json.load(f)
         for data in data_list:
             url_part = data.get('url_part')
+            category = data.get('category')
             date_published = data.get('date_published')
             try:
                 date_obj = datetime.strptime(date_published, "%d %m %Y %H:%M")
@@ -70,7 +71,7 @@ def get_urls_from_json_files(language):
             language = data.get('language', 'en')
             language_code = language_to_code(language)
 
-            url = f"{SITE_DOMAIN}/{language_code}/{main_site_topic}/{url_part}/detail"
+            url = f"{SITE_DOMAIN}/{language_code}/{category}/{url_part}"
             urls_list.append({
                 "loc": url,
                 "lastmod": lastmod,
