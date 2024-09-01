@@ -10,9 +10,12 @@ router = APIRouter(tags=["Languages"])
 
 load_dotenv()
 
-API_KEY = os.getenv("LANGUAGE_API_KEY")
-API_KEY_NAME = os.getenv("LANGUAGE_API_NAME")
-api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=True)
+try:
+    API_KEY = os.getenv("LANGUAGE_API_KEY")
+    API_KEY_NAME = os.getenv("LANGUAGE_API_NAME")
+    api_key_header = APIKeyHeader(name=API_KEY_NAME, auto_error=True)
+except Exception as e:
+    print(f"Error during getting environment variables: {e}")
 
 
 def get_api_key(api_key: str = Query(..., description="Your API key")):
