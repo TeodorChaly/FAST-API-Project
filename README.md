@@ -3,6 +3,7 @@
 ## Introduction
 This project, "News Generator," leverages the OpenAI GPT models to automate the creation of news content across various categories. It is designed for content creators, marketers, and news agencies looking to streamline their content generation process. The system integrates with existing JSON-based data infrastructures and provides a seamless workflow for producing high-quality, tailored news articles.
 
+
 ### Key Features
 
 -   **Automated News Generation**: Utilizes GPT models to generate news content that is coherent, contextually relevant, and up-to-date.
@@ -10,15 +11,14 @@ This project, "News Generator," leverages the OpenAI GPT models to automate the 
 -   **SEO Optimization**: Automatically generates SEO-friendly titles and descriptions to boost search engine visibility.
 -   **Custom Category Creation**: Users can define and modify news categories according to their needs.
 
+
 ### Installation
 
 1.  Clone the repository:
     
-    
     `git clone https://github.com/yourgithub/news-generator.git` 
     
 2.  Install the required packages:
-   
  
     
     `pip install -r requirements.txt` 
