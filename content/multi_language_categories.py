@@ -36,4 +36,3 @@ async def get_header(topic, language, json_data):
     popular_categories_dict = get_translated_categories_name(topic, language, popular_categories)
     remaining_categories_dict = get_translated_categories_name(topic, language, remaining_categories)
     return popular_categories_dict, remaining_categories_dict, all_categories
-

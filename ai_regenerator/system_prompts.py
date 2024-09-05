@@ -47,7 +47,3 @@ def create_prompt(language, list_of_categories):
                 The result MUST BE ONLU IN {language} and in the correct JSON format. Here is the text of the article you need to rewrite:
             """
     return result3
-
-
-
-

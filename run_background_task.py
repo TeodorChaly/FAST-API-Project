@@ -41,6 +41,7 @@ async def run_crawler(categories_list_bg, is_google=True):
         finally:
             logging.info(f"Finished processing for category: {category_name}")
 
+
 if __name__ == "__main__":
     logging.info("Starting background tasks...")
     try:

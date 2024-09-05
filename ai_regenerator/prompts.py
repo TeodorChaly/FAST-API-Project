@@ -139,4 +139,3 @@ async def ai_main_config_for_multiple_languages(language, topic, additional_info
     except Exception as e:
         print(f'Error during generation: {e}')
         return None
-

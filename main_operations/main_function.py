@@ -124,8 +124,6 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
             file.write(str(e))
 
 
-
-
 async def scrape(url, topic, languages, status, bool_google=False, additional_info=None):
     try:
         if check(url):
