@@ -1,5 +1,6 @@
 # News Generator Application
 
+
 ## Introduction
 This project, "News Generator," leverages the OpenAI GPT models to automate the creation of news content across various categories. It is designed for content creators, marketers, and news agencies looking to streamline their content generation process. The system integrates with existing JSON-based data infrastructures and provides a seamless workflow for producing high-quality, tailored news articles.
 
