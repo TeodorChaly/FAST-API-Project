@@ -7,7 +7,7 @@ from starlette.templating import Jinja2Templates
 
 from content.functions import *
 from content.news_file_extractor import *
-from configs.config_setup import main_site_topic, SITE_DOMAIN
+from configs.config_setup import main_site_topic, SITE_DOMAIN, main_language
 from languages.language_json import languages_to_code
 from main_operations.crawlers.RSS_crawler.rss_crawler import show_all_topics_function
 from content.multi_language_categories import *
@@ -20,7 +20,7 @@ templates = Jinja2Templates(directory="templates")
 templates.env.filters['language_name'] = language_to_code
 
 
-async def show_content_json(topic: str, language: str = "en", limit: int = None):
+async def show_content_json(topic: str, language: str = main_language, limit: int = None):
     try:
         language_name = get_language_name_by_code(language)
         return await news_extractor(topic, language_name, limit)
@@ -29,7 +29,7 @@ async def show_content_json(topic: str, language: str = "en", limit: int = None)
 
 
 @router.get("/", tags=["User content"], response_class=HTMLResponse)
-async def main_page_redirect(request: Request, language: str = "en"):
+async def main_page_redirect(request: Request, language: str = main_language):
     try:
         redirect = main_site_topic
         all_topic = await show_all_topics_function()
@@ -45,7 +45,7 @@ async def main_page_redirect(request: Request, language: str = "en"):
 #
 #
 @router.get("/{language}", tags=["User content"], response_class=HTMLResponse)
-async def main_page(request: Request, topic: str = main_site_topic, language: str = "en", limit: int = None):
+async def main_page(request: Request, topic: str = main_site_topic, language: str = main_language, limit: int = None):
     try:
         time_now = datetime.now()
         languages = await languages_to_code()
@@ -118,13 +118,13 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
 
 
 @router.get("/{language}/{category}", tags=["User content"], response_class=HTMLResponse)
-async def category_list_normal(request: Request, category: str, language: str = "en",
+async def category_list_normal(request: Request, category: str, language: str = main_language,
                                limit: Optional[int] = None, page: int = 1, topic: str = main_site_topic):
     return await category_list(request, category, language, limit, page, topic)
 
 
 @router.get("/{language}/{category}/page_{page}", tags=["User content"], response_class=HTMLResponse)
-async def category_list(request: Request, category: str, language: str = "en",
+async def category_list(request: Request, category: str, language: str = main_language,
                         limit: Optional[int] = None, page: int = 1, topic: str = main_site_topic):
     try:
         language_name = get_language_name_by_code(language)

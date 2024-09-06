@@ -8,3 +8,5 @@ dict_of_tasks = ["latvia_google_news"]  # Add task (category name) to run it in 
 main_site_topic = "latvia_google_news"
 
 SITE_DOMAIN = "https://deepwebnews.tech"
+
+main_language = "en"

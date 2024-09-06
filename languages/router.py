@@ -36,4 +36,4 @@ async def delete_language(language: str, api_key: str = Depends(get_api_key)):
 
 @router.get("/show_languages")
 async def show_languages():
-    return language_json_read()
+    return await language_json_read()
