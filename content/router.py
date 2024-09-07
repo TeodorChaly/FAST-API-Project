@@ -7,7 +7,7 @@ from starlette.templating import Jinja2Templates
 
 from content.functions import *
 from content.news_file_extractor import *
-from configs.config_setup import main_site_topic, SITE_DOMAIN, main_language
+from configs.config_setup import main_site_topic, SITE_DOMAIN, main_language, SITE_NAME
 from languages.language_json import languages_to_code
 from main_operations.crawlers.RSS_crawler.rss_crawler import show_all_topics_function
 from content.multi_language_categories import *
@@ -112,7 +112,8 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
                                            "top_categories": popular_categories_dict,
                                            "other_categories": remaining_categories_dict, "all_content": new_content,
                                            "today_news": today_news, "newest_news": newest_news,
-                                           "info_translate": info_translate, "site_domain": SITE_DOMAIN})
+                                           "info_translate": info_translate, "site_domain": SITE_DOMAIN,
+                                           "site_name": SITE_NAME})
     except Exception as e:
         print(e, 54321)
 
@@ -134,7 +135,7 @@ async def category_list(request: Request, category: str, language: str = main_la
                 {"request": request, "error": f"Invalid language."},
                 status_code=404
             )
-
+        languages_urls = await change_language_category(category, language, topic)
         print(f"Category {category} requested.")
 
         articles = await news_extractor(topic, language_name, limit)
@@ -176,7 +177,8 @@ async def category_list(request: Request, category: str, language: str = main_la
                                            "trending_categories": trending_categories_dict,
                                            "trending_news": trending_news,
                                            "page": page, "total_pages": total_pages, "about_category": about_category,
-                                           "info_translate": info_translate, "site_domain": SITE_DOMAIN})
+                                           "info_translate": info_translate, "site_domain": SITE_DOMAIN,
+                                           "site_name": SITE_NAME, "languages_urls": languages_urls})
     except Exception as e:
         print(e, 7654)
 
@@ -223,7 +225,7 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                                                    "trending_news": trending_news, "tags": tags,
                                                    "previous_and_next_news": previous_and_next_news, "author": author,
                                                    "info_translate": info_translate, "languages_dict": languages_dict,
-                                                   "site_domain": SITE_DOMAIN})
+                                                   "site_domain": SITE_DOMAIN, "site_name": SITE_NAME})
 
         return templates.TemplateResponse(
             "error.html",
@@ -232,6 +234,27 @@ async def article_detail(request: Request, url_part: str, language: str, categor
         )
     except Exception as e:
         print(e, 4321)
+
+
+async def change_language_category(category: str, language: str, topic: str = main_site_topic):
+    language_dict = {}
+    time_now = datetime.now()
+
+    languages = await languages_to_code()
+
+    for new_language_name in languages:
+        json_response = await news_extractor(topic, get_language_name_by_code(new_language_name), None)
+
+        for response in json_response:
+            if response["category"] == category:
+                language_dict[f"{new_language_name}"] = response['category']
+                break
+            else:
+                language_dict[f"{new_language_name}"] = None
+
+    time_after = datetime.now()
+    print(time_after - time_now)
+    return language_dict
 
 
 async def change_language(url_part: str, language: str,

@@ -7,7 +7,7 @@
     <title>
         {{ about_category[1].translated_category_seo_title }}
         {% if page > 1 %}| Page {{ page }}
-        {% endif %}| DeepWebNews
+        {% endif %}| {{ site_name }}
     </title>
     <meta name="description" content="{{ about_category[1].translated_category_seo_description }} {% if page > 1 %}| Page {{ page }} {% endif %}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,13 +30,16 @@
     <link rel="stylesheet" href="{{ url_for('assets', path='/css/spacing.css') }}">
     <link rel="stylesheet" href="{{ url_for('assets', path='/css/main.css') }}">
 
-    {% for lang in languages %}
+    {% for lang, url in languages_urls.items() %}
+    {% if url is not none %}
         {% if page > 1 %}
-            <link rel="alternate" href="{{ site_domain }}/{{lang}}/{{ category }}/page_{{page}}" hreflang="{{lang}}">
+            <link rel="alternate" href="{{ site_domain }}/{{ lang }}/{{ url }}/page_{{page}}" hreflang="{{ lang }}">
         {% else %}
-            <link rel="alternate" href="{{ site_domain }}/{{lang}}/{{ category }}" hreflang="{{lang}}">
+            <link rel="alternate" href="{{ site_domain }}/{{ lang }}/{{ url }}" hreflang="{{ lang }}">
         {% endif %}
-    {% endfor %}
+    {% endif %}
+{% endfor %}
+
 
 </head>
 
@@ -119,15 +122,18 @@
 
                                 </div>
                                 <div class="dropdown">
-                                        <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: rgba(0, 0, 0, 0.0); border: 0.0px solid rgba(0, 0, 0, 0.3);">
-                                            {{ language.upper() }}
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                            {% for lang in languages %}
-                                            <li><a class="dropdown-item" href="/{{ lang }}/{{ category }}">{{ lang.upper() }}</a></li>
-                                            {% endfor %}
-                                        </ul>
-                                    </div>
+                                    <button class="dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: rgba(0, 0, 0, 0.0); border: 0.0px solid rgba(0, 0, 0, 0.3);">
+                                        {{ language.upper() }}
+                                    </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        {% for lang, url in languages_urls.items() %}
+                                            {% if url is not none %}
+                                                <li><a class="dropdown-item" href="/{{ lang }}/{{ url }}">{{ lang.upper() }}</a></li>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+
                             </nav>
                         </div>
                         <!-- Mobile Menu  -->

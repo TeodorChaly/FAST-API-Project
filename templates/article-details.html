@@ -13,7 +13,7 @@
     {% if article.category and article.category[0] and article.category[1] and article.category[0] in article.category[1] %}
         | {{ article.category[1][article.category[0]].translated_name | capitalize }}
     {% else %}
-        | DeepWebNews
+        | {{ site_name }}
     {% endif %}
     </title>
 
