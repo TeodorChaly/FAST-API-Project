@@ -181,6 +181,11 @@ async def category_list(request: Request, category: str, language: str = main_la
                                            "site_name": SITE_NAME, "languages_urls": languages_urls})
     except Exception as e:
         print(e, 7654)
+        return templates.TemplateResponse(
+            "error.html",
+            {"request": request, "error": f"Category was not found."},
+            status_code=404
+        )
 
 
 @router.get("/{language}/{category}/{url_part}", tags=["User content"], response_class=HTMLResponse)
@@ -233,7 +238,11 @@ async def article_detail(request: Request, url_part: str, language: str, categor
             status_code=404
         )
     except Exception as e:
-        print(e, 4321)
+        return templates.TemplateResponse(
+            "error.html",
+            {"request": request, "error": f"No articles found."},
+            status_code=404
+        )
 
 
 async def change_language_category(category: str, language: str, topic: str = main_site_topic):
