@@ -19,16 +19,23 @@ async def languages_to_code():
 
 async def del_append_language(language, action):
     languages_list = await language_json_read()
-
     if action == "append":
         if language not in languages_list:
-            languages_list.append(language)
+            try:
+                if language_to_code(language) is not None:
+                    languages_list.append(language)
 
-            with open("languages/languages.json", "w", encoding="utf-8") as file:
-                json.dump(languages_list, file, indent=4)
-            return f"{language} language was added."
+                    with open("languages/languages.json", "w", encoding="utf-8") as file:
+                        json.dump(languages_list, file, indent=4)
+                    return f"{language} language was added."
+                else:
+                    return f"Langauge was not added. Error during given language converting."
+            except Exception as e:
+                return f"Langauge was not added. Error during given language converting."
+
         else:
             return f"{language} language already exist."
+
     elif action == "delete":
         if language in languages_list:
             languages_list.remove(language)
@@ -36,4 +43,4 @@ async def del_append_language(language, action):
                 json.dump(languages_list, file, indent=4)
             return f"{language} language deleted."
         else:
-            return f"{language} language found."
+            return f"{language} language was not found."
