@@ -15,10 +15,11 @@ async def news_regeneration_function(topic, path):
     with open(json_file_path, "r", encoding="utf-8") as file:
         languages = json.load(file)
     for url in list_of_urls:
-
-        google = True
-        additional_ifo = None
-        print(url)
-        result = await scrape(url, topic, languages, "test", google, additional_ifo)
-        # return result
-
+        try:
+            google = True
+            additional_ifo = None
+            print(url)
+            await scrape(url, topic, languages, "scrape", google, additional_ifo)
+        except Exception as e:
+            print(f"Error during news regeneration: {e}")
+            continue

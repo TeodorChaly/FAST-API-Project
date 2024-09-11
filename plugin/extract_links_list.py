@@ -8,7 +8,6 @@ async def get_links(path):
         url_list = []
 
         for row in reader:
-            print(row['URL'])
             url_list.append(row['URL'])
 
         return url_list
