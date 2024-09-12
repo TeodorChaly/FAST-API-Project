@@ -2,6 +2,7 @@ import csv
 
 
 async def get_links(path):
+    print(path)
     with open(path, newline='', encoding='utf-16') as csvfile:
         reader = csv.DictReader(csvfile, delimiter='\t')
 

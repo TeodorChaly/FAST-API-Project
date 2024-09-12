@@ -2,12 +2,11 @@ import json
 import os
 
 from main_operations.main_function import scrape
-
 from plugin.extract_links_list import get_links
 
 
 async def news_regeneration_function(topic, path):
-    list_of_urls = await get_links(path)
+    list_of_urls = await get_links("plugin/"+path)
 
     current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
