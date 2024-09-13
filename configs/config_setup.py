@@ -1,13 +1,10 @@
 # Run background function
-# bg_time = 10  # Minutes
-# task_name = "latvia_google_news"
-# task_google = True
-dict_of_tasks = ["latvia_google_news"]  # Add task (category name) to run it in background
+dict_of_tasks = ["latvia_google_news"]  # Name of category to run in background
 
 # Main site
-main_site_topic = "latvia_google_news"
+main_site_topic = "latvia_google_news"  # Main site category
 
-SITE_DOMAIN = "https://deepwebnews.tech"
-SITE_NAME = "Deep Web News"
+SITE_DOMAIN = "https://deepwebnews.tech"  # Site domain
+SITE_NAME = "Deep Web News"  # Site name
 
-main_language = "en"
+main_language = "en"  # Main language
