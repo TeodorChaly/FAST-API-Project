@@ -209,6 +209,8 @@ async def article_detail(request: Request, url_part: str, language: str, categor
 
         trending_news = await show_content_json(topic, language, 6)
         previous_and_next_news = trending_news[:4]
+        previous_and_next_news_1 = previous_and_next_news[0]
+        previous_and_next_news_2 = previous_and_next_news[1]
         trending_news = trending_news[2:6]
         for i in trending_news:
             i["category"] = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
@@ -228,7 +230,10 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                                                    "other_categories": remaining_categories,
                                                    "trending_categories": trending_categories_dict,
                                                    "trending_news": trending_news, "tags": tags,
-                                                   "previous_and_next_news": previous_and_next_news, "author": author,
+                                                   "previous_and_next_news": previous_and_next_news,
+                                                   "previous_and_next_news_1": previous_and_next_news_1,
+                                                   "previous_and_next_news_2": previous_and_next_news_2,
+                                                   "author": author,
                                                    "info_translate": info_translate, "languages_dict": languages_dict,
                                                    "site_domain": SITE_DOMAIN, "site_name": SITE_NAME})
 
