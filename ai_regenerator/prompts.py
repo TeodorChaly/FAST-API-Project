@@ -39,7 +39,7 @@ async def ai_category_function(topic_name, additional_info=None):
                      JSON result format:
                      [
                      "category",
-                     "category2", 
+                     "category2", # If you want to use two words, separate them with _ (underscore)
                      "other" # at the end necessary add category other 
                      ]
                      please try to think abstractive and use wide categories name
@@ -69,7 +69,7 @@ async def ai_category_for_multiple_languages(language, main_list_of_categories, 
                      I will give you json list and your task to create new JSON file, that looks like this:
                     {{
                     given_category: {{
-                    "translated_name":"given_category_translated to {language}", # This field must be 1-2 words. 
+                    "translated_name":"given_category_translated to {language}", # This field must be 1-2 words and and try to use no longer than 12-14 char. 
                     "translated_category_seo_title": "given_category_seo_title_translated to {language}",  # An SEO title no longer than 50 characters without quotes, reflecting category and being engaging
                     "translated_category_seo_description": "given_category_seo_description_translated to {language}" # An SEO description no longer than 170 characters, briefly describing category
                     }}, 
