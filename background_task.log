@@ -1,0 +1,11 @@
+2024-09-16 22:13:38,355 - INFO - Starting background tasks...
+2024-09-16 22:13:38,355 - DEBUG - Using proactor: IocpProactor
+2024-09-16 22:13:38,357 - INFO - Starting processing for category: latvia_google_news
+2024-09-16 22:13:38,362 - INFO - Checked categories: ['code_news', 'code', 'crypto', 'latvia-newsq', 'latvia-news', 'latvia-test', 'latvia_google_news', 'latvija_news']
+2024-09-16 22:13:38,362 - INFO - Category 'latvia_google_news' exists. Starting background task.
+2024-09-16 22:13:38,375 - DEBUG - Starting new HTTPS connection (1): www.lsm.lv:443
+2024-09-16 22:13:38,718 - DEBUG - https://www.lsm.lv:443 "GET /rss/?lang=lv&catid=14 HTTP/1.1" 200 None
+2024-09-16 22:13:38,770 - INFO - Background task completed for category: latvia_google_news
+2024-09-16 22:13:38,771 - INFO - Finished processing for category: latvia_google_news
+2024-09-16 22:13:38,771 - INFO - Shutting down tasks...
+2024-09-16 22:13:38,771 - ERROR - Error cancelling task: no running event loop
