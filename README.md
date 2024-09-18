@@ -21,7 +21,6 @@ This project, "News Generator," leverages the OpenAI GPT models to automate the 
     
 2.  Install the required packages:
  
-    
     `pip install -r requirements.txt` 
     
 3.  Set up environment variables:
