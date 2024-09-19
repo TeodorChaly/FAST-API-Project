@@ -115,8 +115,8 @@
                             <nav class="tgmobile__menu-box">
                                 <div class="close-btn"><i class="fas fa-times"></i></div>
                                 <div class="nav-logo">
-                                    <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
-                                    <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
+                                    <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" loading="lazy" alt="Logo"></a>
+                                    <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" loading="lazy" alt="Logo"></a>
                                 </div>
                                 <div class="tgmobile__search">
                                     <form action="#">
@@ -151,17 +151,17 @@
                 <div class="offCanvas__toggle"><i class="flaticon-addition"></i></div>
                 <div class="offCanvas__content">
                    <div class="offCanvas__logo logo">
-                        <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
-                        <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
+                        <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" loading="lazy" alt="Logo"></a>
+                        <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" loading="lazy" alt="Logo"></a>
                     </div>
                     <p>Change how the world works with Biotellus, made for ecology.</p>
                     <ul class="offCanvas__instagram list-wrap">
-                        <li><a href="{{ url_for('assets', path='/img/blog/blog01.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog01.jpg') }}" alt="img"></a></li>
-                        <li><a href="{{ url_for('assets', path='/img/blog/blog02.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog02.jpg') }}" alt="img"></a></li>
-                        <li><a href="{{ url_for('assets', path='/img/blog/blog03.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog03.jpg') }}" alt="img"></a></li>
-                        <li><a href="{{ url_for('assets', path='/img/blog/blog04.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog04.jpg') }}" alt="img"></a></li>
-                        <li><a href="{{ url_for('assets', path='/img/blog/blog05.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog05.jpg') }}" alt="img"></a></li>
-                        <li><a href="{{ url_for('assets', path='/img/blog/blog06.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog06.jpg') }}" alt="img"></a></li>
+                        <li><a href="{{ url_for('assets', path='/img/blog/blog01.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog01.jpg') }}" loading="lazy" alt="img"></a></li>
+                        <li><a href="{{ url_for('assets', path='/img/blog/blog02.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog02.jpg') }}" loading="lazy" alt="img"></a></li>
+                        <li><a href="{{ url_for('assets', path='/img/blog/blog03.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog03.jpg') }}" loading="lazy" alt="img"></a></li>
+                        <li><a href="{{ url_for('assets', path='/img/blog/blog04.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog04.jpg') }}" loading="lazy" alt="img"></a></li>
+                        <li><a href="{{ url_for('assets', path='/img/blog/blog05.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog05.jpg') }}" loading="lazy" alt="img"></a></li>
+                        <li><a href="{{ url_for('assets', path='/img/blog/blog06.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog06.jpg') }}" loading="lazy" alt="img"></a></li>
                     </ul>
                 </div>
                 <div class="offCanvas__contact">
@@ -226,7 +226,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="slider__img-wrap">
-                                    <img src="{{ item.image }}" class="main-img" alt="{{ item.seo_title }}">
+                                    <img src="{{ item.image }}" class="main-img" alt="{{ item.seo_title }}" loading="lazy">
                                 </div>
                             </div>
                         </div>
@@ -270,7 +270,7 @@
                                 <div class="swiper-slide">
                                     <div class="trending__post">
                                         <div class="trending__post-thumb tgImage__hover">
-                                            <a href="/{{ language }}/{{ item.category }}/{{ item.url_part }}"><img src="{{ item.image }}" alt="{{ item.seo_title }}"></a>
+                                            <a href="/{{ language }}/{{ item.category }}/{{ item.url_part }}"><img src="{{ item.image }}" alt="{{ item.seo_title }}" loading="lazy"></a>
                                             <span class="is_trend"><i class="fas fa-bolt"></i></span>
                                         </div>
                                         <div class="trending__post-content">
@@ -312,7 +312,7 @@
                                 <div class="swiper-slide">
                                     <div class="trending__post">
                                         <div class="trending__post-thumb tgImage__hover">
-                                            <a href="/{{ language }}/{{ item.category }}/{{ item.url_part }}"><img src="{{ item.image }}" alt="{{ item.seo_title }}"></a>
+                                            <a href="/{{ language }}/{{ item.category }}/{{ item.url_part }}"><img src="{{ item.image }}" alt="{{ item.seo_title }}" loading="lazy"></a>
                                         </div>
                                         <div class="trending__post-content">
 <!--                                            <ul class="tgbanner__content-meta list-wrap">-->
@@ -354,7 +354,7 @@
                     <div class="col-md-6">
                         <div class="stories-post__item">
                             <div class="stories-post__thumb tgImage__hover">
-                                <a href="/{{ language }}/{{ item.category[0] }}/{{ item.url_part }}"><img src="{{ item.image }}" alt="{{item.seo_title}}"></a>
+                                <a href="/{{ language }}/{{ item.category[0] }}/{{ item.url_part }}"><img src="{{ item.image }}" alt="{{item.seo_title}}" loading="lazy"></a>
                             </div>
                             <div class="stories-post__content video__post-content">
                                 <ul class="tgbanner__content-meta list-wrap">
@@ -380,7 +380,7 @@
                        <div class="trending__post stories-small-post__item">
     <div class="trending__post-thumb tgImage__hover">
         <a href="/{{ language }}/{{ item.category[0] }}/{{ item.url_part }}">
-            <img src="{{ item.image }}" alt="{{ item.seo_title }}">
+            <img src="{{ item.image }}" alt="{{ item.seo_title }}" loading="lazy">
         </a>
     </div>
     <div class="trending__post-content">
@@ -433,8 +433,8 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-md-4">
                         <div class="footer__logo logo">
-                            <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
-                            <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }} " alt="Logo"></a>
+                            <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" loading="lazy" alt="Logo"></a>
+                            <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }} " loading="lazy" alt="Logo"></a>
                         </div>
                     </div>
                     <div class="col-lg-9 col-md-8">
@@ -469,19 +469,19 @@
 
 
     <!-- JS here -->
-    <script src="{{ url_for('assets', path='js/vendor/jquery-3.6.0.min.js') }}"></script>
-    <script src="{{ url_for('assets', path='js/bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('assets', path='js/isotope.pkgd.min.js') }}"></script>
-    <script src="{{ url_for('assets', path='js/imagesloaded.pkgd.min.js') }}"></script>
-    <script src="{{ url_for('assets', path='js/jquery.magnific-popup.min.js') }}"></script>
-    <script src="{{ url_for('assets', path='js/jquery.marquee.min.js') }}"></script>
-    <script src="{{ url_for('assets', path='js/imageRevealHover.js') }}"></script>
-    <script src="{{ url_for('assets', path='js/swiper-bundle.js') }}"></script>
-    <script src="{{ url_for('assets', path='js/TweenMax.min.js') }}"></script>
-    <script src="{{ url_for('assets', path='js/slick.min.js') }}"></script>
-    <script src="{{ url_for('assets', path='js/ajax-form.js') }}"></script>
-    <script src="{{ url_for('assets', path='js/wow.min.js') }}"></script>
-    <script src="{{ url_for('assets', path='js/main.js') }}"></script>
+    <script src="{{ url_for('assets', path='js/vendor/jquery-3.6.0.min.js') }}" async></script>
+    <script src="{{ url_for('assets', path='js/bootstrap.min.js') }}" async></script>
+    <script src="{{ url_for('assets', path='js/isotope.pkgd.min.js') }}" async></script>
+    <script src="{{ url_for('assets', path='js/imagesloaded.pkgd.min.js') }}" async></script>
+    <script src="{{ url_for('assets', path='js/jquery.magnific-popup.min.js') }}" async></script>
+    <script src="{{ url_for('assets', path='js/jquery.marquee.min.js') }}" async></script>
+    <script src="{{ url_for('assets', path='js/imageRevealHover.js') }}" async></script>
+    <script src="{{ url_for('assets', path='js/swiper-bundle.js') }}" async></script>
+    <script src="{{ url_for('assets', path='js/TweenMax.min.js') }}" async></script>
+    <script src="{{ url_for('assets', path='js/slick.min.js') }}" async></script>
+    <script src="{{ url_for('assets', path='js/ajax-form.js') }}" async></script>
+    <script src="{{ url_for('assets', path='js/wow.min.js') }}" async></script>
+    <script src="{{ url_for('assets', path='js/main.js') }}" async></script>
 
 </body>
 
