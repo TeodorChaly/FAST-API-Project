@@ -204,7 +204,7 @@ async def article_detail(request: Request, url_part: str, language: str, categor
 
         trending_categories = get_trending_categories(all_categories)
         trending_categories_dict = get_translated_categories_name_and_count(topic, language, trending_categories)
-
+        print(123)
         info_translate = get_main_info(language, topic)
 
         trending_news = await show_content_json(topic, language, 6)
@@ -214,10 +214,15 @@ async def article_detail(request: Request, url_part: str, language: str, categor
         trending_news = trending_news[2:6]
         for i in trending_news:
             i["category"] = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
+        print(4434)
+        print(43144)
 
         languages_dict = await change_language(url_part, language, topic)
+
         for article in articles:
+
             if article.get("url_part") == url_part and article.get("category") == category:
+
                 author = article.get("author", "A. Intelligence")
                 article["category"] = [article["category"],
                                        get_translated_categories_name(topic, language, [article["category"]])]
@@ -236,7 +241,6 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                                                    "author": author,
                                                    "info_translate": info_translate, "languages_dict": languages_dict,
                                                    "site_domain": SITE_DOMAIN, "site_name": SITE_NAME})
-
         return templates.TemplateResponse(
             "error.html",
             {"request": request, "error": f"No articles found with url part {url_part} in category {category}."},
@@ -251,52 +255,61 @@ async def article_detail(request: Request, url_part: str, language: str, categor
 
 
 async def change_language_category(category: str, language: str, topic: str = main_site_topic):
-    language_dict = {}
-    time_now = datetime.now()
-
-    languages = await languages_to_code()
-
-    for new_language_name in languages:
-        json_response = await news_extractor(topic, get_language_name_by_code(new_language_name), None)
-
-        for response in json_response:
-            if response["category"] == category:
-                language_dict[f"{new_language_name}"] = response['category']
-                break
-            else:
-                language_dict[f"{new_language_name}"] = None
-
-    time_after = datetime.now()
-    print(time_after - time_now)
-    return language_dict
-
-
-async def change_language(url_part: str, language: str,
-                          topic: str = main_site_topic):
-    language_name = get_language_name_by_code(language)
-    articles = load_articles_from_json(topic, language_name)
-
-    article = next((a for a in articles if a.get("url_part") == url_part), None)
-    langauge_dict = {}
-
-    time_now = datetime.now()
-    if article:
-        new_id = article.get("url")
+    try:
+        language_dict = {}
+        time_now = datetime.now()
 
         languages = await languages_to_code()
 
         for new_language_name in languages:
             json_response = await news_extractor(topic, get_language_name_by_code(new_language_name), None)
+
             for response in json_response:
-                if response["url"] == new_id:
-                    langauge_dict[f"{new_language_name}"] = response['category'] + "/" + response['url_part']
+                if response["category"] == category:
+                    language_dict[f"{new_language_name}"] = response['category']
                     break
                 else:
-                    langauge_dict[f"{new_language_name}"] = None
+                    language_dict[f"{new_language_name}"] = None
 
-        # print(langauge_dict)
+        time_after = datetime.now()
+        print(time_after - time_now)
+        return language_dict
+    except Exception as e:
+        print(e)
+        return {"": ""}
 
-    time_after = datetime.now()
-    print(time_after - time_now)
-    # print(langauge_dict, 11112)
-    return langauge_dict
+
+async def change_language(url_part: str, language: str,
+                          topic: str = main_site_topic):
+    try:
+        language_name = get_language_name_by_code(language)
+        articles = load_articles_from_json(topic, language_name)
+
+        article = next((a for a in articles if a.get("url_part") == url_part), None)
+        langauge_dict = {}
+
+        time_now = datetime.now()
+        if article:
+            new_id = article.get("url")
+
+            languages = await languages_to_code()
+
+            for new_language_name in languages:
+                json_response = await news_extractor(topic, get_language_name_by_code(new_language_name), None)
+                for response in json_response:
+                    if response["url"] == new_id:
+
+                        langauge_dict[f"{new_language_name}"] = response['category'] + "/" + response['url_part']
+                        break
+                    else:
+                        langauge_dict[f"{new_language_name}"] = None
+
+            # print(langauge_dict)
+
+        time_after = datetime.now()
+        print(time_after - time_now)
+        # print(langauge_dict, 11112)
+        return langauge_dict
+    except Exception as e:
+        print(e)
+        return {"": ""}

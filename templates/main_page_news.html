@@ -34,15 +34,15 @@
 <body>
 
     <!-- preloader -->
-    <div id="preloader">
-        <div id="loading-center">
-            <div id="loading-center-absolute">
-                <div class="object" id="object_one"></div>
-                <div class="object" id="object_two"></div>
-                <div class="object" id="object_three"></div>
-            </div>
-        </div>
-    </div>
+<!--    <div id="preloader">-->
+<!--        <div id="loading-center">-->
+<!--            <div id="loading-center-absolute">-->
+<!--                <div class="object" id="object_one"></div>-->
+<!--                <div class="object" id="object_two"></div>-->
+<!--                <div class="object" id="object_three"></div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
     <!-- preloader-end -->
 
     <!-- Scroll-top -->
@@ -154,15 +154,15 @@
                         <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" loading="lazy" alt="Logo"></a>
                         <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" loading="lazy" alt="Logo"></a>
                     </div>
-                    <p>Change how the world works with Biotellus, made for ecology.</p>
-                    <ul class="offCanvas__instagram list-wrap">
-                        <li><a href="{{ url_for('assets', path='/img/blog/blog01.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog01.jpg') }}" loading="lazy" alt="img"></a></li>
-                        <li><a href="{{ url_for('assets', path='/img/blog/blog02.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog02.jpg') }}" loading="lazy" alt="img"></a></li>
-                        <li><a href="{{ url_for('assets', path='/img/blog/blog03.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog03.jpg') }}" loading="lazy" alt="img"></a></li>
-                        <li><a href="{{ url_for('assets', path='/img/blog/blog04.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog04.jpg') }}" loading="lazy" alt="img"></a></li>
-                        <li><a href="{{ url_for('assets', path='/img/blog/blog05.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog05.jpg') }}" loading="lazy" alt="img"></a></li>
-                        <li><a href="{{ url_for('assets', path='/img/blog/blog06.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog06.jpg') }}" loading="lazy" alt="img"></a></li>
-                    </ul>
+<!--                    <p>Change how the world works with Biotellus, made for ecology.</p>-->
+<!--                    <ul class="offCanvas__instagram list-wrap">-->
+<!--                        <li><a href="{{ url_for('assets', path='/img/blog/blog01.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog01.jpg') }}" loading="lazy" alt="img"></a></li>-->
+<!--                        <li><a href="{{ url_for('assets', path='/img/blog/blog02.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog02.jpg') }}" loading="lazy" alt="img"></a></li>-->
+<!--                        <li><a href="{{ url_for('assets', path='/img/blog/blog03.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog03.jpg') }}" loading="lazy" alt="img"></a></li>-->
+<!--                        <li><a href="{{ url_for('assets', path='/img/blog/blog04.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog04.jpg') }}" loading="lazy" alt="img"></a></li>-->
+<!--                        <li><a href="{{ url_for('assets', path='/img/blog/blog05.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog05.jpg') }}" loading="lazy" alt="img"></a></li>-->
+<!--                        <li><a href="{{ url_for('assets', path='/img/blog/blog06.jpg') }}" class="popup-image"><img src="{{ url_for('assets', path='/img/blog/blog06.jpg') }}" loading="lazy" alt="img"></a></li>-->
+<!--                    </ul>-->
                 </div>
                 <div class="offCanvas__contact">
                     <h4 class="title">Get In Touch</h4>
@@ -226,7 +226,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="slider__img-wrap">
-                                    <img src="{{ item.image }}" class="main-img" alt="{{ item.seo_title }}" loading="lazy">
+                                    <img src="{{ item.image }}" class="main-img" alt="{{ item.seo_title }}"  width="600" height="600" loading="lazy">
                                 </div>
                             </div>
                         </div>
@@ -312,7 +312,7 @@
                                 <div class="swiper-slide">
                                     <div class="trending__post">
                                         <div class="trending__post-thumb tgImage__hover">
-                                            <a href="/{{ language }}/{{ item.category }}/{{ item.url_part }}"><img src="{{ item.image }}" alt="{{ item.seo_title }}" loading="lazy"></a>
+                                            <a href="/{{ language }}/{{ item.category }}/{{ item.url_part }}"><img src="{{ item.image }}" alt="{{ item.seo_title }}" width="820" height="440" loading="lazy"></a>
                                         </div>
                                         <div class="trending__post-content">
 <!--                                            <ul class="tgbanner__content-meta list-wrap">-->
@@ -354,7 +354,7 @@
                     <div class="col-md-6">
                         <div class="stories-post__item">
                             <div class="stories-post__thumb tgImage__hover">
-                                <a href="/{{ language }}/{{ item.category[0] }}/{{ item.url_part }}"><img src="{{ item.image }}" alt="{{item.seo_title}}" loading="lazy"></a>
+                                <a href="/{{ language }}/{{ item.category[0] }}/{{ item.url_part }}"><img src="{{ item.image }}" alt="{{item.seo_title}}" loading="lazy" width="820" height="440"></a>
                             </div>
                             <div class="stories-post__content video__post-content">
                                 <ul class="tgbanner__content-meta list-wrap">
@@ -380,7 +380,7 @@
                        <div class="trending__post stories-small-post__item">
     <div class="trending__post-thumb tgImage__hover">
         <a href="/{{ language }}/{{ item.category[0] }}/{{ item.url_part }}">
-            <img src="{{ item.image }}" alt="{{ item.seo_title }}" loading="lazy">
+            <img src="{{ item.image }}" alt="{{ item.seo_title }}" loading="lazy" width="820" height="440">
         </a>
     </div>
     <div class="trending__post-content">
@@ -469,19 +469,19 @@
 
 
     <!-- JS here -->
-    <script src="{{ url_for('assets', path='js/vendor/jquery-3.6.0.min.js') }}" async></script>
-    <script src="{{ url_for('assets', path='js/bootstrap.min.js') }}" async></script>
-    <script src="{{ url_for('assets', path='js/isotope.pkgd.min.js') }}" async></script>
-    <script src="{{ url_for('assets', path='js/imagesloaded.pkgd.min.js') }}" async></script>
-    <script src="{{ url_for('assets', path='js/jquery.magnific-popup.min.js') }}" async></script>
-    <script src="{{ url_for('assets', path='js/jquery.marquee.min.js') }}" async></script>
-    <script src="{{ url_for('assets', path='js/imageRevealHover.js') }}" async></script>
-    <script src="{{ url_for('assets', path='js/swiper-bundle.js') }}" async></script>
-    <script src="{{ url_for('assets', path='js/TweenMax.min.js') }}" async></script>
-    <script src="{{ url_for('assets', path='js/slick.min.js') }}" async></script>
-    <script src="{{ url_for('assets', path='js/ajax-form.js') }}" async></script>
-    <script src="{{ url_for('assets', path='js/wow.min.js') }}" async></script>
-    <script src="{{ url_for('assets', path='js/main.js') }}" async></script>
+    <script src="{{ url_for('assets', path='js/vendor/jquery-3.6.0.min.js') }}" defer></script>
+    <script src="{{ url_for('assets', path='js/bootstrap.min.js') }}" defer></script>
+    <script src="{{ url_for('assets', path='js/isotope.pkgd.min.js') }}" defer></script>
+    <script src="{{ url_for('assets', path='js/imagesloaded.pkgd.min.js') }}" defer></script>
+    <script src="{{ url_for('assets', path='js/jquery.magnific-popup.min.js') }}" defer></script>
+    <script src="{{ url_for('assets', path='js/jquery.marquee.min.js') }}" defer></script>
+    <script src="{{ url_for('assets', path='js/imageRevealHover.js') }}" defer></script>
+    <script src="{{ url_for('assets', path='js/swiper-bundle.js') }}" defer></script>
+    <script src="{{ url_for('assets', path='js/TweenMax.min.js') }}" defer></script>
+    <script src="{{ url_for('assets', path='js/slick.min.js') }}" defer></script>
+    <script src="{{ url_for('assets', path='js/ajax-form.js') }}" defer></script>
+    <script src="{{ url_for('assets', path='js/wow.min.js') }}" defer></script>
+    <script src="{{ url_for('assets', path='js/main.js') }}" defer></script>
 
 </body>
 

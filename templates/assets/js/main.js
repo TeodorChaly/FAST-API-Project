@@ -5,8 +5,8 @@
 	=           Preloader       =
 =============================================*/
 function preloader() {
-	$('#preloader').delay(0).fadeOut();
-};
+    $('#preloader').delay(500).fadeOut('slow');
+}
 
 $(window).on('load', function () {
 	preloader();
