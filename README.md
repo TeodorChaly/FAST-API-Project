@@ -27,8 +27,6 @@ This project, "News Generator," leverages the OpenAI GPT models to automate the 
     -   `MY_OPENAI_API_KEY`: Your OpenAI API key.
     -   `LANGUAGE_API_KEY`: Your password key for language changing
     -   `LANGUAGE_API_NAME`: Your name for language changing
-  
-
 ### Usage
 
 Start the application by running the following command:
