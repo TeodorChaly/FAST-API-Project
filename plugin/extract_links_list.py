@@ -3,8 +3,8 @@ import csv
 
 async def get_links(path, limitation):
     print(path)
-    with open(path, newline='', encoding='utf-16') as csvfile:
-        reader = csv.DictReader(csvfile, delimiter='\t')
+    with open(path, newline='', encoding='utf-8') as csvfile:
+        reader = csv.DictReader(csvfile, delimiter=',')
 
         url_list = []
 
