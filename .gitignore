@@ -13,3 +13,4 @@ access.log
 sitemaps/
 languages/languages.json
 plugin/test.csv
+plugin/sites_indexing/sites_to_check.txt
