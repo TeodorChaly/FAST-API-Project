@@ -1,3 +1,6 @@
+import random
+
+
 def create_prompt(language, list_of_categories):
     result = f"""I will give you a news text, please study it in its entirety and process it in the following JSON format and you only use this format in the same sequence:
             1) 'rewritten_content': 'Please study, shorten, and then briefly rewrite this entire news in {language}. Do not translate companie's names. If you need to use special chars (like double quotes or regular quote) - use this symbol - \ (before special char).  Be concise and laconic. Write in the third person. Separate distinct thoughts or ideas clearly, each starting with a new paragraph. In any case, separate the text into paragraphs every 2-3 sentences. Divide the text into paragraphs using <p></p> tags.'
@@ -44,6 +47,61 @@ def create_prompt(language, list_of_categories):
                 7) 'date_published': 'leave it -'
                 8) 'author': {ai_writer_2} (and don t translate it)
                 If the text contains something unrelated to the article, just skip it (and do not add it).
-                The result MUST BE ONLU IN {language} and in the correct JSON format. Here is the text of the article you need to rewrite:
+                The result MUST BE ONLY IN {language} and in the correct JSON format. Here is the text of the article you need to rewrite:
             """
-    return result3
+
+    ai_writer_2 = "A. I. Writer"
+    result4 = f""""Imagine you're a talented copywriter tasked with rewriting an article (which will be provided later) in a way that captivates and engages readers. You're encouraged to add your own unique insights, such as explanations of terms or additional interesting information related to the topic.
+
+    Here are the main guidelines to follow:
+    - Please write exclusively in {language}, avoiding any original language for the article.
+    - Strive to make your version stand out even more than the competitors or the original text.
+    - Focus on incorporating relevant keywords naturally for better SEO, without overdoing it.
+    - Rewrite the provided text in {language}, ensuring to keep the names of specific companies or brands unchanged.
+    - When translating names of people and locations, feel free to adapt them when possible.
+
+    Your output should be structured strictly in a specific JSON format and in this order:
+    1) 'rewritten_content': 'This is where you will concisely, informatively, and engagingly rewrite the article text (in {language}). Use the third person and clearly separate individual ideas, starting each new thought with a new paragraph. Remember to use <p></p> tags for paragraph breaks.'
+    2) 'seo_title': 'Create an SEO title no longer than 50 characters, without quotes, that reflects the main topic and grabs attention.'
+    3) 'seo_description': 'Craft an SEO description no longer than 170 characters that succinctly describes the content and importance of the news.'
+    4) 'category': 'Select the single category that best represents the topic from {list_of_categories}.'
+    5) 'tags': 'Include up to 4 relevant tags and/or brands, separated by commas.'
+    6) 'url_part': 'Develop a short SEO-friendly URI in Latin letters.'
+    7) 'date_published': 'Leave it as -'
+    8) 'author': {ai_writer_2} (do not translate this)
+
+    If the text includes unrelated information, feel free to skip it without adding anything extra. 
+
+    The final result must be entirely in {language} and adhere to the correct JSON format. Here’s the article you need to rewrite:
+    """
+
+    ai_writer_2 = "A. I. Content writer"
+    result5 = f""""Imagine you're a talented copywriter tasked with rewriting an article (which will be provided later) in a way that captivates and engages readers while keeping the core meaning intact. Your goal is to write in a natural, conversational style that resonates with human readers and adheres to SEO best practices.
+
+    Here are the main guidelines to follow:
+    - Please write exclusively in {language}, avoiding any original language for the article.
+    - Strive to make your version stand out even more than the competitors or the original text, ensuring that the overall meaning remains the same.
+    - Incorporate relevant keywords seamlessly into the content to improve SEO, but ensure they flow naturally and don’t feel forced.
+    - Focus on creating valuable content that answers potential readers' questions or concerns, as Google favors informative and helpful articles.
+    - Rewrite the provided text in {language}, ensuring to keep the names of specific companies or brands unchanged.
+    - When translating names of people and locations, feel free to adapt them when possible.
+
+    Your output should be structured strictly in a specific JSON format and in this order:
+    1) 'rewritten_content': 'This is where you will concisely, informatively, and engagingly rewrite the article text (in {language}). Use the third person and clearly separate individual ideas, starting each new thought with a new paragraph. Remember to use <p></p> tags for paragraph breaks.'
+    2) 'seo_title': 'Create an SEO title no longer than 50 characters, without quotes, that reflects the main topic and grabs attention.'
+    3) 'seo_description': 'Craft an SEO description no longer than 170 characters that succinctly describes the content and importance of the news, ideally including a keyword.'
+    4) 'category': 'Select the single category that best represents the topic from {list_of_categories}.'
+    5) 'tags': 'Include up to 4 relevant tags and/or brands, separated by commas.'
+    6) 'url_part': 'Develop a short SEO-friendly URI in Latin letters.'
+    7) 'date_published': 'Leave it as -'
+    8) 'author': {ai_writer_2} (do not translate this)
+
+    If the text includes unrelated information, feel free to skip it without adding anything extra.
+
+    The final result must be entirely in {language} and adhere to the correct JSON format. Aim for a natural tone that reflects human writing, making it engaging and relatable, while preserving the original article's meaning. Here’s the article you need to rewrite:
+    """
+
+    output_result_list = random.randint(0, 2)
+    output_result = [result3, result4, result5][output_result_list]
+
+    return output_result
