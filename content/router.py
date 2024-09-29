@@ -227,6 +227,12 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                 article["category"] = [article["category"],
                                        get_translated_categories_name(topic, language, [article["category"]])]
                 tags = article["tags"].split(",")
+                date_published = article["date_published"]
+                try:
+                    date_obj = datetime.strptime(date_published, "%d %m %Y %H:%M")
+                    correct_time = date_obj.strftime("%Y-%m-%dT%H:%M:%SZ")
+                except Exception as e:
+                    correct_time = date_published
 
                 return templates.TemplateResponse("article-details.html",
                                                   {"request": request, "topic": topic, "article": article,
@@ -238,7 +244,7 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                                                    "previous_and_next_news": previous_and_next_news,
                                                    "previous_and_next_news_1": previous_and_next_news_1,
                                                    "previous_and_next_news_2": previous_and_next_news_2,
-                                                   "author": author,
+                                                   "author": author, "correct_time": correct_time,
                                                    "info_translate": info_translate, "languages_dict": languages_dict,
                                                    "site_domain": SITE_DOMAIN, "site_name": SITE_NAME})
         return templates.TemplateResponse(

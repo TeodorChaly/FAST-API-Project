@@ -1,6 +1,53 @@
 <!doctype html>
 <html class="no-js" lang="{{language}}">
 
+
+<!--<script type="application/ld+json">-->
+<!--{-->
+<!--  "@context": "http://schema.org",-->
+<!--  "@type": "Article",-->
+<!--  "name": "{{ article.seo_title | safe}}",-->
+<!--  "author": {-->
+<!--    "@type": "Person",-->
+<!--    "name": "{{ author | safe}}"-->
+<!--  },-->
+<!--  "datePublished": "{{ article.date_published }}",-->
+<!--  "image": "{{ site_domain | safe}}{{ article.image | safe }}",-->
+<!--  "articleBody": "{{ article.rewritten_content | safe}} ",-->
+<!--  "publisher": {-->
+<!--    "@type": "Organization",-->
+<!--    "name": "iTeo"-->
+<!--  }-->
+<!--}-->
+
+<script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "NewsArticle",
+        "url": "{{ site_domain | safe}}/{{ language }}/{{ languages_dict[language] }}",
+        "publisher": {
+            "@type": "Organization",
+            "name": "iTeo"
+        },
+        "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "{{ site_domain | safe}}/{{ language }}/{{ languages_dict[language] }}"
+        },
+        "headline": "{{ article.seo_title | safe}}",
+        "articleBody": "{{ article.rewritten_content | safe}} ",
+        "image": "{{ site_domain | safe}}{{ article.image | safe }}",
+        "author": {
+            "@type": "Person",
+            "name": "{{ author | safe}}"
+        },
+        "keywords": "{{ article.tags | safe}}",
+        "datePublished": "{{ correct_time }}",
+        "articleSection": "{{ article.category[0] | safe}}"
+    }
+</script>
+
+
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
