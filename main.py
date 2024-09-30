@@ -1,19 +1,23 @@
+import os
+
 import json
 import logging
-import os
 from pathlib import Path
-
 from fastapi import FastAPI
 from starlette.responses import FileResponse
 from starlette.staticfiles import StaticFiles
 from starlette.requests import Request
-
 from main_operations.router import router as scraping_router
-from content.router import router as topics_router
+
 from languages.router import router as languages_router
 from main_operations.crawlers.RSS_crawler.router import router as crawler_router
-from configs.sitemap import router as sitemap_router
+from configs.config_file_setup import create_config_file
+
+create_config_file()
+
 from configs.robots import router as robots_router
+from configs.sitemap import router as sitemap_router
+from content.router import router as topics_router
 
 logging.basicConfig(
     filename='access.log',
