@@ -11,7 +11,7 @@ from main_operations.router import router as scraping_router
 
 from languages.router import router as languages_router
 from main_operations.crawlers.RSS_crawler.router import router as crawler_router
-from configs.config_file_setup import create_config_file
+from configs.prepare_config_file import create_config_file
 
 create_config_file()
 
