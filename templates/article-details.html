@@ -12,7 +12,8 @@
         },
         "mainEntityOfPage": {
         "@type": "WebPage",
-        "@id": "{{ site_domain | safe}}/{{ language }}/{{ languages_dict[language] }}"
+        "@id": "{{ site_domain | safe}}/{{ language }}/{{ languages_dict[language] }}",
+        "name": "{{ article.seo_title | safe }}"
         },
         "headline": "{{ article.seo_title | safe}}",
         "articleBody": "{{ article.rewritten_content | safe}} ",
@@ -26,6 +27,43 @@
         "articleSection": "{{ article.category[0] | safe}}"
     }
 </script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "item": {
+        "@type": "WebPage",
+        "@id": "{{ site_domain }}/{{language}}",
+        "name": "{{ info_translate.home }}"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "item": {
+        "@type": "WebPage",
+        "@id": "{% if article.category and article.category[0] %}{{ site_domain }}/{{ language }}/{{ article.category[0] }}{% else %}{{ site_domain }}/other{% endif %}",
+        "name": "{% if article.category and article.category[0] and article.category[1] and article.category[0] in article.category[1] %}{{ article.category[1][article.category[0]].translated_name | default('Other') }}{% else %}Other{% endif %}"
+      }
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "item": {
+        "@type": "WebPage",
+        "@id": "{{ site_domain }}/{{ language }}/{{ article.url_part }}",
+        "name": "{{ article.seo_title }}"
+      }
+    }
+  ]
+}
+</script>
+
 
 
 
