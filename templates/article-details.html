@@ -16,7 +16,7 @@
         "name": "{{ article.seo_title | safe }}"
         },
         "headline": "{{ article.seo_title | safe}}",
-        "articleBody": "{{ article.rewritten_content | safe}} ",
+        "articleBody": "{{ article.rewritten_content | replace('\"', '') | safe}}",
         "image": "{{ site_domain | safe}}{{ article.image | safe }}",
         "author": {
             "@type": "Person",
