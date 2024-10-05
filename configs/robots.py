@@ -1,12 +1,19 @@
-import os
-from starlette.responses import FileResponse
-
+from fastapi.responses import PlainTextResponse
 from fastapi import APIRouter
+
+from configs.config_setup import SITE_DOMAIN
 
 router = APIRouter()
 
 
-@router.get("/robots.txt", response_class=FileResponse)
+@router.get("/robots.txt", response_class=PlainTextResponse)
 async def robots_txt():
-    file_path = os.path.join(os.getcwd(), "robots.txt")
-    return FileResponse(file_path)
+    robots_file = f"""
+User-agent: *
+Disallow: /docs/
+Allow: /
+
+host: {SITE_DOMAIN}
+sitemap: {SITE_DOMAIN}/sitemap.xml
+"""
+    return PlainTextResponse(content=robots_file)

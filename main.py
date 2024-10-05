@@ -18,6 +18,7 @@ create_config_file()
 from configs.robots import router as robots_router
 from configs.sitemap import router as sitemap_router
 from content.router import router as topics_router
+from other_content.router import router as other_content_router
 
 logging.basicConfig(
     filename='access.log',
@@ -96,6 +97,7 @@ async def serve_image(topic, img):
 app.include_router(robots_router)
 app.include_router(sitemap_router)
 app.include_router(crawler_router)
+app.include_router(other_content_router)
 app.include_router(languages_router)
 app.include_router(topics_router)
 app.include_router(scraping_router)

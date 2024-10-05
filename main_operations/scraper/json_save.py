@@ -81,6 +81,54 @@ async def folder_prep(topic, language, additional_info=None):
         if not os.path.exists(folder_name):
             os.makedirs(folder_name)
 
+        # Team file
+        team_origin_path = os.path.join(sub_folder_name, f"{topic}_team.json")
+        if not os.path.exists(team_origin_path):
+            print("Team file not found. Creating new one.")
+
+            # with open(team_origin_path, 'w', encoding='utf-8') as file:
+            # json_team_result = ai_main_team_function()
+            #     json.dump([], file)
+            #     print(f"File created: {team_origin_path}")
+
+        team_lang_path = os.path.join(sub_folder_name, f"{topic}_team.json")
+        if not os.path.exists(team_lang_path):
+            print("Team lang file not found. Creating new one.")
+
+            # with open(team_origin_path, 'r', encoding='utf-8') as file:
+            #     team_list = json.load(file)
+
+            # with open(team_lang_path, 'w', encoding='utf-8') as file:
+            # json_team_lang_result = ai_lang_team_function()
+            # json.dump([], file)
+            # print(f"File created: {team_origin_path}")
+
+        # Terms file
+        terms_origin_path = os.path.join(sub_folder_name, f"{topic}_terms.json")
+        if not os.path.exists(terms_origin_path):
+            print("Terms file not found. Creating new one.")
+
+            terms_json = """[{"about_us": ""}, {"privacy_policy": ""}, {"terms_of_use": ""}]"""
+
+
+            json_terms_result = await ai_main_terms_function(terms_json, topic, additional_info)
+
+            # with open(terms_origin_path, 'w', encoding='utf-8') as file:
+            #     json.dump(terms_json, file)
+            #     print(f"File created: {terms_origin_path}")
+
+        terms_lang_path = os.path.join(sub_folder_name, f"{topic}_terms.json")
+        if not os.path.exists(terms_lang_path):
+            print("Terms lang file not found. Creating new one.")
+
+            # with open(terms_origin_path, 'r', encoding='utf-8') as file:
+            #     terms_list = json.load(file)
+
+            # with open(terms_lang_path, 'w', encoding='utf-8') as file:
+            # json_terms_lang_result = ai_lang_terms_function()
+            # json.dump([], file)
+            # print(f"File created: {terms_origin_path}")
+
         main_category_path = os.path.join(sub_folder_name, f"{topic}.json")
         if not os.path.exists(sub_folder_name):
             os.makedirs(sub_folder_name)
@@ -130,6 +178,11 @@ async def folder_prep(topic, language, additional_info=None):
     except Exception as e:
         print(f"Error during folder preparation: {e}")
         raise "Problem"
+
+
+import asyncio
+
+asyncio.run(folder_prep("latvia_google_news", "english"))
 
 
 def generate_random_filename(prefix="", length=10):
