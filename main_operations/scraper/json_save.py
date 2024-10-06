@@ -130,7 +130,29 @@ async def folder_prep(topic, language, additional_info=None):
 
             terms_list = json.loads(terms_list)
 
+            configs = f"""
+                "config": {{"about_us": "About us", "privacy_policy": "Privacy policy", "terms_of_use": "Terms of use",
+                           "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"}},
+                "description": {{"about_us": "About {SITE_NAME}",
+                                "privacy_policy": "Privacy policy of {SITE_NAME}",
+                                "terms_of_use": "Terms of use of {SITE_NAME}"}}
+            """
+
             translated_info = await ai_translate_terms(terms_list, language)
+            config_translated = await ai_translate_config(configs, language)
+            try:
+                config_translated = json.loads(config_translated)
+                translated_info["configs"] = config_translated
+            except Exception as e:
+                print("Error during JSON decoding. Trying again.", e)
+                try:
+                    config_translated = json.loads(config_translated)
+                    translated_info["configs"] = config_translated
+                except Exception as e:
+                    print("Error during JSON decoding. Trying again.", e)
+                    pass
+
+            print(translated_info)
             try:
                 translated_info = json.dumps(translated_info)
                 with open(terms_lang_path, 'w', encoding='utf-8') as file:
@@ -192,7 +214,7 @@ async def folder_prep(topic, language, additional_info=None):
 # import asyncio
 #
 # asyncio.run(folder_prep("latvia_google_news", "russian"))
-
+# asyncio.run(folder_prep("latvia_google_news", "english"))
 
 def generate_random_filename(prefix="", length=10):
     characters = string.ascii_letters + string.digits

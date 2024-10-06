@@ -404,3 +404,21 @@ async def ai_translate_terms(json_terms, language):
         except Exception as e:
             print(f'Error during translation: {e}')
     return news_json
+
+
+async def ai_translate_config(content, language):
+    try:
+        print(123)
+        completion = API_endpoint.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system",
+                 "content": f"Translate this text to {language}. Output must be in correct JSON format."},
+                {"role": "user", "content": content},
+            ]
+        )
+        return completion.choices[0].message.content
+    except Exception as e:
+        print(f'Error during translation: {e}')
+
+
