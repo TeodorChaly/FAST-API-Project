@@ -9,6 +9,7 @@ import requests
 from PIL import Image, UnidentifiedImageError
 
 from ai_regenerator.prompts import *
+from configs.config_setup import SITE_DOMAIN, SITE_NAME
 from content.news_file_extractor import get_language_name_by_code
 
 
@@ -108,26 +109,34 @@ async def folder_prep(topic, language, additional_info=None):
         if not os.path.exists(terms_origin_path):
             print("Terms file not found. Creating new one.")
 
-            terms_json = """[{"about_us": ""}, {"privacy_policy": ""}, {"terms_of_use": ""}]"""
+            categories = categories_extractor(topic)
 
+            json_terms_result = await ai_main_terms_function(topic, additional_info, SITE_DOMAIN, SITE_NAME,
+                                                             categories)
+            try:
+                json_terms_result = json.dumps(json_terms_result)
+                with open(terms_origin_path, 'w', encoding='utf-8') as file:
+                    json.dump(json_terms_result, file)
+                    print(f"File created: {terms_origin_path}")
+            except json.JSONDecodeError as e:
+                print("Error during JSON decoding. Trying again.", e)
 
-            json_terms_result = await ai_main_terms_function(terms_json, topic, additional_info)
-
-            # with open(terms_origin_path, 'w', encoding='utf-8') as file:
-            #     json.dump(terms_json, file)
-            #     print(f"File created: {terms_origin_path}")
-
-        terms_lang_path = os.path.join(sub_folder_name, f"{topic}_terms.json")
+        terms_lang_path = os.path.join(sub_folder_name, f"{topic}_terms_{language}.json")
         if not os.path.exists(terms_lang_path):
             print("Terms lang file not found. Creating new one.")
 
-            # with open(terms_origin_path, 'r', encoding='utf-8') as file:
-            #     terms_list = json.load(file)
+            with open(terms_origin_path, 'r', encoding='utf-8') as file:
+                terms_list = json.load(file)
 
-            # with open(terms_lang_path, 'w', encoding='utf-8') as file:
-            # json_terms_lang_result = ai_lang_terms_function()
-            # json.dump([], file)
-            # print(f"File created: {terms_origin_path}")
+            terms_list = json.loads(terms_list)
+
+            translated_info = await ai_translate_terms(terms_list, language)
+            try:
+                translated_info = json.dumps(translated_info)
+                with open(terms_lang_path, 'w', encoding='utf-8') as file:
+                    json.dump(translated_info, file)
+            except Exception as e:
+                print("Error during JSON decoding. Trying again.", e)
 
         main_category_path = os.path.join(sub_folder_name, f"{topic}.json")
         if not os.path.exists(sub_folder_name):
@@ -180,9 +189,9 @@ async def folder_prep(topic, language, additional_info=None):
         raise "Problem"
 
 
-import asyncio
-
-asyncio.run(folder_prep("latvia_google_news", "english"))
+# import asyncio
+#
+# asyncio.run(folder_prep("latvia_google_news", "russian"))
 
 
 def generate_random_filename(prefix="", length=10):
