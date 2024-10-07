@@ -83,26 +83,37 @@ async def folder_prep(topic, language, additional_info=None):
             os.makedirs(folder_name)
 
         # Team file
-        team_origin_path = os.path.join(sub_folder_name, f"{topic}_team.json")
+
+        team_origin_path = os.path.join(sub_folder_name, f"{topic}__our_team__.json")
         if not os.path.exists(team_origin_path):
             print("Team file not found. Creating new one.")
 
-            # with open(team_origin_path, 'w', encoding='utf-8') as file:
-            # json_team_result = ai_main_team_function()
-            #     json.dump([], file)
-            #     print(f"File created: {team_origin_path}")
+            string_team = await ai_generate_team()
+            print(string_team)
 
-        team_lang_path = os.path.join(sub_folder_name, f"{topic}_team.json")
+            try:
+                json_team = json.dumps(string_team)
+                with open(team_origin_path, 'w', encoding='utf-8') as file:
+                    json.dump(json_team, file)
+                    print(f"File created: {team_origin_path}")
+            except json.JSONDecodeError as e:
+                print("Error during JSON decoding. Trying again.", e)
+
+        team_lang_path = os.path.join(sub_folder_name, f"{topic}__our_team__{language}.json")
         if not os.path.exists(team_lang_path):
             print("Team lang file not found. Creating new one.")
 
-            # with open(team_origin_path, 'r', encoding='utf-8') as file:
-            #     team_list = json.load(file)
+            with open(team_origin_path, 'r', encoding='utf-8') as file:
+                team_list = json.load(file)
 
-            # with open(team_lang_path, 'w', encoding='utf-8') as file:
-            # json_team_lang_result = ai_lang_team_function()
-            # json.dump([], file)
-            # print(f"File created: {team_origin_path}")
+            translated_info = await ai_translate_team(team_list, language)
+            try:
+                translated_info = json.dumps(translated_info)
+                with open(team_lang_path, 'w', encoding='utf-8') as file:
+                    json.dump(translated_info, file)
+            except json.JSONDecodeError as e:
+                print("Error during JSON decoding. Trying again.", e)
+
 
         # Terms file
         terms_origin_path = os.path.join(sub_folder_name, f"{topic}_terms.json")
