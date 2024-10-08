@@ -97,11 +97,10 @@
                                     {{ language.upper() }}
                                 </button>
                                 <ul class="dropdown-menu">
-                                    {% for lang in languages_dict %}
-                                    {% if languages_dict[lang] is not none %}
-                                    <li><a class="dropdown-item" href="/{{ lang }}/{{ languages_dict[lang] }}">{{
+                                    {% for lang in languages %}
+                                        <li><a class="dropdown-item" href="/{{ lang }}/privacy_policy">{{
                                         lang.upper() }} </a></li>
-                                    {% endif %}
+
                                     {% endfor %}
 
                                 </ul>
@@ -200,6 +199,8 @@
             </div>
         </div>
     </section>
+<script src="{{ url_for('assets', path='js/bootstrap.min.js') }}"></script>
+
 </body>
 <footer class="footer-area black-bg">
     <div class="container">
@@ -213,17 +214,17 @@
             <div class="row">
                 <div class="col-lg-6">
                     <div class="copyright__text">
-                        <p>Copyright <span>@NewOk</span> - 2024</p>
+                        <p>{{ config_translate.config.copyright }} <span>@NewOk</span> - 2024</p>
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="copyright__menu">
                         <ul class="list-wrap">
-                            <li><a href="/{{ language }}/contact_us">Contact Us</a></li>
-                            <li><a href="/{{ language }}/terms_of_use">Terms of Use</a></li>
-                            <li><a href="/{{ language }}/about_us">About us </a></li>
-                            <li><a href="/{{ language }}/privacy_policy">Privacy policy</a></li>
-                            <li><a href="/sitemap.xml">Sitemap</a></li>
+                            <li><a href="/{{ language }}/contact_us">{{ config_translate.config.contact_us }}</a></li>
+                            <li><a href="/{{ language }}/terms_of_use">{{ config_translate.config.terms_of_use }}</a></li>
+                            <li><a href="/{{ language }}/about_us">{{ config_translate.config.about_us }}</a></li>
+                            <li><a href="/{{ language }}/privacy_policy">{{ config_translate.config.privacy_policy }}</a></li>
+                            <li><a href="/sitemap.xml">{{ config_translate.config.sitemap }}</a></li>
                         </ul>
                     </div>
                 </div>

@@ -4,7 +4,6 @@ import random
 
 from ai_regenerator.ai_api_env import API_endpoint
 from ai_regenerator.system_prompts import create_prompt
-from languages.language_json import language_json_read
 
 
 def json_loader():
@@ -422,16 +421,13 @@ async def ai_translate_config(content, language):
 
 
 async def ai_generate_team():
-    format_of_person = {"Name Surname":
-                            {"name": "Name",
-                             "surname": "Surname",
-                             "feature": "unique feature",
-                             "about me": "info about person",
-                             "image": "-",
-                             "position": "job position/job title"
-                             }
-                        }
-    lang_list = ['turkish', "russian"]
+    current_file_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+    folder_name = os.path.join(current_file_path, "languages")
+    folder_name2 = os.path.join(folder_name, "languages.json")
+
+    with open(folder_name2, "r", encoding="utf-8") as file:
+        lang_list = json.load(file)
+
     prompt = f""""You are creating a team for website. Team size is from 5 to 10 people (Choose the number of people as you see fit). 
     The website is targeted at the following languages: {lang_list}, so make sure that almost every team member has a name from one of these languages (or countries).
     Here’s how the team should look: 
@@ -444,7 +440,7 @@ async def ai_generate_team():
           {{"name": "Name of person",  
           "surname": "Surname of person",
           "feature": "Unique writing style (for copywriters) or some unique feature (for the founder or translator, leave blank -)",
-          "about me": "Information about person. Come up with some information about these individuals (preferably related to work).",
+          "about_me": "Information about person. Come up with some information about these individuals (preferably related to work).",
           "image": "Leave it as '-'",
           "position": "job position/job title"
           }},
@@ -481,6 +477,3 @@ async def ai_translate_team(json_team, language):
         return completion.choices[0].message.content
     except Exception as e:
         print(f'Error during translation: {e}')
-
-
-

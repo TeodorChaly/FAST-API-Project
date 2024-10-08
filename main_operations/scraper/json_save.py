@@ -114,9 +114,8 @@ async def folder_prep(topic, language, additional_info=None):
             except json.JSONDecodeError as e:
                 print("Error during JSON decoding. Trying again.", e)
 
-
         # Terms file
-        terms_origin_path = os.path.join(sub_folder_name, f"{topic}_terms.json")
+        terms_origin_path = os.path.join(sub_folder_name, f"{topic}__terms.json")
         if not os.path.exists(terms_origin_path):
             print("Terms file not found. Creating new one.")
 
@@ -132,13 +131,12 @@ async def folder_prep(topic, language, additional_info=None):
             except json.JSONDecodeError as e:
                 print("Error during JSON decoding. Trying again.", e)
 
-        terms_lang_path = os.path.join(sub_folder_name, f"{topic}_terms_{language}.json")
+        terms_lang_path = os.path.join(sub_folder_name, f"{topic}__terms__{language}.json")
         if not os.path.exists(terms_lang_path):
             print("Terms lang file not found. Creating new one.")
 
             with open(terms_origin_path, 'r', encoding='utf-8') as file:
                 terms_list = json.load(file)
-
             terms_list = json.loads(terms_list)
 
             configs = f"""
@@ -146,28 +144,18 @@ async def folder_prep(topic, language, additional_info=None):
                            "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"}},
                 "description": {{"about_us": "About {SITE_NAME}",
                                 "privacy_policy": "Privacy policy of {SITE_NAME}",
-                                "terms_of_use": "Terms of use of {SITE_NAME}"}}
+                                "terms_of_use": "Terms of use of {SITE_NAME}",
+                                "contact_us": "Contact us"}}
             """
-
             translated_info = await ai_translate_terms(terms_list, language)
             config_translated = await ai_translate_config(configs, language)
             try:
                 config_translated = json.loads(config_translated)
                 translated_info["configs"] = config_translated
-            except Exception as e:
-                print("Error during JSON decoding. Trying again.", e)
-                try:
-                    config_translated = json.loads(config_translated)
-                    translated_info["configs"] = config_translated
-                except Exception as e:
-                    print("Error during JSON decoding. Trying again.", e)
-                    pass
-
-            print(translated_info)
-            try:
                 translated_info = json.dumps(translated_info)
                 with open(terms_lang_path, 'w', encoding='utf-8') as file:
                     json.dump(translated_info, file)
+
             except Exception as e:
                 print("Error during JSON decoding. Trying again.", e)
 
