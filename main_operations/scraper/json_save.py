@@ -82,7 +82,47 @@ async def folder_prep(topic, language, additional_info=None):
         if not os.path.exists(folder_name):
             os.makedirs(folder_name)
 
-        # Team file
+        main_category_path = os.path.join(sub_folder_name, f"{topic}.json")
+        if not os.path.exists(sub_folder_name):
+            os.makedirs(sub_folder_name)
+
+            with open(main_category_path, 'w', encoding='utf-8') as file:
+                ai_result = await ai_category_function(topic, additional_info)
+                json.dump(ai_result, file)
+                print(f"File created: {main_category_path}")
+
+        category_path = os.path.join(sub_folder_name, f"{topic}__category__{language}.json")
+        if not os.path.exists(category_path):
+            with open(main_category_path, 'r', encoding='utf-8') as file:
+                main_categories_list = file.read()
+
+            for i in range(3):
+                rewrite_categories_json = await ai_category_for_multiple_languages(language, main_categories_list,
+                                                                                   topic)
+                try:
+                    json.loads(rewrite_categories_json)
+                    language_category_path = os.path.join(sub_folder_name, f"{topic}__category__{language}.json")
+                    with open(language_category_path, 'w', encoding='utf-8') as file:
+                        json.dump(json.loads(rewrite_categories_json), file)
+                    break
+                except json.JSONDecodeError as e:
+                    print("Error during JSON decoding. Trying again.", e)
+                    continue
+
+        category_config_path = os.path.join(sub_folder_name, f"{topic}__configs__{language}.json")
+        if not os.path.exists(category_config_path):
+            for i in range(3):
+                rewrite_categories_json = await ai_main_config_for_multiple_languages(language, topic, additional_info)
+                try:
+                    json.loads(rewrite_categories_json)
+                    language_category_path = os.path.join(sub_folder_name, f"{topic}__configs__{language}.json")
+                    with open(language_category_path, 'w', encoding='utf-8') as file:
+                        json.dump(json.loads(rewrite_categories_json), file)
+                    break
+                except json.JSONDecodeError as e:
+                    print("Error during JSON decoding. Trying again.", e)
+                    continue
+                # Team file
 
         team_origin_path = os.path.join(sub_folder_name, f"{topic}__our_team__.json")
         if not os.path.exists(team_origin_path):
@@ -140,13 +180,13 @@ async def folder_prep(topic, language, additional_info=None):
             terms_list = json.loads(terms_list)
 
             configs = f"""
-                "config": {{"about_us": "About us", "privacy_policy": "Privacy policy", "terms_of_use": "Terms of use",
-                           "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"}},
-                "description": {{"about_us": "About {SITE_NAME}",
-                                "privacy_policy": "Privacy policy of {SITE_NAME}",
-                                "terms_of_use": "Terms of use of {SITE_NAME}",
-                                "contact_us": "Contact us"}}
-            """
+                        "config": {{"about_us": "About us", "privacy_policy": "Privacy policy", "terms_of_use": "Terms of use",
+                                   "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"}},
+                        "description": {{"about_us": "About {SITE_NAME}",
+                                        "privacy_policy": "Privacy policy of {SITE_NAME}",
+                                        "terms_of_use": "Terms of use of {SITE_NAME}",
+                                        "contact_us": "Contact us"}}
+                    """
             translated_info = await ai_translate_terms(terms_list, language)
             config_translated = await ai_translate_config(configs, language)
             try:
@@ -158,48 +198,6 @@ async def folder_prep(topic, language, additional_info=None):
 
             except Exception as e:
                 print("Error during JSON decoding. Trying again.", e)
-
-        main_category_path = os.path.join(sub_folder_name, f"{topic}.json")
-        if not os.path.exists(sub_folder_name):
-            os.makedirs(sub_folder_name)
-
-            with open(main_category_path, 'w', encoding='utf-8') as file:
-                ai_result = await ai_category_function(topic, additional_info)
-                json.dump(ai_result, file)
-                print(f"File created: {main_category_path}")
-
-        category_path = os.path.join(sub_folder_name, f"{topic}__category__{language}.json")
-        if not os.path.exists(category_path):
-            with open(main_category_path, 'r', encoding='utf-8') as file:
-                main_categories_list = file.read()
-
-            for i in range(3):
-                rewrite_categories_json = await ai_category_for_multiple_languages(language, main_categories_list,
-                                                                                   topic)
-                try:
-                    json.loads(rewrite_categories_json)
-                    language_category_path = os.path.join(sub_folder_name, f"{topic}__category__{language}.json")
-                    with open(language_category_path, 'w', encoding='utf-8') as file:
-                        json.dump(json.loads(rewrite_categories_json), file)
-                    break
-                except json.JSONDecodeError as e:
-                    print("Error during JSON decoding. Trying again.", e)
-                    continue
-
-        category_config_path = os.path.join(sub_folder_name, f"{topic}__configs__{language}.json")
-        if not os.path.exists(category_config_path):
-            for i in range(3):
-                rewrite_categories_json = await ai_main_config_for_multiple_languages(language, topic, additional_info)
-                try:
-                    json.loads(rewrite_categories_json)
-                    language_category_path = os.path.join(sub_folder_name, f"{topic}__configs__{language}.json")
-                    with open(language_category_path, 'w', encoding='utf-8') as file:
-                        json.dump(json.loads(rewrite_categories_json), file)
-                    break
-                except json.JSONDecodeError as e:
-                    print("Error during JSON decoding. Trying again.", e)
-                    continue
-
         if not os.path.exists(file_path):
             with open(file_path, 'w', encoding='utf-8') as file:
                 json.dump([], file)
@@ -227,15 +225,12 @@ def extract_prefix_from_url(url):
     return prefix
 
 
-def compress_image(image: Image.Image, quality: int, max_size: tuple) -> io.BytesIO:
-    buffered = io.BytesIO()
-
+def compress_image(image, quality, max_size):
     image.thumbnail(max_size, Image.Resampling.LANCZOS)
-
-    image.save(buffered, format=image.format, optimize=True, quality=quality)
-
-    buffered.seek(0)
-    return buffered
+    img_byte_arr = io.BytesIO()
+    image.save(img_byte_arr, format='WEBP', quality=quality)
+    img_byte_arr.seek(0)
+    return img_byte_arr
 
 
 def save_images_local(url, topic, quality=85, max_size=(1024, 1024)):
@@ -251,61 +246,27 @@ def save_images_local(url, topic, quality=85, max_size=(1024, 1024)):
 
         os.makedirs(save_directory, exist_ok=True)
 
-        prefix = extract_prefix_from_url(url)
-        random_filename = prefix
+        filename = url.split('/')[-1].split('?')[0]
+        base_name = os.path.splitext(filename)[0]
 
-        temp_path = os.path.join(save_directory, random_filename)
+        with io.BytesIO(response.content) as data_stream:
+            with Image.open(data_stream) as img:
+                compressed_image = compress_image(img, quality, max_size)
+                output_file_path = os.path.join(save_directory, f"{base_name}.webp")
 
-        with open(temp_path, 'wb') as file:
-            for chunk in response.iter_content(1024):
-                file.write(chunk)
+                with open(output_file_path, 'wb') as f:
+                    f.write(compressed_image.getvalue())
 
-        try:
-            jpg_check = os.path.join(save_directory, f"{random_filename}.jpg")
-            png_check = os.path.join(save_directory, f"{random_filename}.png")
-            if os.path.exists(jpg_check) or os.path.exists(png_check):
-                if os.path.exists(jpg_check):
-                    result = f"/get_images/image?topic={topic}&img={random_filename}.jpg"
-                    return result
-                else:
-                    result = f"/get_images/image?topic={topic}&img={random_filename}.png"
-                    return result
-            else:
-                with Image.open(temp_path) as img:
-                    img_format = img.format.lower()
-
-                    compressed_image = compress_image(img, quality, max_size)
-                    if img_format == 'jpg':
-                        compressed_path = os.path.join(save_directory, f"{random_filename}.jpg")
-                        with open(compressed_path, 'wb') as f:
-                            f.write(compressed_image.getvalue())
-                        random_filename += ".jpg"
-                    elif img_format == 'png':
-                        compressed_path = os.path.join(save_directory, f"{random_filename}.png")
-                        with open(compressed_path, 'wb') as f:
-                            f.write(compressed_image.getvalue())
-                        random_filename += ".png"
-                    else:
-                        compressed_path = os.path.join(save_directory, f"{random_filename}.png")
-                        with open(compressed_path, 'wb') as f:
-                            f.write(compressed_image.getvalue())
-                        random_filename += ".png"
-                        compressed_path = temp_path
-
-            os.remove(temp_path)
-            print(f"/get_images/image?topic={topic}&img={random_filename}", 43513)
-
-            result = f"/get_images/image?topic={topic}&img={random_filename}"
-
-            return result
-
-        except UnidentifiedImageError:
-            os.remove(temp_path)
-            print(f"File not image, {url}")
-            return None
+        return f"/get_images/image?topic={topic}&img={base_name}.webp"
 
     except requests.exceptions.RequestException as e:
         print(f"Error via loading: {e}, {url}")
+        return None
+    except IOError as e:
+        print(f"IO error: {e}")
+        return None
+    except Exception as e:
+        print(f"Unexpected error: {e}")
         return None
 
 

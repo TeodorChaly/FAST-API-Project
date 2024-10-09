@@ -1,7 +1,9 @@
+import json
+import os
 import random
 
 
-def create_prompt(language, list_of_categories):
+def create_prompt(language, list_of_categories, topic):
     result = f"""I will give you a news text, please study it in its entirety and process it in the following JSON format and you only use this format in the same sequence:
             1) 'rewritten_content': 'Please study, shorten, and then briefly rewrite this entire news in {language}. Do not translate companie's names. If you need to use special chars (like double quotes or regular quote) - use this symbol - \ (before special char).  Be concise and laconic. Write in the third person. Separate distinct thoughts or ideas clearly, each starting with a new paragraph. In any case, separate the text into paragraphs every 2-3 sentences. Divide the text into paragraphs using <p></p> tags.'
             2) 'seo_title': 'SEO title not exceeding 50 characters, without quotes, reflecting the main theme.'
@@ -104,4 +106,16 @@ def create_prompt(language, list_of_categories):
     output_result_list = random.randint(0, 2)
     output_result = [result3, result4, result5][output_result_list]
 
+    current_file_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+    try:
+        folder_name = os.path.join(current_file_path, "news_json")
+        folder_name2 = os.path.join(folder_name, topic)
+        folder_name3 = os.path.join(folder_name2, f"{topic}__our_team__.json")
+
+
+    except Exception as e:
+        print(e)
+
     return output_result
+
+# create_prompt("english", ["news", "politics", "business"], "latvia_google_news")

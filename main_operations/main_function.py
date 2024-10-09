@@ -77,7 +77,7 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
                 await folder_prep(topic, language, additional_info)
                 categories = json.loads(categories_extractor(topic))
                 print(f"Folder prepared for {language} language.")
-                regenerated_result = await ai_generator_function(content_to_generate, language, categories)
+                regenerated_result = await ai_generator_function(content_to_generate, language, categories, topic)
                 try:
                     regenerated_result_json = json.loads(regenerated_result)
                     print(f"Content for {language}", regenerated_result_json["url_part"])

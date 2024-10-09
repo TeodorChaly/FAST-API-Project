@@ -249,29 +249,29 @@
     <div class="offCanvas__wrap">
         <div class="offCanvas__body">
             <div class="offCanvas__toggle"><i class="flaticon-addition"></i></div>
-            <div class="offCanvas__content">
-                <div class="offCanvas__logo logo">
-                    <a href="/{{language}}" class="logo-dark"><img
-                            src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
-                    <a href="/{{language}}" class="logo-light"><img
-                            src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
-                </div>
-                <p>Change how the world works with Biotellus, made for ecology.</p>
-                <ul class="offCanvas__instagram list-wrap">
-                    <li><a href="{{ url_for('assets', path='/img/blog/blog01.jpg') }}" class="popup-image"><img
-                            src="{{ url_for('assets', path='/img/blog/blog01.jpg') }}" alt="img"></a></li>
-                    <li><a href="{{ url_for('assets', path='/img/blog/blog02.jpg') }}" class="popup-image"><img
-                            src="{{ url_for('assets', path='/img/blog/blog02.jpg') }}" alt="img"></a></li>
-                    <li><a href="{{ url_for('assets', path='/img/blog/blog03.jpg') }}" class="popup-image"><img
-                            src="{{ url_for('assets', path='/img/blog/blog03.jpg') }}" alt="img"></a></li>
-                    <li><a href="{{ url_for('assets', path='/img/blog/blog04.jpg') }}" class="popup-image"><img
-                            src="{{ url_for('assets', path='/img/blog/blog04.jpg') }}" alt="img"></a></li>
-                    <li><a href="{{ url_for('assets', path='/img/blog/blog05.jpg') }}" class="popup-image"><img
-                            src="{{ url_for('assets', path='/img/blog/blog05.jpg') }}" alt="img"></a></li>
-                    <li><a href="{{ url_for('assets', path='/img/blog/blog06.jpg') }}" class="popup-image"><img
-                            src="{{ url_for('assets', path='/img/blog/blog06.jpg') }}" alt="img"></a></li>
-                </ul>
-            </div>
+<!--            <div class="offCanvas__content">-->
+<!--                <div class="offCanvas__logo logo">-->
+<!--                    <a href="/{{language}}" class="logo-dark"><img-->
+<!--                            src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>-->
+<!--                    <a href="/{{language}}" class="logo-light"><img-->
+<!--                            src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>-->
+<!--                </div>-->
+<!--                <p>Change how the world works with Biotellus, made for ecology.</p>-->
+<!--                <ul class="offCanvas__instagram list-wrap">-->
+<!--                    <li><a href="{{ url_for('assets', path='/img/blog/blog01.jpg') }}" class="popup-image"><img-->
+<!--                            src="{{ url_for('assets', path='/img/blog/blog01.jpg') }}" alt="img"></a></li>-->
+<!--                    <li><a href="{{ url_for('assets', path='/img/blog/blog02.jpg') }}" class="popup-image"><img-->
+<!--                            src="{{ url_for('assets', path='/img/blog/blog02.jpg') }}" alt="img"></a></li>-->
+<!--                    <li><a href="{{ url_for('assets', path='/img/blog/blog03.jpg') }}" class="popup-image"><img-->
+<!--                            src="{{ url_for('assets', path='/img/blog/blog03.jpg') }}" alt="img"></a></li>-->
+<!--                    <li><a href="{{ url_for('assets', path='/img/blog/blog04.jpg') }}" class="popup-image"><img-->
+<!--                            src="{{ url_for('assets', path='/img/blog/blog04.jpg') }}" alt="img"></a></li>-->
+<!--                    <li><a href="{{ url_for('assets', path='/img/blog/blog05.jpg') }}" class="popup-image"><img-->
+<!--                            src="{{ url_for('assets', path='/img/blog/blog05.jpg') }}" alt="img"></a></li>-->
+<!--                    <li><a href="{{ url_for('assets', path='/img/blog/blog06.jpg') }}" class="popup-image"><img-->
+<!--                            src="{{ url_for('assets', path='/img/blog/blog06.jpg') }}" alt="img"></a></li>-->
+<!--                </ul>-->
+<!--            </div>-->
             <div class="offCanvas__contact">
                 <h4 class="title">Get In Touch</h4>
                 <ul class="offCanvas__contact-list list-wrap">
@@ -368,7 +368,9 @@
                         </ul>
                         <h1 class="title">{{ article.seo_title }}</h1>
                         <div class="blog-details-thumb">
-                            <img src="{{ article.image }}" alt="{{article.seo_title}}">
+                            <div style="width: 820px; height: auto; overflow: hidden;">
+                                <img src="{{ article.image }}" alt="{{ article.seo_title }}" loading="lazy" style="width: 100%; height: auto; object-fit: cover;">
+                            </div>
                         </div>
                         <div class="blog-details-content">
                             <p>{{ article.rewritten_content | safe}} </p>
@@ -535,19 +537,19 @@
 
 
 <!-- JS here -->
-<script src="{{ url_for('assets', path='js/vendor/jquery-3.6.0.min.js') }}"></script>
-<script src="{{ url_for('assets', path='js/bootstrap.min.js') }}"></script>
-<script src="{{ url_for('assets', path='js/isotope.pkgd.min.js') }}"></script>
-<script src="{{ url_for('assets', path='js/imagesloaded.pkgd.min.js') }}"></script>
-<script src="{{ url_for('assets', path='js/jquery.magnific-popup.min.js') }}"></script>
-<script src="{{ url_for('assets', path='js/jquery.marquee.min.js') }}"></script>
-<script src="{{ url_for('assets', path='js/imageRevealHover.js') }}"></script>
-<script src="{{ url_for('assets', path='js/swiper-bundle.js') }}"></script>
-<script src="{{ url_for('assets', path='js/TweenMax.min.js') }}"></script>
-<script src="{{ url_for('assets', path='js/slick.min.js') }}"></script>
-<script src="{{ url_for('assets', path='js/ajax-form.js') }}"></script>
-<script src="{{ url_for('assets', path='js/wow.min.js') }}"></script>
-<script src="{{ url_for('assets', path='js/main.js') }}"></script>
+<script src="{{ url_for('assets', path='js/vendor/jquery-3.6.0.min.js') }}" defer></script>
+<script src="{{ url_for('assets', path='js/bootstrap.min.js') }}" defer></script>
+<script src="{{ url_for('assets', path='js/isotope.pkgd.min.js') }}" defer></script>
+<script src="{{ url_for('assets', path='js/imagesloaded.pkgd.min.js') }}" defer></script>
+<script src="{{ url_for('assets', path='js/jquery.magnific-popup.min.js') }}" defer></script>
+<script src="{{ url_for('assets', path='js/jquery.marquee.min.js') }}" defer></script>
+<script src="{{ url_for('assets', path='js/imageRevealHover.js') }}" defer></script>
+<script src="{{ url_for('assets', path='js/swiper-bundle.js') }}" defer></script>
+<script src="{{ url_for('assets', path='js/TweenMax.min.js') }}" defer></script>
+<script src="{{ url_for('assets', path='js/slick.min.js') }}" defer></script>
+<script src="{{ url_for('assets', path='js/ajax-form.js') }}" defer></script>
+<script src="{{ url_for('assets', path='js/wow.min.js') }}" defer></script>
+<script src="{{ url_for('assets', path='js/main.js') }}" defer></script>
 </body>
 
 </html>
