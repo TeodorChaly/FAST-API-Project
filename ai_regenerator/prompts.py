@@ -201,6 +201,10 @@ Site Name/Domain: {SiteName}
 Founded year: {FoundedYear}
 Categories: {categories}
 
+Never add variables that you think should be added to the text. Use only the variables provided above.
+
+Output must be in correct HTML format. You can use all HTML tags, except <H1> tag. And without ```html and ```. Start with div tag and end with div tag.
+
 The following elements must be integrated:
 Introduction and Founding:
 
@@ -246,10 +250,15 @@ End with an invitation for visitors to explore the website, follow its journey, 
 
 
 async def ai_generate_terms_of_use(SiteLanguages, SiteTheme, BriefDescription, SiteURL, CompanyName, FoundedYear,
-                                   categories, CompanyAddress="London"):
+                                   categories):
     try:
 
-        prompt = f"""""Create a comprehensive 'Terms of Use' document for {CompanyName}, located at {CompanyAddress}, operating both a website at {SiteURL}. This document should follow the standard legal structure used by major online services and address the following sections in detail:
+        prompt = f"""""
+Never add variables that you think should be added to the text. Use only the variables i provided.
+
+Output must be in correct HTML format. You can use all HTML tags, except <H1> tag. And without ```html and ```.  Start with div tag and end with div tag. 
+        
+Create a comprehensive 'Terms of Use' document for {CompanyName}, operating a website at {SiteURL}. This document should follow the standard legal structure used by major online services and address the following sections in detail:
 
 Introduction and Acceptance of Terms: Begin with a formal introduction stating that the use of {CompanyName}'s services, including {SiteURL}, constitutes acceptance of these terms. Include the date of the last update and clarify that these terms apply to all users, whether registered or not.
 
@@ -313,7 +322,18 @@ Ensure the language is formal, legally accurate, and user-friendly, with a logic
 async def ai_generate_privacy_policy(SiteLanguages, SiteTheme, BriefDescription, SiteDomain, SiteName, FoundedYear,
                                      categories):
     try:
-        prompt = """"Write a Privacy Policy that clearly explains how a company collects, uses, and protects personal data. The policy should cover the following key sections:
+        prompt = f""""
+Here is some veriables, that you can use:        
+Site languages: {SiteLanguages}
+Site main theme: {SiteTheme}
+Site domain: {SiteDomain}
+Site name: {SiteName}
+Site founded year: {FoundedYear}
+Never add variables that you think should be added to the text. Use only the variables provided above.
+
+Output must be in correct HTML format. You can use all HTML tags, except <H1> tag. And without ```html and ```. Start with div tag and end with div tag.
+        
+Write a Privacy Policy that clearly explains how a company collects, uses, and protects personal data. The policy should cover the following key sections:
 
 Introduction: Begin with a statement that emphasizes the company’s commitment to protecting user privacy and describe the purpose of the policy. Mention that the policy applies to all users of the company’s services (website, apps, etc.).
 
@@ -376,7 +396,7 @@ Follow legal obligations based on relevant privacy laws (e.g., GDPR, CCPA)."""
                 {"role": "system",
                  "content": system_fine_tuning},
 
-                {"role": "user", "content": "Write in english"},
+                {"role": "user", "content": "Write in english. Output must be in correct HTML format."},
             ]
         )
         print(completion.choices[0].message.content)
@@ -387,22 +407,19 @@ Follow legal obligations based on relevant privacy laws (e.g., GDPR, CCPA)."""
 
 
 async def ai_translate_terms(json_terms, language):
-    news_json = {}
-    for key in json_terms:
-        try:
-            print(f"Translating {key} to {language}")
-            completion = API_endpoint.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[
-                    {"role": "system",
-                     "content": f"Translate this text to {language}"},
-                    {"role": "user", "content": json_terms[key]},
-                ]
-            )
-            news_json[key] = completion.choices[0].message.content
-        except Exception as e:
-            print(f'Error during translation: {e}')
-    return news_json
+    try:
+        print(f"Translating footer to {language}")
+        completion = API_endpoint.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system",
+                 "content": f"Translate this text to {language}. Output must be in correct JSON format and Without ```json."},
+                {"role": "user", "content": str(json_terms)},
+            ]
+        )
+        return completion.choices[0].message.content
+    except Exception as e:
+        print(f'Error during translation: {e}')
 
 
 async def ai_translate_config(content, language):
@@ -411,7 +428,7 @@ async def ai_translate_config(content, language):
             model="gpt-4o-mini",
             messages=[
                 {"role": "system",
-                 "content": f"Translate this text to {language}. Output must be in correct JSON format."},
+                 "content": f"Translate this text to {language}. Output must be in correct JSON format and Without ```json."},
                 {"role": "user", "content": content},
             ]
         )

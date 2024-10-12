@@ -62,6 +62,7 @@ async def team_extractor(topic: str, language: str):
 @router.get("/{language}/about_us", tags=["terms"])
 async def other_content(request: Request, topic: str = main_site_topic, language: str = main_language):
     result = await content_extractor("about_us", topic, language)
+    # print(result)
     languages = await languages_to_code()
     json_data = await show_content_json(topic, language, None)
     popular_categories, remaining_categories, all_categories = await get_header(topic, language, json_data)
@@ -70,7 +71,6 @@ async def other_content(request: Request, topic: str = main_site_topic, language
 
     try:
         config = await content_extractor("configs", topic, language)
-        print("dqdqdq", config)
     except Exception as e:
         print(e)
         config = {"config": {"about_us": "About us", "privacy_policy": "Privacy policy", "terms_of_use": "Terms of use",

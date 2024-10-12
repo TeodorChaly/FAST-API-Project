@@ -188,16 +188,26 @@ async def folder_prep(topic, language, additional_info=None):
                                         "contact_us": "Contact us"}}
                     """
             translated_info = await ai_translate_terms(terms_list, language)
+            try:
+                translated_info = json.loads(translated_info)
+            except json.JSONDecodeError as e:
+                print("Error during JSON decoding 1. Trying again.", e)
+
             config_translated = await ai_translate_config(configs, language)
+
             try:
                 config_translated = json.loads(config_translated)
+            except json.JSONDecodeError as e:
+                print("Error during JSON decoding 2. Trying again.", e)
+
+            try:
                 translated_info["configs"] = config_translated
                 translated_info = json.dumps(translated_info)
                 with open(terms_lang_path, 'w', encoding='utf-8') as file:
                     json.dump(translated_info, file)
 
             except Exception as e:
-                print("Error during JSON decoding. Trying again.", e)
+                print("Error during JSON saving.", e)
         if not os.path.exists(file_path):
             with open(file_path, 'w', encoding='utf-8') as file:
                 json.dump([], file)
