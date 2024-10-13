@@ -448,7 +448,7 @@ async def ai_generate_team():
     prompt = f""""You are creating a team for website. Team size is from 5 to 10 people (Choose the number of people as you see fit). 
     The website is targeted at the following languages: {lang_list}, so make sure that almost every team member has a name from one of these languages (or countries).
     Here’s how the team should look: 
-    1 - Founder/Owner,
+    1 - Founder/Owner (male),
     70% - Copywriter/Journalist,
     25% - Translator (Ideally, there should be at least as many translators as there are languages)    
     
@@ -458,8 +458,9 @@ async def ai_generate_team():
           "surname": "Surname of person",
           "feature": "Unique writing style (for copywriters) or some unique feature (for the founder or translator, leave blank -)",
           "about_me": "Information about person. Come up with some information about these individuals (preferably related to work).",
-          "image": "Leave it as '-'",
-          "position": "job position/job title"
+          "image": "/img/copywriters/group_N/G.jpeg", # Instead of N, use the number 1 (if person is female) or 2 (if person if male). Instead of G, use random number from 1 to 25
+          "position": "job position/job title",
+          "is_copywriter": "+", # If person is copywriter, - if not
           }},
           "1": {{...}}
      }}

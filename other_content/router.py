@@ -7,7 +7,7 @@ from starlette.templating import Jinja2Templates
 from configs.config_setup import main_site_topic, main_language
 from content.multi_language_categories import get_header
 from content.news_file_extractor import read_json, get_language_name_by_code
-from content.router import show_content_json
+from content.router import show_content_json, content_extractor
 from languages.language_json import languages_to_code
 from main_operations.scraper.json_save import get_main_info
 
@@ -34,17 +34,6 @@ async def extract_translation(topic: str, language: str):
                        'sitemap': 'Sitemap', 'contact_us': 'Contact us', 'copyright': 'copyright'}}
 
 
-async def content_extractor(category, topic: str, language: str):
-    try:
-        language = get_language_name_by_code(language)
-        file_path = f"news_json/{topic}/{topic}__terms__{language.lower()}.json"
-
-        if os.path.isfile(file_path):
-            json_result = await read_json(file_path)
-            return json.loads(json_result)[category]
-    except Exception as e:
-        return None
-
 
 async def team_extractor(topic: str, language: str):
     try:
@@ -62,7 +51,6 @@ async def team_extractor(topic: str, language: str):
 @router.get("/{language}/about_us", tags=["terms"])
 async def other_content(request: Request, topic: str = main_site_topic, language: str = main_language):
     result = await content_extractor("about_us", topic, language)
-    # print(result)
     languages = await languages_to_code()
     json_data = await show_content_json(topic, language, None)
     popular_categories, remaining_categories, all_categories = await get_header(topic, language, json_data)

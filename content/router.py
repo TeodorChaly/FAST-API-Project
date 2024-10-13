@@ -1,3 +1,4 @@
+import random
 from datetime import datetime
 from typing import Optional
 
@@ -18,6 +19,30 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 templates.env.filters['language_name'] = language_to_code
+
+
+async def content_extractor(category, topic: str, language: str):
+    try:
+        language = get_language_name_by_code(language)
+        file_path = f"news_json/{topic}/{topic}__terms__{language.lower()}.json"
+
+        if os.path.isfile(file_path):
+            json_result = await read_json(file_path)
+            return json.loads(json_result)[category]
+    except Exception as e:
+        return None
+
+
+async def team_extractor(topic: str, language: str):
+    try:
+        language = get_language_name_by_code(language)
+        file_path = f"news_json/{topic}/{topic}__our_team__{language.lower()}.json"
+        if os.path.isfile(file_path):
+            json_result = await read_json(file_path)
+            json_result = json.loads(json_result)
+            return json.loads(json_result)
+    except Exception as e:
+        return None
 
 
 async def show_content_json(topic: str, language: str = main_language, limit: int = None):
@@ -106,6 +131,17 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
                 except Exception as e:
                     new_content[i].remove(i2)
 
+        try:
+            footer = await content_extractor("configs", topic, language)
+        except Exception as e:
+            print(e)
+            footer = {
+                "config": {"about_us": "About us", "privacy_policy": "Privacy policy", "terms_of_use": "Terms of use",
+                           "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"},
+                "description": {"about_us": "About {SITE_NAME}",
+                                "privacy_policy": "Privacy policy of {SITE_NAME}",
+                                "terms_of_use": "Terms of use of {SITE_NAME}"}}
+
         return templates.TemplateResponse("main_page_news.html",
                                           {"request": request, "topic": topic, "language": language,
                                            "languages": languages,
@@ -113,7 +149,7 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
                                            "other_categories": remaining_categories_dict, "all_content": new_content,
                                            "today_news": today_news, "newest_news": newest_news,
                                            "info_translate": info_translate, "site_domain": SITE_DOMAIN,
-                                           "site_name": SITE_NAME})
+                                           "site_name": SITE_NAME, "footer": footer})
     except Exception as e:
         print(e, 54321)
 
@@ -168,6 +204,28 @@ async def category_list(request: Request, category: str, language: str = main_la
         #     return templates.TemplateResponse("error.html",
         #                                       {"request": request, "error": f"No articles found in category {category}."})
 
+        try:
+            footer = await content_extractor("configs", topic, language)
+        except Exception as e:
+            print(e)
+            footer = {
+                "config": {"about_us": "About us", "privacy_policy": "Privacy policy", "terms_of_use": "Terms of use",
+                           "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"},
+                "description": {"about_us": "About {SITE_NAME}",
+                                "privacy_policy": "Privacy policy of {SITE_NAME}",
+                                "terms_of_use": "Terms of use of {SITE_NAME}"}}
+        try:
+            team = await team_extractor(topic, language)
+            list_copywriters = []
+            for key, value in team.items():
+                print(value["is_copywriter"])
+                if value["is_copywriter"].lower() == "+":
+                    list_copywriters.append(
+                        {"name": value["name"], "surname": value["surname"], "image": value["image"]})
+            random_copywriter = random.choice(list(list_copywriters))
+        except Exception as e:
+            random_copywriter = {"name": "Anna", "image": "/img/copywriters/group_1/12.jpeg"}
+
         return templates.TemplateResponse("category_list_template.html",
                                           {"request": request, "topic": topic, "category": category,
                                            "language": language,
@@ -178,7 +236,8 @@ async def category_list(request: Request, category: str, language: str = main_la
                                            "trending_news": trending_news,
                                            "page": page, "total_pages": total_pages, "about_category": about_category,
                                            "info_translate": info_translate, "site_domain": SITE_DOMAIN,
-                                           "site_name": SITE_NAME, "languages_urls": languages_urls})
+                                           "site_name": SITE_NAME, "languages_urls": languages_urls, "footer": footer,
+                                           "random_copywriter": random_copywriter})
     except Exception as e:
         print(e, 7654)
         return templates.TemplateResponse(
@@ -204,7 +263,6 @@ async def article_detail(request: Request, url_part: str, language: str, categor
 
         trending_categories = get_trending_categories(all_categories)
         trending_categories_dict = get_translated_categories_name_and_count(topic, language, trending_categories)
-        print(123)
         info_translate = get_main_info(language, topic)
 
         trending_news = await show_content_json(topic, language, 6)
@@ -214,8 +272,6 @@ async def article_detail(request: Request, url_part: str, language: str, categor
         trending_news = trending_news[2:6]
         for i in trending_news:
             i["category"] = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
-        print(4434)
-        print(43144)
 
         languages_dict = await change_language(url_part, language, topic)
 
@@ -224,6 +280,17 @@ async def article_detail(request: Request, url_part: str, language: str, categor
             if article.get("url_part") == url_part and article.get("category") == category:
 
                 author = article.get("author", "A. Intelligence")
+                try:
+                    team = await team_extractor(topic, language)
+                    for key, value in team.items():
+                        if value["name"] + " " + value["surname"] == author:
+                            copywriter = {"name": value["name"], "surname": value["surname"], "image": value["image"]}
+                            break
+                        else:
+                            copywriter = {"name": "Sam", "image": "/img/copywriters/group_2/12.jpeg"}
+                except Exception as e:
+                    copywriter = {"name": "Anna", "image": "/img/copywriters/group_1/12.jpeg"}
+
                 article["category"] = [article["category"],
                                        get_translated_categories_name(topic, language, [article["category"]])]
                 tags = article["tags"].split(",")
@@ -233,6 +300,18 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                     correct_time = date_obj.strftime("%Y-%m-%dT%H:%M:%SZ")
                 except Exception as e:
                     correct_time = date_published
+
+                try:
+                    footer = await content_extractor("configs", topic, language)
+                except Exception as e:
+                    print(e)
+                    footer = {
+                        "config": {"about_us": "About us", "privacy_policy": "Privacy policy",
+                                   "terms_of_use": "Terms of use",
+                                   "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"},
+                        "description": {"about_us": "About {SITE_NAME}",
+                                        "privacy_policy": "Privacy policy of {SITE_NAME}",
+                                        "terms_of_use": "Terms of use of {SITE_NAME}"}}
 
                 return templates.TemplateResponse("article-details.html",
                                                   {"request": request, "topic": topic, "article": article,
@@ -246,7 +325,8 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                                                    "previous_and_next_news_2": previous_and_next_news_2,
                                                    "author": author, "correct_time": correct_time,
                                                    "info_translate": info_translate, "languages_dict": languages_dict,
-                                                   "site_domain": SITE_DOMAIN, "site_name": SITE_NAME})
+                                                   "site_domain": SITE_DOMAIN, "site_name": SITE_NAME,
+                                                   "footer": footer, "copywriter": copywriter})
         return templates.TemplateResponse(
             "error.html",
             {"request": request, "error": f"No articles found with url part {url_part} in category {category}."},

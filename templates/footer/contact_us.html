@@ -159,14 +159,29 @@
                         <div class="blog-details-thumb">
 
                         </div>
+
+
+
                         <div class="blog-details-content">
                             {% for key in content %}
-                            <h2>{{ key }}</h2>
-                            <h3>{{ content[key].name }} {{ content[key].surname }}</h3>
-                            <h4>{{ content[key].position }}</h4>
-                            <p> {{ content[key].about_me }}</p>
-                            <p> {{ content[key].feature }}</p>
-                            <p> {{ content[key].image }}</p>
+
+<!--                            <h3>{{ content[key].name }} {{ content[key].surname }}</h3>-->
+<!--                            <div class="tgAbout-thumb" style="height:140px ">-->
+<!--                                        <img src="{{ url_for('assets', path=content[key].image ) }}"  style="height:100%" alt="me">-->
+<!--                            </div>-->
+<!--                            <h4>{{ content[key].position }}</h4>-->
+<!--                            <p> {{ content[key].about_me }}</p>-->
+<!--                            <p> {{ content[key].feature }}</p>-->
+                             <div class="tgAbout-me">
+                                    <div class="tgAbout-thumb" style="height:140px ">
+                                        <img src="{{ url_for('assets', path=content[key].image) }}"  style="height:100%" alt="me">
+                                    </div>
+                                    <div class="tgAbout-info">
+                                        <p class="intro">{{ content[key].position }} <span>{{ content[key].name }} {{ content[key].surname }}</span></p>
+                                        <span class="designation">{{ content[key].about_me }}</span>
+                                    </div>
+                                </div>
+                                <br>
                             {% endfor %}
                         </div>
                     </div>

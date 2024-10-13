@@ -318,10 +318,10 @@
                            <div class="widget sidebar-widget">
                                 <div class="tgAbout-me">
                                     <div class="tgAbout-thumb" style="height:140px ">
-                                        <img src="{{ url_for('assets', path='/img/others/content_writer.png') }}"  style="height:100%" alt="me">
+                                        <img src="{{ url_for('assets', path=random_copywriter.image) }}"  style="height:100%" alt="me">
                                     </div>
                                     <div class="tgAbout-info">
-                                        <p class="intro">{{info_translate.content_writer_text}} <span>{{author}}</span></p>
+                                        <p class="intro">{{info_translate.content_writer_text}} <span>{{random_copywriter.name}}</span></p>
                                         <span class="designation">{{info_translate.content_writer}}</span>
                                     </div>
                                 </div>
@@ -378,17 +378,17 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="copyright__text">
-                            <p>Copyright By <span>@{{site_name}}</span> - 2024</p>
+                            <p>{{ footer.config.copyright }} <span>@{{site_name}}</span> - 2024</p>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="copyright__menu">
                             <ul class="list-wrap">
-                                <li><a href="/{{language}}/contact_us">Contact Us</a></li>
-                                <li><a href="/{{language}}/terms_of_use">Terms of Use</a></li>
-                                <li><a href="/{{language}}/about_us">About us </a></li>
-                                <li><a href="/{{language}}/privacy_policy">Privacy policy</a></li>
-                                <li><a href="/sitemap.xml">Sitemap</a></li>
+                                <li><a href="/{{language}}/contact_us">{{ footer.config.contact_us }}</a></li>
+                                <li><a href="/{{language}}/terms_of_use">{{ footer.config.terms_of_use }}</a></li>
+                                <li><a href="/{{language}}/about_us">{{ footer.config.about_us }}</a></li>
+                                <li><a href="/{{language}}/privacy_policy">{{ footer.config.privacy_policy }}</a></li>
+                                <li><a href="/sitemap.xml">{{ footer.config.sitemap }}</a></li>
                             </ul>
                         </div>
                     </div>

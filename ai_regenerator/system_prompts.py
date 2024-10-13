@@ -103,19 +103,74 @@ def create_prompt(language, list_of_categories, topic):
     The final result must be entirely in {language} and adhere to the correct JSON format. Aim for a natural tone that reflects human writing, making it engaging and relatable, while preserving the original article's meaning. Here’s the article you need to rewrite:
     """
 
-    output_result_list = random.randint(0, 2)
-    output_result = [result3, result4, result5][output_result_list]
+    try:
+        output_result = copy_writing_prompt(language, list_of_categories, topic)
+        print("Prompt created successfully")
+    except Exception as e:
+        output_result_list = random.randint(0, 2)
+        output_result = [result3, result4, result5][output_result_list]
 
+    print(output_result)
+
+    return output_result
+
+
+def copy_writing_prompt(language, list_of_categories, topic):
+    list_of_copywriter = extract_copywriters(topic)
+
+    author = list_of_copywriter[random.randint(0, len(list_of_copywriter) - 1)]
+    print(author["name"], author["surname"], )
+    author_name = f"{author['name']} {author['surname']}"
+    unique_future = author["feature"]
+
+    content = f""""Imagine you're a talented copywriter tasked with rewriting an article (which will be provided later) in a way that captivates and engages readers while keeping the core meaning intact. Your goal is to write in a natural, conversational style that resonates with human readers and adheres to SEO best practices.
+
+       Here are the main guidelines to follow:
+       - Please write exclusively in {language}, avoiding any original language for the article.
+       - Strive to make your version stand out even more than the competitors or the original text, ensuring that the overall meaning remains the same.
+       - Incorporate relevant keywords seamlessly into the content to improve SEO, but ensure they flow naturally and don’t feel forced.
+       - Focus on creating valuable content that answers potential readers' questions or concerns, as Google favors informative and helpful articles.
+       - Rewrite the provided text in {language}, ensuring to keep the names of specific companies or brands unchanged.
+       - When translating names of people and locations, feel free to adapt them when possible.
+
+       Your output should be structured strictly in a specific JSON format and in this order:
+       1) 'rewritten_content': 'This is where you will concisely, informatively, and engagingly rewrite the article text (in {language}). Use the third person and clearly separate individual ideas, starting each new thought with a new paragraph. Remember to use <p></p> tags for paragraph breaks.'
+       2) 'seo_title': 'Create an SEO title no longer than 50 characters, without quotes, that reflects the main topic and grabs attention.'
+       3) 'seo_description': 'Craft an SEO description no longer than 170 characters that succinctly describes the content and importance of the news, ideally including a keyword.'
+       4) 'category': 'Select the single category that best represents the topic from {list_of_categories}.'
+       5) 'tags': 'Include up to 4 relevant tags and/or brands, separated by commas.'
+       6) 'url_part': 'Develop a short SEO-friendly URI in Latin letters.'
+       7) 'date_published': 'Leave it as -'
+       8) 'author': {author_name} (do not translate this)
+
+       If the text includes unrelated information, feel free to skip it without adding anything extra.
+
+       The final result must be entirely in {language} and adhere to the correct JSON format. Aim for a natural tone that reflects human writing, making it engaging and relatable, while preserving the original article's meaning. Here’s the article you need to rewrite:
+       """
+
+    return content
+
+
+def extract_copywriters(topic):
     current_file_path = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
     try:
         folder_name = os.path.join(current_file_path, "news_json")
         folder_name2 = os.path.join(folder_name, topic)
         folder_name3 = os.path.join(folder_name2, f"{topic}__our_team__.json")
-
+        list_of_copywriters = []
+        if os.path.exists(folder_name3):
+            with open(folder_name3, "r", encoding='utf-8') as file:
+                raw_data = file.read()
+                json_f = json.loads(raw_data)
+                json_f = json.loads(json_f)
+                json_f = json.loads(json_f)
+                for key, value in json_f.items():
+                    if value["is_copywriter"].lower() == "+":
+                        list_of_copywriters.append(value)
+        return list_of_copywriters
 
     except Exception as e:
         print(e)
 
-    return output_result
 
-# create_prompt("english", ["news", "politics", "business"], "latvia_google_news")
+# print(create_prompt("russian", ["Business", "Technology", "Health", "Entertainment"], "latvian_google_news"))
