@@ -279,17 +279,10 @@ async def article_detail(request: Request, url_part: str, language: str, categor
 
             if article.get("url_part") == url_part and article.get("category") == category:
 
-                author = article.get("author", "A. Intelligence")
-                try:
-                    team = await team_extractor(topic, language)
-                    for key, value in team.items():
-                        if value["name"] + " " + value["surname"] == author:
-                            copywriter = {"name": value["name"], "surname": value["surname"], "image": value["image"]}
-                            break
-                        else:
-                            copywriter = {"name": "Sam", "image": "/img/copywriters/group_2/12.jpeg"}
-                except Exception as e:
-                    copywriter = {"name": "Anna", "image": "/img/copywriters/group_1/12.jpeg"}
+                author = article.get("author", "Author")
+                image_path = article.get("image_path", "/img/copywriters/group_2/12.jpeg")
+                copywriter = {"name": author, "image": image_path}
+                print(copywriter)
 
                 article["category"] = [article["category"],
                                        get_translated_categories_name(topic, language, [article["category"]])]

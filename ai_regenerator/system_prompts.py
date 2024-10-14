@@ -105,12 +105,10 @@ def create_prompt(language, list_of_categories, topic):
 
     try:
         output_result = copy_writing_prompt(language, list_of_categories, topic)
-        print("Prompt created successfully")
     except Exception as e:
         output_result_list = random.randint(0, 2)
         output_result = [result3, result4, result5][output_result_list]
 
-    print(output_result)
 
     return output_result
 
@@ -119,9 +117,9 @@ def copy_writing_prompt(language, list_of_categories, topic):
     list_of_copywriter = extract_copywriters(topic)
 
     author = list_of_copywriter[random.randint(0, len(list_of_copywriter) - 1)]
-    print(author["name"], author["surname"], )
     author_name = f"{author['name']} {author['surname']}"
     unique_future = author["feature"]
+    img_path = author["image"]
 
     content = f""""Imagine you're a talented copywriter tasked with rewriting an article (which will be provided later) in a way that captivates and engages readers while keeping the core meaning intact. Your goal is to write in a natural, conversational style that resonates with human readers and adheres to SEO best practices.
 
@@ -141,7 +139,8 @@ def copy_writing_prompt(language, list_of_categories, topic):
        5) 'tags': 'Include up to 4 relevant tags and/or brands, separated by commas.'
        6) 'url_part': 'Develop a short SEO-friendly URI in Latin letters.'
        7) 'date_published': 'Leave it as -'
-       8) 'author': {author_name} (do not translate this)
+       8) 'author': {author_name} 
+       9) 'image_path': {img_path} (keep it as it is)
 
        If the text includes unrelated information, feel free to skip it without adding anything extra.
 
