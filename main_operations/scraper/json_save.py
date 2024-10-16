@@ -280,12 +280,11 @@ def save_images_local(url, topic, quality=85, max_size=(1024, 1024)):
         return None
 
 
-async def json_rewritten_news_saver(generated_json_data, topic, language, image, url):
+async def json_rewritten_news_saver(generated_json_data, topic, language, new_img, url):
     try:
         language = language.lower()
         topic = topic.lower()
 
-        new_img = save_images_local(image, topic)
         generated_json_data["topic"] = topic
         generated_json_data["language"] = language
         generated_json_data["image"] = new_img

@@ -32,6 +32,10 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
         main_text_with_url = add_links_to_text(main_text, soup)
 
         img_url = img_path_scraper(soup)
+        img_url = save_images_local(img_url, topic)
+        if img_url is None:
+            print("No image found.")
+            return {"Next_url": "This url wasn't scrapped correctly."}
 
         try:
             title = title_scraper(soup)
