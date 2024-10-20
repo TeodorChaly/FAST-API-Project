@@ -130,17 +130,19 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
                         pass
                 except Exception as e:
                     new_content[i].remove(i2)
-        footer = {
+
+        try:
+            footer = await content_extractor("configs", topic, language)
+            if footer is None:
+                footer = {
             "config": {"about_us": "About us", "privacy_policy": "Privacy policy", "terms_of_use": "Terms of use",
                        "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"},
             "description": {"about_us": "About {SITE_NAME}",
                             "privacy_policy": "Privacy policy of {SITE_NAME}",
                             "terms_of_use": "Terms of use of {SITE_NAME}"}}
-        try:
-            footer = await content_extractor("configs", topic, language)
         except Exception as e:
             print(e)
-
+        print(footer)
         return templates.TemplateResponse("main_page_news.html",
                                           {"request": request, "topic": topic, "language": language,
                                            "languages": languages,
@@ -203,15 +205,16 @@ async def category_list(request: Request, category: str, language: str = main_la
         #     return templates.TemplateResponse("error.html",
         #                                       {"request": request, "error": f"No articles found in category {category}."})
 
-        footer = {
+
+        try:
+            footer = await content_extractor("configs", topic, language)
+            if footer is None:
+                footer = {
             "config": {"about_us": "About us", "privacy_policy": "Privacy policy", "terms_of_use": "Terms of use",
                        "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"},
             "description": {"about_us": "About {SITE_NAME}",
                             "privacy_policy": "Privacy policy of {SITE_NAME}",
                             "terms_of_use": "Terms of use of {SITE_NAME}"}}
-
-        try:
-            footer = await content_extractor("configs", topic, language)
         except Exception as e:
             print(e)
 
@@ -295,15 +298,17 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                 except Exception as e:
                     correct_time = date_published
 
-                footer = {
-                    "config": {"about_us": "About us", "privacy_policy": "Privacy policy",
-                               "terms_of_use": "Terms of use",
-                               "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"},
-                    "description": {"about_us": "About {SITE_NAME}",
-                                    "privacy_policy": "Privacy policy of {SITE_NAME}",
-                                    "terms_of_use": "Terms of use of {SITE_NAME}"}}
+
                 try:
                     footer = await content_extractor("configs", topic, language)
+                    if footer is None:
+                        footer = {
+                            "config": {"about_us": "About us", "privacy_policy": "Privacy policy",
+                                       "terms_of_use": "Terms of use",
+                                       "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"},
+                            "description": {"about_us": "About {SITE_NAME}",
+                                            "privacy_policy": "Privacy policy of {SITE_NAME}",
+                                            "terms_of_use": "Terms of use of {SITE_NAME}"}}
                 except Exception as e:
                     print(e)
 
@@ -327,6 +332,7 @@ async def article_detail(request: Request, url_part: str, language: str, categor
             status_code=404
         )
     except Exception as e:
+        print(e)
         return templates.TemplateResponse(
             "error.html",
             {"request": request, "error": f"No articles found."},

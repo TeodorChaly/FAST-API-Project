@@ -21,16 +21,8 @@
     <!-- Place favicon.ico in the root directory -->
 
     <!-- CSS here -->
-    <link rel="stylesheet" href="{{ url_for('assets', path='/css/bootstrap.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('assets', path='/css/animate.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('assets', path='/css/magnific-popup.css') }}">
-    <link rel="stylesheet" href="{{ url_for('assets', path='/css/fontawesome-all.min.css') }}">
-    <link rel="stylesheet" href="{{ url_for('assets', path='/css/imageRevealHover.css') }}">
-    <link rel="stylesheet" href="{{ url_for('assets', path='/css/swiper-bundle.css') }}">
-    <link rel="stylesheet" href="{{ url_for('assets', path='/css/flaticon.css') }}">
-    <link rel="stylesheet" href="{{ url_for('assets', path='/css/slick.css') }}">
-    <link rel="stylesheet" href="{{ url_for('assets', path='/css/spacing.css') }}">
-    <link rel="stylesheet" href="{{ url_for('assets', path='/css/main.css') }}">
+    {% include 'base/css.html' %}
+
 
     {% for lang in languages %}
         <link rel="alternate" href="{{ site_domain }}/{{lang}}" hreflang="{{lang}}">
@@ -43,15 +35,15 @@
 <body>
 
     <!-- preloader -->
-<!--    <div id="preloader">-->
-<!--        <div id="loading-center">-->
-<!--            <div id="loading-center-absolute">-->
-<!--                <div class="object" id="object_one"></div>-->
-<!--                <div class="object" id="object_two"></div>-->
-<!--                <div class="object" id="object_three"></div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
+    <div id="preloader">
+        <div id="loading-center">
+            <div id="loading-center-absolute">
+                <div class="object" id="object_one"></div>
+                <div class="object" id="object_two"></div>
+                <div class="object" id="object_three"></div>
+            </div>
+        </div>
+    </div>
     <!-- preloader-end -->
 
     <!-- Scroll-top -->
@@ -435,50 +427,14 @@
 
 
     <!-- footer-area -->
-    <footer class="footer-area footer-style-three footer-bg" data-background="{{ url_for('assets', path='/img/bg/footer_bg.jpg') }} ">
+{% include 'base/footer.html' %}
 
-        <div class="container">
-            <div class="footer__copyright">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="copyright__text">
-                            <p>{{ footer.config.copyright }} <span>@{{site_name}}</span> - 2024</p>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="copyright__menu">
-                            <ul class="list-wrap">
-                                <li><a href="/{{language}}/contact_us">{{ footer.config.contact_us }}</a></li>
-                                <li><a href="/{{language}}/terms_of_use">{{ footer.config.terms_of_use }}</a></li>
-                                <li><a href="/{{language}}/about_us">{{ footer.config.about_us }}</a></li>
-                                <li><a href="/{{language}}/privacy_policy">{{ footer.config.privacy_policy }}</a></li>
-                                <li><a href="/sitemap.xml">{{ footer.config.sitemap }}</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </footer>
     <!-- footer-area-end -->
 
 
 
     <!-- JS here -->
-    <script src="{{ url_for('assets', path='js/vendor/jquery-3.6.0.min.js') }}" defer></script>
-    <script src="{{ url_for('assets', path='js/bootstrap.min.js') }}" defer></script>
-    <script src="{{ url_for('assets', path='js/isotope.pkgd.min.js') }}" defer></script>
-    <script src="{{ url_for('assets', path='js/imagesloaded.pkgd.min.js') }}" defer></script>
-    <script src="{{ url_for('assets', path='js/jquery.magnific-popup.min.js') }}" defer></script>
-    <script src="{{ url_for('assets', path='js/jquery.marquee.min.js') }}" defer></script>
-    <script src="{{ url_for('assets', path='js/imageRevealHover.js') }}" defer></script>
-    <script src="{{ url_for('assets', path='js/swiper-bundle.js') }}" defer></script>
-    <script src="{{ url_for('assets', path='js/TweenMax.min.js') }}" defer></script>
-    <script src="{{ url_for('assets', path='js/slick.min.js') }}" defer></script>
-    <script src="{{ url_for('assets', path='js/ajax-form.js') }}" defer></script>
-    <script src="{{ url_for('assets', path='js/wow.min.js') }}" defer></script>
-    <script src="{{ url_for('assets', path='js/main.js') }}" defer></script>
-
+{% include 'base/java_script.html' %}
 </body>
 
 </html>

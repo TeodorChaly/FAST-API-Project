@@ -34,7 +34,6 @@ async def extract_translation(topic: str, language: str):
                        'sitemap': 'Sitemap', 'contact_us': 'Contact us', 'copyright': 'copyright'}}
 
 
-
 async def team_extractor(topic: str, language: str):
     try:
         language = get_language_name_by_code(language)
@@ -82,21 +81,38 @@ async def other_content(request: Request, topic: str = main_site_topic, language
 
 @router.get("/{language}/contact_us", tags=["terms"])
 async def contact_us(request: Request, topic: str = main_site_topic, language: str = main_language):
-    result = await team_extractor(topic, language)
-    result_dict = json.loads(result)
-    config_translate = await extract_translation(topic, language)
-    languages = await languages_to_code()
-    json_data = await show_content_json(topic, language, None)
-    popular_categories, remaining_categories, all_categories = await get_header(topic, language, json_data)
-    info_translate = get_main_info(language, topic)
-    config = await content_extractor("configs", topic, language)
-    config_translate = await extract_translation(topic, language)
+    try:
+        result = await team_extractor(topic, language)
+        result_dict = json.loads(result)
+        config_translate = await extract_translation(topic, language)
+        languages = await languages_to_code()
+        json_data = await show_content_json(topic, language, None)
+        popular_categories, remaining_categories, all_categories = await get_header(topic, language, json_data)
+        info_translate = get_main_info(language, topic)
+        config = await content_extractor("configs", topic, language)
+        config_translate = await extract_translation(topic, language)
 
-    return templates.TemplateResponse("footer/contact_us.html",
-                                      {"request": request, "topic": topic, "language": language, "content": result_dict,
-                                       "languages": languages, "top_categories": popular_categories,
-                                       "other_categories": remaining_categories, "info_translate": info_translate,
-                                       "config": config, "config_translate": config_translate})
+        if config is None:
+            config = {
+                "config": {"about_us": "About us", "privacy_policy": "Privacy policy", "terms_of_use": "Terms of use",
+                           "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"},
+                "description": {"about_us": "About {SITE_NAME}",
+                                "privacy_policy": "Privacy policy of {SITE_NAME}",
+                                "terms_of_use": "Terms of use of {SITE_NAME}"}}
+
+        return templates.TemplateResponse("footer/contact_us.html",
+                                          {"request": request, "topic": topic, "language": language,
+                                           "content": result_dict,
+                                           "languages": languages, "top_categories": popular_categories,
+                                           "other_categories": remaining_categories, "info_translate": info_translate,
+                                           "config": config, "config_translate": config_translate})
+    except Exception as e:
+        print(e)
+        return templates.TemplateResponse(
+            "error.html",
+            {"request": request, "error": f"Invalid language."},
+            status_code=404
+        )
 
 
 @router.get("/{language}/privacy_policy", tags=["terms"])
