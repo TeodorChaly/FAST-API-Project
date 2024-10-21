@@ -9,6 +9,12 @@ from starlette.templating import Jinja2Templates
 from content.functions import *
 from content.news_file_extractor import *
 from configs.config_setup import main_site_topic, SITE_DOMAIN, main_language, SITE_NAME
+
+try:
+    from configs.config_setup import google_id_tag
+except Exception as e:
+    google_id_tag = ""
+
 from languages.language_json import languages_to_code
 from main_operations.crawlers.RSS_crawler.rss_crawler import show_all_topics_function
 from content.multi_language_categories import *
@@ -135,11 +141,12 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
             footer = await content_extractor("configs", topic, language)
             if footer is None:
                 footer = {
-            "config": {"about_us": "About us", "privacy_policy": "Privacy policy", "terms_of_use": "Terms of use",
-                       "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"},
-            "description": {"about_us": "About {SITE_NAME}",
-                            "privacy_policy": "Privacy policy of {SITE_NAME}",
-                            "terms_of_use": "Terms of use of {SITE_NAME}"}}
+                    "config": {"about_us": "About us", "privacy_policy": "Privacy policy",
+                               "terms_of_use": "Terms of use",
+                               "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"},
+                    "description": {"about_us": "About {SITE_NAME}",
+                                    "privacy_policy": "Privacy policy of {SITE_NAME}",
+                                    "terms_of_use": "Terms of use of {SITE_NAME}"}}
         except Exception as e:
             print(e)
         print(footer)
@@ -150,7 +157,7 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
                                            "other_categories": remaining_categories_dict, "all_content": new_content,
                                            "today_news": today_news, "newest_news": newest_news,
                                            "info_translate": info_translate, "site_domain": SITE_DOMAIN,
-                                           "site_name": SITE_NAME, "footer": footer})
+                                           "site_name": SITE_NAME, "footer": footer, "google_id_tag": google_id_tag})
     except Exception as e:
         print(e, 54321)
 
@@ -205,16 +212,16 @@ async def category_list(request: Request, category: str, language: str = main_la
         #     return templates.TemplateResponse("error.html",
         #                                       {"request": request, "error": f"No articles found in category {category}."})
 
-
         try:
             footer = await content_extractor("configs", topic, language)
             if footer is None:
                 footer = {
-            "config": {"about_us": "About us", "privacy_policy": "Privacy policy", "terms_of_use": "Terms of use",
-                       "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"},
-            "description": {"about_us": "About {SITE_NAME}",
-                            "privacy_policy": "Privacy policy of {SITE_NAME}",
-                            "terms_of_use": "Terms of use of {SITE_NAME}"}}
+                    "config": {"about_us": "About us", "privacy_policy": "Privacy policy",
+                               "terms_of_use": "Terms of use",
+                               "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"},
+                    "description": {"about_us": "About {SITE_NAME}",
+                                    "privacy_policy": "Privacy policy of {SITE_NAME}",
+                                    "terms_of_use": "Terms of use of {SITE_NAME}"}}
         except Exception as e:
             print(e)
 
@@ -241,7 +248,7 @@ async def category_list(request: Request, category: str, language: str = main_la
                                            "page": page, "total_pages": total_pages, "about_category": about_category,
                                            "info_translate": info_translate, "site_domain": SITE_DOMAIN,
                                            "site_name": SITE_NAME, "languages_urls": languages_urls, "footer": footer,
-                                           "random_copywriter": random_copywriter})
+                                           "random_copywriter": random_copywriter, "google_id_tag": google_id_tag})
     except Exception as e:
         print(e, 7654)
         return templates.TemplateResponse(
@@ -298,18 +305,19 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                 except Exception as e:
                     correct_time = date_published
 
-
+                footer_template = {
+                    "config": {"about_us": "About us", "privacy_policy": "Privacy policy",
+                               "terms_of_use": "Terms of use",
+                               "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"},
+                    "description": {"about_us": "About {SITE_NAME}",
+                                    "privacy_policy": "Privacy policy of {SITE_NAME}",
+                                    "terms_of_use": "Terms of use of {SITE_NAME}"}}
                 try:
                     footer = await content_extractor("configs", topic, language)
                     if footer is None:
-                        footer = {
-                            "config": {"about_us": "About us", "privacy_policy": "Privacy policy",
-                                       "terms_of_use": "Terms of use",
-                                       "sitemap": "Sitemap", "contact_us": "Contact us", "copyright": "copyright"},
-                            "description": {"about_us": "About {SITE_NAME}",
-                                            "privacy_policy": "Privacy policy of {SITE_NAME}",
-                                            "terms_of_use": "Terms of use of {SITE_NAME}"}}
+                        footer = footer_template
                 except Exception as e:
+                    footer = footer_template
                     print(e)
 
                 return templates.TemplateResponse("article-details.html",
@@ -325,7 +333,8 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                                                    "author": author, "correct_time": correct_time,
                                                    "info_translate": info_translate, "languages_dict": languages_dict,
                                                    "site_domain": SITE_DOMAIN, "site_name": SITE_NAME,
-                                                   "footer": footer, "copywriter": copywriter})
+                                                   "footer": footer, "copywriter": copywriter,
+                                                   "google_id_tag": google_id_tag})
         return templates.TemplateResponse(
             "error.html",
             {"request": request, "error": f"No articles found with url part {url_part} in category {category}."},

@@ -21,4 +21,6 @@ SITE_DOMAIN = ""  # Site domain. For example 'https://example.com' (Don't add '/
 SITE_NAME = ""  # Site name. For example 'Example'
 
 main_language = ""  # Main language. For example 'en'
-    ''')
+
+google_id_tag = ""  # Google ID tag. Leave empty if you don't have one
+''')
