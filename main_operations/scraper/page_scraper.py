@@ -1,6 +1,73 @@
+from urllib.parse import urljoin
 from datetime import datetime
+from bs4 import BeautifulSoup
 from bs4 import Comment
 import trafilatura
+import requests
+
+
+
+def extract_images_from_main_content(url):
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    main_content = (soup.find('main') or
+                    soup.find('article') or
+                    soup.find('div', class_='content') or
+                    soup.find('div', class_='post-content') or
+                    soup.find('section', class_='main-content') or
+                    soup.body)
+
+    if not main_content:
+        return []
+
+    images = main_content.find_all('img')
+    image_info = []
+
+    min_width = 800
+    min_height = 300
+
+    for img in images:
+        img_url = img.get('src') or img.get('data-src') or img.get('data-lazy-src')
+
+        if img_url:
+            full_img_url = urljoin(url, img_url)
+
+            img_alt = img.get('alt') or "No alt text"
+
+            width = img.get('width')
+            height = img.get('height')
+
+            if width and height:
+                try:
+                    width_value = int(width.replace('px', '').strip())
+                    height_value = int(height.replace('px', '').strip())
+                except ValueError:
+                    continue
+
+                if width_value >= min_width and height_value >= min_height:
+                    image_info.append({
+                        'url': full_img_url,
+                        'alt': img_alt,
+                        'width': width,
+                        'height': height
+                    })
+
+    image_info = sorted(image_info, key=lambda x: (x['alt'] != "No alt text"), reverse=True)
+
+    return image_info
+
+# url = 'https://andybradford.dev/2021/08/31/detailed-vw-golf-8-review-have-you-tried-turning-it-off-and-on-again/'
+#
+# images = extract_images_from_main_content(url)
+#
+# for img in images:
+#     if img['alt'] != "No alt text":
+#
+#         print(f"Image URL: {img['url']}")
+#         print(f"Alt text: {img['alt']}")
+#         print(f"Width: {img['width']}, Height: {img['height']}")
+#         print("-" * 30)
 
 
 def title_scraper(soup):

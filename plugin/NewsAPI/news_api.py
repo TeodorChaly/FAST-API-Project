@@ -7,9 +7,14 @@ load_dotenv()
 
 news_api_key = os.getenv("NEWS_API_KEY")
 
-url = f'https://newsapi.org/v2/everything?q=Apple&apiKey={news_api_key}'
+url = 'https://newsapi.org/v2/top-headlines'
+params = {
+    'country': 'au',  # Новости по стране
+    'category': 'business',  # Категория новостей
+    'apiKey': news_api_key
+}
 
-response = requests.get(url)
+response = requests.get(url, params=params)
 
 for i in response.json()["articles"]:
     print(i["title"])
