@@ -6,7 +6,6 @@ import trafilatura
 import requests
 
 
-
 def extract_images_from_main_content(url):
     response = requests.get(url)
     soup = BeautifulSoup(response.content, 'html.parser')
@@ -56,6 +55,7 @@ def extract_images_from_main_content(url):
     image_info = sorted(image_info, key=lambda x: (x['alt'] != "No alt text"), reverse=True)
 
     return image_info
+
 
 # url = 'https://andybradford.dev/2021/08/31/detailed-vw-golf-8-review-have-you-tried-turning-it-off-and-on-again/'
 #
