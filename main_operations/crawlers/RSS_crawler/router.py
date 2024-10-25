@@ -25,6 +25,7 @@ async def create_topic(topic: str = Query(..., description="Name of topic"),
     for language in languages:
         await folder_prep(topic, language, additional_info)
 
+
     return f"Topic {topic} created."
 
 

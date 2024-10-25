@@ -19,6 +19,7 @@ from configs.robots import router as robots_router
 from configs.sitemap import router as sitemap_router
 from content.router import router as topics_router
 from other_content.router import router as other_content_router
+from PIL import Image, ImageDraw, ImageFont
 
 logging.basicConfig(
     filename='access.log',
