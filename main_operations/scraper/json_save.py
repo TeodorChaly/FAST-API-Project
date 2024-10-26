@@ -221,7 +221,7 @@ async def folder_prep(topic, language, additional_info=None):
             width, height = 218, 61
             text = SITE_NAME
             font_path = "../../templates/assets/fonts/LEMONMILK-Medium.otf"
-            font_size = 30
+            font_size = 60
 
             image_black = Image.new("RGBA", (width, height), (255, 255, 255, 0))
             image_white = Image.new("RGBA", (width, height), (255, 255, 255, 0))
@@ -244,6 +244,7 @@ async def folder_prep(topic, language, additional_info=None):
 
             image_black.save("../../templates/assets/img/logo/text_image_black.png", "PNG")
             image_white.save("../../templates/assets/img/logo/text_image_white.png", "PNG")
+
 
     except Exception as e:
         print(f"Error during folder preparation: {e}")

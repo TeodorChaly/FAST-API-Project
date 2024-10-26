@@ -9,6 +9,7 @@ from starlette.templating import Jinja2Templates
 from content.functions import *
 from content.news_file_extractor import *
 from configs.config_setup import main_site_topic, SITE_DOMAIN, main_language, SITE_NAME
+from main_operations.images_function import extract_logo_images
 
 try:
     from configs.config_setup import google_id_tag
@@ -212,6 +213,9 @@ async def category_list(request: Request, category: str, language: str = main_la
         #     return templates.TemplateResponse("error.html",
         #                                       {"request": request, "error": f"No articles found in category {category}."})
 
+        logos = await extract_logo_images()
+        black_logo, white_logo = logos[0], logos[1]
+
         try:
             footer = await content_extractor("configs", topic, language)
             if footer is None:
@@ -248,7 +252,8 @@ async def category_list(request: Request, category: str, language: str = main_la
                                            "page": page, "total_pages": total_pages, "about_category": about_category,
                                            "info_translate": info_translate, "site_domain": SITE_DOMAIN,
                                            "site_name": SITE_NAME, "languages_urls": languages_urls, "footer": footer,
-                                           "random_copywriter": random_copywriter, "google_id_tag": google_id_tag})
+                                           "random_copywriter": random_copywriter, "google_id_tag": google_id_tag,
+                                           "black_logo": black_logo, "white_logo": white_logo})
     except Exception as e:
         print(e, 7654)
         return templates.TemplateResponse(
@@ -285,6 +290,9 @@ async def article_detail(request: Request, url_part: str, language: str, categor
             i["category"] = [i["category"], get_translated_categories_name(topic, language, [i["category"]])]
 
         languages_dict = await change_language(url_part, language, topic)
+
+        logos = await extract_logo_images()
+        black_logo, white_logo = logos[0], logos[1]
 
         for article in articles:
 
@@ -334,7 +342,8 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                                                    "info_translate": info_translate, "languages_dict": languages_dict,
                                                    "site_domain": SITE_DOMAIN, "site_name": SITE_NAME,
                                                    "footer": footer, "copywriter": copywriter,
-                                                   "google_id_tag": google_id_tag})
+                                                   "google_id_tag": google_id_tag, "black_logo": black_logo,
+                                                   "white_logo": white_logo})
         return templates.TemplateResponse(
             "error.html",
             {"request": request, "error": f"No articles found with url part {url_part} in category {category}."},

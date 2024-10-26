@@ -1,3 +1,4 @@
+import os.path
 import re
 import httpx
 
@@ -26,3 +27,13 @@ async def is_image_url_valid(url):
     else:
         img_url = "https://htmlcolorcodes.com/assets/images/colors/white-color-solid-background-1920x1080.png"  # White color as stub
     return img_url
+
+
+async def extract_logo_images():
+    if os.path.exists("templates/assets/img/logo/text_image_black.png") and os.path.exists(
+            "templates/assets/img/logo/text_image_white.png"):
+        print("Logos exist")
+        return ["/img/logo/text_image_black.png", "/img/logo/text_image_white.png"]
+    else:
+        print("Logo not exists")
+        return ["/img/logo/logo.png", "/img/logo/w_logo.png"]

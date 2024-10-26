@@ -4,11 +4,12 @@ import os
 from fastapi import APIRouter, Request
 from starlette.templating import Jinja2Templates
 
-from configs.config_setup import main_site_topic, main_language
+from configs.config_setup import main_site_topic, main_language, SITE_NAME
 from content.multi_language_categories import get_header
 from content.news_file_extractor import read_json, get_language_name_by_code
 from content.router import show_content_json, content_extractor
 from languages.language_json import languages_to_code
+from main_operations.images_function import extract_logo_images
 from main_operations.scraper.json_save import get_main_info
 
 templates = Jinja2Templates(directory="templates")
@@ -56,6 +57,9 @@ async def other_content(request: Request, topic: str = main_site_topic, language
     info_translate = get_main_info(language, topic)
     config_translate = await extract_translation(topic, language)
 
+    logos = await extract_logo_images()
+    black_logo, white_logo = logos[0], logos[1]
+
     try:
         config = await content_extractor("configs", topic, language)
     except Exception as e:
@@ -76,7 +80,9 @@ async def other_content(request: Request, topic: str = main_site_topic, language
                                           {"request": request, "topic": topic, "language": language, "content": result,
                                            "languages": languages, "top_categories": popular_categories,
                                            "other_categories": remaining_categories, "info_translate": info_translate,
-                                           "config": config, "config_translate": config_translate})
+                                           "footer": config, "config_translate": config_translate,
+                                           "black_logo": black_logo,
+                                           "white_logo": white_logo, "site_name": SITE_NAME})
 
 
 @router.get("/{language}/contact_us", tags=["terms"])
@@ -92,6 +98,9 @@ async def contact_us(request: Request, topic: str = main_site_topic, language: s
         config = await content_extractor("configs", topic, language)
         config_translate = await extract_translation(topic, language)
 
+        logos = await extract_logo_images()
+        black_logo, white_logo = logos[0], logos[1]
+
         if config is None:
             config = {
                 "config": {"about_us": "About us", "privacy_policy": "Privacy policy", "terms_of_use": "Terms of use",
@@ -105,7 +114,8 @@ async def contact_us(request: Request, topic: str = main_site_topic, language: s
                                            "content": result_dict,
                                            "languages": languages, "top_categories": popular_categories,
                                            "other_categories": remaining_categories, "info_translate": info_translate,
-                                           "config": config, "config_translate": config_translate})
+                                           "footer": config, "config_translate": config_translate,
+                                           "black_logo": black_logo, "white_logo": white_logo, "site_name": SITE_NAME})
     except Exception as e:
         print(e)
         return templates.TemplateResponse(
@@ -125,6 +135,9 @@ async def privacy_policy(request: Request, topic: str = main_site_topic, languag
     config = await content_extractor("configs", topic, language)
     config_translate = await extract_translation(topic, language)
 
+    logos = await extract_logo_images()
+    black_logo, white_logo = logos[0], logos[1]
+
     if result is None:
         return templates.TemplateResponse(
             "error.html",
@@ -136,7 +149,8 @@ async def privacy_policy(request: Request, topic: str = main_site_topic, languag
                                           {"request": request, "topic": topic, "language": language, "content": result,
                                            "languages": languages, "top_categories": popular_categories,
                                            "other_categories": remaining_categories, "info_translate": info_translate,
-                                           "config": config, "config_translate": config_translate})
+                                           "footer": config, "config_translate": config_translate,
+                                           "black_logo": black_logo, "white_logo": white_logo, "site_name": SITE_NAME})
 
 
 @router.get("/{language}/terms_of_use", tags=["terms"])
@@ -148,6 +162,8 @@ async def terms_of_service(request: Request, topic: str = main_site_topic, langu
     info_translate = get_main_info(language, topic)
     config = await content_extractor("configs", topic, language)
     config_translate = await extract_translation(topic, language)
+    logos = await extract_logo_images()
+    black_logo, white_logo = logos[0], logos[1]
 
     if result is None:
         return templates.TemplateResponse(
@@ -160,4 +176,5 @@ async def terms_of_service(request: Request, topic: str = main_site_topic, langu
                                           {"request": request, "topic": topic, "language": language, "content": result,
                                            "languages": languages, "top_categories": popular_categories,
                                            "other_categories": remaining_categories, "info_translate": info_translate,
-                                           "config": config, "config_translate": config_translate})
+                                           "footer": config, "config_translate": config_translate,
+                                           "black_logo": black_logo, "white_logo": white_logo, "site_name": SITE_NAME})

@@ -4,11 +4,11 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>
-        {{ config.config.privacy_policy }}
+        {{ footer.config.privacy_policy }}
     </title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="{{ config.description.privacy_policy }}">
+    <meta name="description" content="{{ footer.description.privacy_policy }}">
 
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('assets', path='/img/favicon.png') }}">
     <!-- Place favicon.ico in the root directory -->
@@ -30,93 +30,8 @@
 <body>
 
 <!-- header-area -->
-<header>
-    <div class="header__top">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-4 col-md-6 col-sm-6 order-2 order-lg-0">
-                </div>
-                <div class="col-lg-4 col-md-3 order-0 order-lg-2 d-none d-md-block">
-                    <div class="header__top-logo logo text-lg-center">
-                        <a href="/{{language}}" class="logo-dark"><img
-                                src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
-                        <a href="/{{language}}" class="logo-light"><img
-                                src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
-                    </div>
-                </div>
+{% include 'base/header.html' %}
 
-            </div>
-        </div>
-    </div>
-    <div id="header-fixed-height"></div>
-    <div id="sticky-header" class="tg-header__area">
-        <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <div class="tgmenu__wrap">
-                        <nav class="tgmenu__nav">
-                            <div class="tgmenu__action">
-                                <ul class="list-wrap">
-                                    <li class="mode-switcher">
-                                        <nav class="switcher__tab">
-                                            <span class="switcher__btn light-mode"><i class="flaticon-sun"></i></span>
-                                            <span class="switcher__mode"></span>
-                                            <span class="switcher__btn dark-mode"><i class="flaticon-moon"></i></span>
-                                        </nav>
-                                    </li>
-                                </ul>
-                            </div>
-
-                            <div class="logo d-block d-md-none">
-                                <a href="/{{language}}" class="logo-dark"><img
-                                        src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
-                                <a href="/{{language}}" class="logo-light"><img
-                                        src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
-                            </div>
-                            <div class="tgmenu__navbar-wrap tgmenu__main-menu d-none d-lg-flex">
-                                <ul class="navigation">
-                                    {% for category, data in top_categories.items() %}
-                                    <li><a href="/{{ language }}/{{ category }}">{{ data.translated_name }}</a></li>
-                                    {% endfor %}
-                                    {% if other_categories %}
-                                    <li class="active menu-item-has-children"><a href="#">{{info_translate.other}}</a>
-                                        <ul class="sub-menu">
-                                            {% for category, data in other_categories.items() %}
-                                            <li><a href="/{{ language }}/{{ category }}">{{ data.translated_name }}</a>
-                                            </li>
-                                            {% endfor %}
-                                        </ul>
-                                    </li>
-                                    {% endif %}
-                                </ul>
-                            </div>
-                            <div>
-                                <button class="dropdown-toggle" type="button" id="dropdownMenuButton1"
-                                        data-bs-toggle="dropdown" aria-expanded="false"
-                                        style="background-color: rgba(0, 0, 0, 0.0); border: 0.2px solid rgba(0, 0, 0, 0);">
-                                    {{ language.upper() }}
-                                </button>
-                                <ul class="dropdown-menu">
-                                    {% for lang in languages %}
-                                        <li><a class="dropdown-item" href="/{{ lang }}/privacy_policy">{{
-                                        lang.upper() }} </a></li>
-
-                                    {% endfor %}
-
-                                </ul>
-                            </div>
-                        </nav>
-                    </div>
-                    <!-- Mobile Menu  -->
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- offCanvas-area -->
-
-
-</header>
 <!-- header-area-end -->
 <section class="blog-details-area pt-80 pb-100">
         <div class="container">
@@ -125,7 +40,7 @@
                 <div class="col-xl-8 col-lg-7">
                     <div class="blog-details-wrap">
 
-                        <h1 class="title">{{ config.description.privacy_policy }}</h1>
+                        <h1 class="title">{{ footer.description.privacy_policy }}</h1>
                         <div class="blog-details-thumb">
 
                         </div>
@@ -139,38 +54,9 @@
         </div>
     </section>
 <script src="{{ url_for('assets', path='js/bootstrap.min.js') }}"></script>
+{% include 'base/java_script.html' %}
 
 </body>
-<footer class="footer-area black-bg">
-    <div class="container">
-        <div class="footer__logo-wrap">
-            <div class="row align-items-center">
-                <div class="col-lg-3 col-md-4">
-                </div>
-            </div>
-        </div>
-        <div class="footer__copyright">
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="copyright__text">
-                        <p>{{ config_translate.config.copyright }} <span>@NewOk</span> - 2024</p>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="copyright__menu">
-                        <ul class="list-wrap">
-                            <li><a href="/{{ language }}/contact_us">{{ config_translate.config.contact_us }}</a></li>
-                            <li><a href="/{{ language }}/terms_of_use">{{ config_translate.config.terms_of_use }}</a></li>
-                            <li><a href="/{{ language }}/about_us">{{ config_translate.config.about_us }}</a></li>
-                            <li><a href="/{{ language }}/privacy_policy">{{ config_translate.config.privacy_policy }}</a></li>
-                            <li><a href="/sitemap.xml">{{ config_translate.config.sitemap }}</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
+{% include 'base/footer.html' %}
 
-
-    </div>
-</footer>
 </html>
