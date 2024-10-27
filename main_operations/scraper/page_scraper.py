@@ -23,12 +23,10 @@ def extract_images_from_main_content(url):
     images = main_content.find_all('img')
     image_info = []
 
-    min_width = 800
+    min_width = 700
     min_height = 300
-
     for img in images:
         img_url = img.get('src') or img.get('data-src') or img.get('data-lazy-src')
-
         if img_url:
             full_img_url = urljoin(url, img_url)
 
@@ -36,7 +34,6 @@ def extract_images_from_main_content(url):
 
             width = img.get('width')
             height = img.get('height')
-
             if width and height:
                 try:
                     width_value = int(width.replace('px', '').strip())
@@ -60,7 +57,6 @@ def extract_images_from_main_content(url):
 # url = 'https://andybradford.dev/2021/08/31/detailed-vw-golf-8-review-have-you-tried-turning-it-off-and-on-again/'
 #
 # images = extract_images_from_main_content(url)
-#
 # for img in images:
 #     if img['alt'] != "No alt text":
 #
