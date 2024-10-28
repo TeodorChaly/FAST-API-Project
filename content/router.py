@@ -82,6 +82,9 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
         time_now = datetime.now()
         languages = await languages_to_code()
 
+        formatted_time = time_now.strftime("%Y-%m-%d %H:%M:%S")
+        ip_address = request.client.host
+
         info_translate = get_main_info(language, topic)
         if info_translate is None:
             return templates.TemplateResponse(
@@ -90,7 +93,7 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
                 status_code=404
             )
 
-        print(f"Main page requested for {topic} in {language}.")
+        print(f"{formatted_time} - visitor {ip_address} requested for main page in {language}.")
 
         json_data = await show_content_json(topic, language, limit)
 
@@ -150,7 +153,9 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
                                     "terms_of_use": "Terms of use of {SITE_NAME}"}}
         except Exception as e:
             print(e)
-        print(footer)
+
+        end_time = datetime.now()
+        print("Request wait:", end_time - time_now)
         return templates.TemplateResponse("main_page_news.html",
                                           {"request": request, "topic": topic, "language": language,
                                            "languages": languages,
@@ -173,6 +178,11 @@ async def category_list_normal(request: Request, category: str, language: str = 
 async def category_list(request: Request, category: str, language: str = main_language,
                         limit: Optional[int] = None, page: int = 1, topic: str = main_site_topic):
     try:
+        start_time = datetime.now()
+
+        formatted_time = start_time.strftime("%Y-%m-%d %H:%M:%S")
+        ip_address = request.client.host
+
         language_name = get_language_name_by_code(language)
         if language_name is None:
             return templates.TemplateResponse(
@@ -181,7 +191,7 @@ async def category_list(request: Request, category: str, language: str = main_la
                 status_code=404
             )
         languages_urls = await change_language_category(category, language, topic)
-        print(f"Category {category} requested.")
+        print(f"{formatted_time} - visitor {ip_address} requested for category {category}.")
 
         articles = await news_extractor(topic, language_name, limit)
 
@@ -230,16 +240,20 @@ async def category_list(request: Request, category: str, language: str = main_la
             print(e)
 
         try:
+
             team = await team_extractor(topic, language)
             list_copywriters = []
             for key, value in team.items():
-                print(value["is_copywriter"])
                 if value["is_copywriter"].lower() == "+":
                     list_copywriters.append(
                         {"name": value["name"], "surname": value["surname"], "image": value["image"]})
             random_copywriter = random.choice(list(list_copywriters))
+
         except Exception as e:
             random_copywriter = {"name": "Anna", "image": "/img/copywriters/group_1/12.jpeg"}
+
+        end_time = datetime.now()
+        print("Request wait:", end_time - start_time)
 
         return templates.TemplateResponse("category_list_template.html",
                                           {"request": request, "topic": topic, "category": category,
@@ -266,7 +280,11 @@ async def category_list(request: Request, category: str, language: str = main_la
 @router.get("/{language}/{category}/{url_part}", tags=["User content"], response_class=HTMLResponse)
 async def article_detail(request: Request, url_part: str, language: str, category: str, topic: str = main_site_topic):
     try:
-        print(f"Article {url_part} {category} requested .")
+        start_time = datetime.now()
+        formatted_time = start_time.strftime("%Y-%m-%d %H:%M:%S")
+        ip_address = request.client.host
+
+        print(f"{formatted_time} - visitor {ip_address} requested for article in {url_part} in {category}")
 
         language_name = get_language_name_by_code(language)
         if language_name is None:
@@ -283,6 +301,7 @@ async def article_detail(request: Request, url_part: str, language: str, categor
 
         trending_news = await show_content_json(topic, language, 6)
         previous_and_next_news = trending_news[:4]
+
         previous_and_next_news_1 = previous_and_next_news[0]
         previous_and_next_news_2 = previous_and_next_news[1]
         trending_news = trending_news[2:6]
@@ -293,7 +312,6 @@ async def article_detail(request: Request, url_part: str, language: str, categor
 
         logos = await extract_logo_images()
         black_logo, white_logo = logos[0], logos[1]
-
         for article in articles:
 
             if article.get("url_part") == url_part and article.get("category") == category:
@@ -301,7 +319,6 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                 author = article.get("author", "Author")
                 image_path = article.get("image_path", "/img/copywriters/group_2/12.jpeg")
                 copywriter = {"name": author, "image": image_path}
-                print(copywriter)
 
                 article["category"] = [article["category"],
                                        get_translated_categories_name(topic, language, [article["category"]])]
@@ -326,7 +343,9 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                         footer = footer_template
                 except Exception as e:
                     footer = footer_template
-                    print(e)
+
+                end_time = datetime.now()
+                print("Request wait:", end_time - start_time)
 
                 return templates.TemplateResponse("article-details.html",
                                                   {"request": request, "topic": topic, "article": article,
@@ -361,7 +380,6 @@ async def article_detail(request: Request, url_part: str, language: str, categor
 async def change_language_category(category: str, language: str, topic: str = main_site_topic):
     try:
         language_dict = {}
-        time_now = datetime.now()
 
         languages = await languages_to_code()
 
@@ -375,8 +393,6 @@ async def change_language_category(category: str, language: str, topic: str = ma
                 else:
                     language_dict[f"{new_language_name}"] = None
 
-        time_after = datetime.now()
-        print(time_after - time_now)
         return language_dict
     except Exception as e:
         print(e)
@@ -411,7 +427,6 @@ async def change_language(url_part: str, language: str,
             # print(langauge_dict)
 
         time_after = datetime.now()
-        print(time_after - time_now)
         # print(langauge_dict, 11112)
         return langauge_dict
     except Exception as e:

@@ -9,7 +9,6 @@ def get_category_meta_tags(topic, category, language):
         if key == category:
             return key, res[key]
 
-    print(False)
     return None, None
 
 

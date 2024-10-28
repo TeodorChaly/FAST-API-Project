@@ -6,7 +6,7 @@ import string
 from urllib.parse import urlparse, urlunparse
 
 import requests
-from PIL import Image, UnidentifiedImageError
+from PIL import Image, ImageDraw, ImageFont
 
 from ai_regenerator.prompts import *
 from configs.config_setup import SITE_DOMAIN, SITE_NAME
@@ -213,21 +213,45 @@ async def folder_prep(topic, language, additional_info=None):
                 json.dump([], file)
                 print(f"File created: {file_path}")
 
-        from PIL import Image, ImageDraw, ImageFont
-
-        if not os.path.exists("../../templates/assets/img/logo/text_image_black.png") or not os.path.exists(
-                "../../templates/assets/img/logo/text_image_white.png"):
+        if not os.path.exists("templates/assets/img/logo/text_image_black.png") or not os.path.exists(
+                "templates/assets/img/logo/text_image_white.png"):
 
             width, height = 218, 61
-            text = SITE_NAME
-            font_path = "../../templates/assets/fonts/LEMONMILK-Medium.otf"
-            font_size = 60
+            text = "Text"
+            font_path = "templates/assets/fonts/LEMONMILK-Medium.otf"
 
             image_black = Image.new("RGBA", (width, height), (255, 255, 255, 0))
             image_white = Image.new("RGBA", (width, height), (255, 255, 255, 0))
 
             draw_black = ImageDraw.Draw(image_black)
             draw_white = ImageDraw.Draw(image_white)
+
+            if len(text) <= 6:
+                font_size = 47
+            else:
+                def find_max_font_size(text, font_path, max_width, max_height):
+                    min_size, max_size = 1, 200
+                    best_fit_size = min_size
+
+                    while min_size <= max_size:
+                        mid_size = (min_size + max_size) // 2
+                        try:
+                            font = ImageFont.truetype(font_path, mid_size)
+                        except IOError:
+                            return ImageFont.load_default()
+
+                        text_bbox = draw_black.textbbox((0, 0), text, font=font)
+                        text_width, text_height = text_bbox[2] - text_bbox[0], text_bbox[3] - text_bbox[1]
+
+                        if text_width <= max_width and text_height <= max_height:
+                            best_fit_size = mid_size
+                            min_size = mid_size + 1
+                        else:
+                            max_size = mid_size - 1
+
+                    return best_fit_size
+
+                font_size = find_max_font_size(text, font_path, width, height)
 
             try:
                 font = ImageFont.truetype(font_path, font_size)
@@ -242,9 +266,8 @@ async def folder_prep(topic, language, additional_info=None):
             draw_black.text((text_x, text_y), text, font=font, fill=(0, 0, 0, 255))
             draw_white.text((text_x, text_y), text, font=font, fill=(255, 255, 255, 255))
 
-            image_black.save("../../templates/assets/img/logo/text_image_black.png", "PNG")
-            image_white.save("../../templates/assets/img/logo/text_image_white.png", "PNG")
-
+            image_black.save("templates/assets/img/logo/text_image_black.png", "PNG")
+            image_white.save("templates/assets/img/logo/text_image_white.png", "PNG")
 
     except Exception as e:
         print(f"Error during folder preparation: {e}")
