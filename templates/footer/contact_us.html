@@ -69,11 +69,32 @@
                                 <br>
                             {% endfor %}
                         </div>
+                             <div class="tgAbout-me">
+                              <h1>{{ footer.config.contact_us }}</h1>
+
+                            <form action="/send" method="post">
+                                <label for="name">Name:</label>
+                                <br>
+                                <input type="text" id="name" name="name" required><br><br>
+
+                                <label for="email">Email:</label>
+                                <br>
+                                <input type="email" id="email" name="email" required><br><br>
+
+                                <label>Message:</label>
+                                <textarea id="message" name="message" required rows="8" style="width: 100%;"></textarea><br><br>
+
+                                <button type="submit">Отправить</button>
+                            </form>
+                        </div>
+
                     </div>
                 </div>
 
             </div>
         </div>
+
+
     </section>
 {% include 'base/java_script.html' %}
 

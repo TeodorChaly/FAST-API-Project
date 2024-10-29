@@ -1,7 +1,9 @@
 import json
 import os
+import smtplib
+from email.mime.text import MIMEText
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, Form
 from starlette.templating import Jinja2Templates
 
 from configs.config_setup import main_site_topic, main_language, SITE_NAME
@@ -178,3 +180,26 @@ async def terms_of_service(request: Request, topic: str = main_site_topic, langu
                                            "other_categories": remaining_categories, "info_translate": info_translate,
                                            "footer": config, "config_translate": config_translate,
                                            "black_logo": black_logo, "white_logo": white_logo, "site_name": SITE_NAME})
+
+
+@router.post("/send")
+async def send_email(name: str = Form(...), email: str = Form(...), message: str = Form(...)):
+    try:
+        smtp_server = "smtp.office365.com"
+        smtp_port = 587
+        sender_email = os.getenv("GMAIL_USER")
+        sender_password = os.getenv("GMAIL_PASSWORD")
+
+        msg = MIMEText(f"Name: {name}\nEmail: {email}\nMessage:\n{message}")
+        msg["Subject"] = f"New message from site {SITE_NAME}"
+        msg["From"] = sender_email
+        msg["To"] = sender_email
+
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email, sender_email, msg.as_string())
+
+        return {"message": "Message sent!"}
+    except Exception as e:
+        return {"error": str(e)}

@@ -217,7 +217,7 @@ async def folder_prep(topic, language, additional_info=None):
                 "templates/assets/img/logo/text_image_white.png"):
 
             width, height = 218, 61
-            text = "Text"
+            text = SITE_NAME
             font_path = "templates/assets/fonts/LEMONMILK-Medium.otf"
 
             image_black = Image.new("RGBA", (width, height), (255, 255, 255, 0))
