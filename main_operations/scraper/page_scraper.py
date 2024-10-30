@@ -41,7 +41,7 @@ def extract_images_from_main_content(url):
                 except ValueError:
                     continue
 
-                if width_value >= min_width and height_value >= min_height:
+                if width_value >= min_width and height_value >= min_height and img_alt != "No alt text":
                     image_info.append({
                         'url': full_img_url,
                         'alt': img_alt,
@@ -58,12 +58,10 @@ def extract_images_from_main_content(url):
 #
 # images = extract_images_from_main_content(url)
 # for img in images:
-#     if img['alt'] != "No alt text":
-#
-#         print(f"Image URL: {img['url']}")
-#         print(f"Alt text: {img['alt']}")
-#         print(f"Width: {img['width']}, Height: {img['height']}")
-#         print("-" * 30)
+#     print(f"Image URL: {img['url']}")
+#     print(f"Alt text: {img['alt']}")
+#     print(f"Width: {img['width']}, Height: {img['height']}")
+#     print("-" * 30)
 
 
 def title_scraper(soup):
