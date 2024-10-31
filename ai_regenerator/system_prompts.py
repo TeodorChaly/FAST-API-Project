@@ -109,7 +109,6 @@ def create_prompt(language, list_of_categories, topic):
         output_result_list = random.randint(0, 2)
         output_result = [result3, result4, result5][output_result_list]
 
-
     return output_result
 
 
@@ -170,6 +169,5 @@ def extract_copywriters(topic):
 
     except Exception as e:
         print(e)
-
 
 # print(create_prompt("russian", ["Business", "Technology", "Health", "Entertainment"], "latvian_google_news"))

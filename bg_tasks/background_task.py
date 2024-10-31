@@ -3,8 +3,6 @@ from datetime import datetime
 from main_operations.crawlers.RSS_crawler.router import crawler_by_rss_or_feed
 
 
-
-
 async def main_bg_function(param, param2):
     try:
         print(f"Task started at {datetime.now()}.")
