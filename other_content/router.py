@@ -84,7 +84,7 @@ async def other_content(request: Request, topic: str = main_site_topic, language
                                            "other_categories": remaining_categories, "info_translate": info_translate,
                                            "footer": config, "config_translate": config_translate,
                                            "black_logo": black_logo,
-                                           "white_logo": white_logo, "site_name": SITE_NAME})
+                                           "white_logo": white_logo, "site_name": SITE_NAME, "footer_name": "about_us"})
 
 
 @router.get("/{language}/contact_us", tags=["terms"])
@@ -117,7 +117,8 @@ async def contact_us(request: Request, topic: str = main_site_topic, language: s
                                            "languages": languages, "top_categories": popular_categories,
                                            "other_categories": remaining_categories, "info_translate": info_translate,
                                            "footer": config, "config_translate": config_translate,
-                                           "black_logo": black_logo, "white_logo": white_logo, "site_name": SITE_NAME})
+                                           "black_logo": black_logo, "white_logo": white_logo, "site_name": SITE_NAME,
+                                           "footer_name": "contact_us"})
     except Exception as e:
         print(e)
         return templates.TemplateResponse(
@@ -152,7 +153,8 @@ async def privacy_policy(request: Request, topic: str = main_site_topic, languag
                                            "languages": languages, "top_categories": popular_categories,
                                            "other_categories": remaining_categories, "info_translate": info_translate,
                                            "footer": config, "config_translate": config_translate,
-                                           "black_logo": black_logo, "white_logo": white_logo, "site_name": SITE_NAME})
+                                           "black_logo": black_logo, "white_logo": white_logo, "site_name": SITE_NAME,
+                                           "footer_name": "privacy_policy"})
 
 
 @router.get("/{language}/terms_of_use", tags=["terms"])
@@ -179,7 +181,8 @@ async def terms_of_service(request: Request, topic: str = main_site_topic, langu
                                            "languages": languages, "top_categories": popular_categories,
                                            "other_categories": remaining_categories, "info_translate": info_translate,
                                            "footer": config, "config_translate": config_translate,
-                                           "black_logo": black_logo, "white_logo": white_logo, "site_name": SITE_NAME})
+                                           "black_logo": black_logo, "white_logo": white_logo, "site_name": SITE_NAME,
+                                           "footer_name": "terms_of_use"})
 
 
 @router.post("/send")

@@ -66,8 +66,20 @@
                                 </button>
                                 <ul class="dropdown-menu">
                                     {% for lang in languages %}
-                                        <li><a class="dropdown-item" href="/{{ lang }}/about_us">{{
-                                        lang.upper() }} </a></li>
+                                        {% if footer_name is not none %}
+                                            <li>
+                                                <a class="dropdown-item" href="/{{ lang }}/{{ footer_name }}">
+                                                    {{ lang.upper() }}
+                                                </a>
+                                            </li>
+
+                                        {% elif languages_dict[lang] is not none %}
+                                            <li>
+                                                <a class="dropdown-item" href="/{{ lang }}/{{ languages_dict[lang] }}">
+                                                    {{ lang.upper() }}
+                                                </a>
+                                            </li>
+                                        {% endif %}
 
                                     {% endfor %}
 

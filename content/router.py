@@ -267,7 +267,7 @@ async def category_list(request: Request, category: str, language: str = main_la
                                            "info_translate": info_translate, "site_domain": SITE_DOMAIN,
                                            "site_name": SITE_NAME, "languages_urls": languages_urls, "footer": footer,
                                            "random_copywriter": random_copywriter, "google_id_tag": google_id_tag,
-                                           "black_logo": black_logo, "white_logo": white_logo})
+                                           "black_logo": black_logo, "white_logo": white_logo, "footer_name": category})
     except Exception as e:
         print(e, 7654)
         return templates.TemplateResponse(
@@ -345,7 +345,7 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                     footer = footer_template
 
                 end_time = datetime.now()
-                print("Request wait:", end_time - start_time)
+
 
                 return templates.TemplateResponse("article-details.html",
                                                   {"request": request, "topic": topic, "article": article,
@@ -362,7 +362,7 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                                                    "site_domain": SITE_DOMAIN, "site_name": SITE_NAME,
                                                    "footer": footer, "copywriter": copywriter,
                                                    "google_id_tag": google_id_tag, "black_logo": black_logo,
-                                                   "white_logo": white_logo})
+                                                   "white_logo": white_logo, "footer_name": None})
         return templates.TemplateResponse(
             "error.html",
             {"request": request, "error": f"No articles found with url part {url_part} in category {category}."},
