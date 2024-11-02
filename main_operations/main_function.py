@@ -33,6 +33,7 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
 
         img_url = img_path_scraper(soup)
         img_url = save_images_local(img_url, topic)
+
         if img_url is None:
             print("No image found.")
             return {"Next_url": "This url wasn't scrapped correctly."}

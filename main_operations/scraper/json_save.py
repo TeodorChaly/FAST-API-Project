@@ -313,9 +313,8 @@ def save_images_local(url, topic, quality=85, max_size=(1024, 1024)):
         response.raise_for_status()
 
         os.makedirs(save_directory, exist_ok=True)
-
-        filename = url.split('/')[-1].split('?')[0]
-        base_name = os.path.splitext(filename)[0]
+        characters = string.ascii_letters + string.digits
+        base_name = ''.join(random.choice(characters) for _ in range(16))
 
         with io.BytesIO(response.content) as data_stream:
             with Image.open(data_stream) as img:
