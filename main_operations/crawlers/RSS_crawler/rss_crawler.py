@@ -2,6 +2,7 @@ import json
 import os
 
 import feedparser
+import httpx
 import requests
 from bs4 import BeautifulSoup
 from fastapi import HTTPException
@@ -102,19 +103,28 @@ async def extract_all_rss_function(topic):
 async def check_by_rss_by_url_function(rss_url):
     try:
         feed = feedparser.parse(rss_url)
-        test_topic = "crypto"
-        test_language = ["english", "german", "russian"]
+
+        test_topic = "test"
+        test_language = ["english"]
         test_rss = feed.entries[1].link
-        print(test_rss)
+
         url = test_rss
 
         session = requests.Session()
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+            'Cache-Control': 'max-age=0'
+        }
 
         try:
-            response = session.get(url, timeout=10)
-            response.raise_for_status()
+            async with httpx.AsyncClient(timeout=10) as client:
+                response = await client.get(url, headers=headers)
+                response.raise_for_status()
+                soup = BeautifulSoup(response.content, 'html.parser')
 
-            soup = BeautifulSoup(response.content, 'html.parser')
 
             result = await regenerate_function(soup, test_language, test_topic, url, "test")
 

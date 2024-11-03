@@ -70,6 +70,7 @@ async def crawler_by_rss_or_feed(topic: str = Query(..., description="Topic"), g
             results = await rss_list_saver(feed["url"], feed["topic"])
             new_links_number += len(results)
             new_links.append(results)
+
         counter = 0
         for urls in new_links:
             for _ in urls:

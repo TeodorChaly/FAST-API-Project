@@ -13,7 +13,15 @@ async def rss_list_saver(url, topic):
 
         rss_url = url
 
-        response = requests.get(rss_url, timeout=10)
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+            'Cache-Control': 'max-age=0'
+        }
+
+        response = requests.get(rss_url, timeout=10, headers=headers)
         response.raise_for_status()
         feed = feedparser.parse(response.content)
 

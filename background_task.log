@@ -9,3 +9,58 @@
 2024-09-16 22:13:38,771 - INFO - Finished processing for category: latvia_google_news
 2024-09-16 22:13:38,771 - INFO - Shutting down tasks...
 2024-09-16 22:13:38,771 - ERROR - Error cancelling task: no running event loop
+2024-11-03 16:27:23,879 - INFO - Starting background tasks...
+2024-11-03 16:27:23,880 - DEBUG - Using proactor: IocpProactor
+2024-11-03 16:27:23,881 - INFO - Starting processing for category: latvia_google_news
+2024-11-03 16:27:23,885 - INFO - Checked categories: ['auto-news', 'code_news', 'code', 'crypto', 'latvia-newsq', 'latvia-news', 'latvia-test', 'latvia_google_news', 'latvija_news']
+2024-11-03 16:27:23,885 - INFO - Category 'latvia_google_news' exists. Starting background task.
+2024-11-03 16:27:23,899 - DEBUG - Starting new HTTPS connection (1): www.lsm.lv:443
+2024-11-03 16:27:23,999 - DEBUG - https://www.lsm.lv:443 "GET /rss/?lang=lv&catid=14 HTTP/1.1" 403 None
+2024-11-03 16:27:24,001 - INFO - Background task completed for category: latvia_google_news
+2024-11-03 16:27:24,001 - INFO - Finished processing for category: latvia_google_news
+2024-11-03 16:27:24,002 - INFO - Shutting down tasks...
+2024-11-03 16:27:24,002 - ERROR - Error cancelling task: no running event loop
+2024-11-03 16:30:03,547 - INFO - Starting background tasks...
+2024-11-03 16:30:03,548 - DEBUG - Using proactor: IocpProactor
+2024-11-03 16:30:03,549 - INFO - Starting processing for category: latvia_google_news
+2024-11-03 16:30:03,549 - INFO - Checked categories: ['auto-news', 'code_news', 'code', 'crypto', 'latvia-newsq', 'latvia-news', 'latvia-test', 'latvia_google_news', 'latvija_news']
+2024-11-03 16:30:03,549 - INFO - Category 'latvia_google_news' exists. Starting background task.
+2024-11-03 16:30:03,555 - DEBUG - Starting new HTTPS connection (1): www.lsm.lv:443
+2024-11-03 16:30:03,656 - DEBUG - https://www.lsm.lv:443 "GET /rss/?lang=lv&catid=14 HTTP/1.1" 403 None
+2024-11-03 16:30:03,660 - INFO - Background task completed for category: latvia_google_news
+2024-11-03 16:30:03,660 - INFO - Finished processing for category: latvia_google_news
+2024-11-03 16:30:03,661 - INFO - Shutting down tasks...
+2024-11-03 16:30:03,661 - ERROR - Error cancelling task: no running event loop
+2024-11-03 16:30:23,167 - INFO - Starting background tasks...
+2024-11-03 16:30:23,167 - DEBUG - Using proactor: IocpProactor
+2024-11-03 16:30:23,168 - INFO - Starting processing for category: latvia_google_news
+2024-11-03 16:30:23,169 - INFO - Checked categories: ['auto-news', 'code_news', 'code', 'crypto', 'latvia-newsq', 'latvia-news', 'latvia-test', 'latvia_google_news', 'latvija_news']
+2024-11-03 16:30:23,169 - INFO - Category 'latvia_google_news' exists. Starting background task.
+2024-11-03 16:30:23,173 - DEBUG - Starting new HTTPS connection (1): www.lsm.lv:443
+2024-11-03 16:30:23,229 - DEBUG - https://www.lsm.lv:443 "GET /rss/?lang=lv&catid=14 HTTP/1.1" 403 None
+2024-11-03 16:30:23,230 - INFO - Background task completed for category: latvia_google_news
+2024-11-03 16:30:23,230 - INFO - Finished processing for category: latvia_google_news
+2024-11-03 16:30:23,232 - INFO - Shutting down tasks...
+2024-11-03 16:30:23,232 - ERROR - Error cancelling task: no running event loop
+2024-11-03 16:30:37,179 - INFO - Starting background tasks...
+2024-11-03 16:30:37,179 - DEBUG - Using proactor: IocpProactor
+2024-11-03 16:30:37,180 - INFO - Starting processing for category: latvia_google_news
+2024-11-03 16:30:37,180 - INFO - Checked categories: ['auto-news', 'code_news', 'code', 'crypto', 'latvia-newsq', 'latvia-news', 'latvia-test', 'latvia_google_news', 'latvija_news']
+2024-11-03 16:30:37,180 - INFO - Category 'latvia_google_news' exists. Starting background task.
+2024-11-03 16:30:37,184 - DEBUG - Starting new HTTPS connection (1): www.lsm.lv:443
+2024-11-03 16:30:37,274 - DEBUG - https://www.lsm.lv:443 "GET /rss/?lang=lv&catid=14 HTTP/1.1" 403 None
+2024-11-03 16:30:37,277 - INFO - Background task completed for category: latvia_google_news
+2024-11-03 16:30:37,277 - INFO - Finished processing for category: latvia_google_news
+2024-11-03 16:30:37,279 - INFO - Shutting down tasks...
+2024-11-03 16:30:37,279 - ERROR - Error cancelling task: no running event loop
+2024-11-03 16:31:39,134 - INFO - Starting background tasks...
+2024-11-03 16:31:39,141 - DEBUG - Using proactor: IocpProactor
+2024-11-03 16:31:39,143 - INFO - Starting processing for category: latvia_google_news
+2024-11-03 16:31:39,144 - INFO - Checked categories: ['auto-news', 'code_news', 'code', 'crypto', 'latvia-newsq', 'latvia-news', 'latvia-test', 'latvia_google_news', 'latvija_news']
+2024-11-03 16:31:39,144 - INFO - Category 'latvia_google_news' exists. Starting background task.
+2024-11-03 16:31:39,149 - DEBUG - Starting new HTTPS connection (1): www.lsm.lv:443
+2024-11-03 16:31:39,345 - DEBUG - https://www.lsm.lv:443 "GET /rss/?lang=lv&catid=14 HTTP/1.1" 200 None
+2024-11-03 16:31:39,387 - INFO - Background task completed for category: latvia_google_news
+2024-11-03 16:31:39,387 - INFO - Finished processing for category: latvia_google_news
+2024-11-03 16:31:39,389 - INFO - Shutting down tasks...
+2024-11-03 16:31:39,389 - ERROR - Error cancelling task: no running event loop
