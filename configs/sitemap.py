@@ -12,7 +12,7 @@ from languages.language_json import language_json_read
 router = APIRouter()
 
 
-@router.get("/sitemap.xml", response_class=PlainTextResponse)
+@router.get("/sitemap.xml", response_class=PlainTextResponse, tags=["Bots"])
 async def sitemap_xml():
     languages = await language_json_read()
 
@@ -32,7 +32,7 @@ async def sitemap_xml():
     return PlainTextResponse(content=sitemap, media_type="application/xml")
 
 
-@router.get("/sitemap_{language}.xml", response_class=PlainTextResponse)
+@router.get("/sitemap_{language}.xml", response_class=PlainTextResponse, tags=["Bots"])
 async def sitemap_language_xml(language: str):
     languages = await language_json_read()
     encrypted_languages = []

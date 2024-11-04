@@ -3,13 +3,18 @@ import os
 import json
 import logging
 from pathlib import Path
-from fastapi import FastAPI
+
+from dotenv import load_dotenv
+from fastapi.openapi.docs import get_swagger_ui_html, get_redoc_html
 from starlette.responses import FileResponse
 from starlette.staticfiles import StaticFiles
 from starlette.requests import Request
+from fastapi import Depends
+from fastapi import FastAPI, HTTPException, status, Response, Query
+from datetime import datetime, timedelta
 
 from languages.router import router as languages_router
-from configs.prepare_config_file import create_config_file
+from configs.prepare_config_file import create_config_file, access_required, active_sessions
 
 create_config_file()
 
@@ -28,10 +33,39 @@ logging.basicConfig(
 
 app = FastAPI(
     title="News generator API",
-    version="0.1"
+    version="0.1",
+    docs_url=None, redoc_url=None
 )
 
 app.mount("/assets", StaticFiles(directory="templates/assets"), name="assets")
+
+load_dotenv()
+
+SPECIAL_TOKEN = os.getenv("LANGUAGE_API_KEY")
+ACCESS_DURATION = timedelta(minutes=30)
+
+
+@app.get("/login", tags=["Login"])
+async def login(response: Response, token: str = Query(...)):
+    if token != SPECIAL_TOKEN:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid special token")
+
+    access_expiry = datetime.utcnow() + ACCESS_DURATION
+    active_sessions["user"] = access_expiry
+
+    response.set_cookie(key="access_token", value="access-granted", httponly=True)
+
+    return get_swagger_ui_html(openapi_url="/openapi.json", title="Swagger UI")
+
+
+@app.get("/docs", include_in_schema=False, dependencies=[Depends(access_required)])
+async def get_swagger_documentation():
+    return get_swagger_ui_html(openapi_url="/openapi.json", title="Swagger UI")
+
+
+@app.get("/redoc", include_in_schema=False, dependencies=[Depends(access_required)])
+async def get_redoc_documentation():
+    return get_redoc_html(openapi_url="/openapi.json", title="ReDoc")
 
 
 @app.on_event("startup")
@@ -74,7 +108,7 @@ async def log_requests_middleware(request: Request, call_next):
     return response
 
 
-@app.get('/get_images/image')
+@app.get('/get_images/image', tags=["User content"])
 async def serve_image(topic, img):
     current_file_path = os.path.abspath(__file__)
     main_directory = os.path.dirname(current_file_path)

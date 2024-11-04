@@ -6,7 +6,7 @@ from configs.config_setup import SITE_DOMAIN
 router = APIRouter()
 
 
-@router.get("/robots.txt", response_class=PlainTextResponse)
+@router.get("/robots.txt", response_class=PlainTextResponse, tags=["Bots"])
 async def robots_txt():
     robots_file = f"""
 User-agent: *

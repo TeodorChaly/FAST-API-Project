@@ -50,7 +50,7 @@ async def team_extractor(topic: str, language: str):
         return None
 
 
-@router.get("/{language}/about_us", tags=["terms"])
+@router.get("/{language}/about_us", tags=["Terms"])
 async def other_content(request: Request, topic: str = main_site_topic, language: str = main_language):
     result = await content_extractor("about_us", topic, language)
     languages = await languages_to_code()
@@ -87,7 +87,7 @@ async def other_content(request: Request, topic: str = main_site_topic, language
                                            "white_logo": white_logo, "site_name": SITE_NAME, "footer_name": "about_us"})
 
 
-@router.get("/{language}/contact_us", tags=["terms"])
+@router.get("/{language}/contact_us", tags=["Terms"])
 async def contact_us(request: Request, topic: str = main_site_topic, language: str = main_language):
     try:
         result = await team_extractor(topic, language)
@@ -128,7 +128,7 @@ async def contact_us(request: Request, topic: str = main_site_topic, language: s
         )
 
 
-@router.get("/{language}/privacy_policy", tags=["terms"])
+@router.get("/{language}/privacy_policy", tags=["Terms"])
 async def privacy_policy(request: Request, topic: str = main_site_topic, language: str = main_language):
     result = await content_extractor("privacy_policy", topic, language)
     languages = await languages_to_code()
@@ -157,7 +157,7 @@ async def privacy_policy(request: Request, topic: str = main_site_topic, languag
                                            "footer_name": "privacy_policy"})
 
 
-@router.get("/{language}/terms_of_use", tags=["terms"])
+@router.get("/{language}/terms_of_use", tags=["Terms"])
 async def terms_of_service(request: Request, topic: str = main_site_topic, language: str = main_language):
     result = await content_extractor("terms_of_use", topic, language)
     languages = await languages_to_code()
@@ -185,7 +185,7 @@ async def terms_of_service(request: Request, topic: str = main_site_topic, langu
                                            "footer_name": "terms_of_use"})
 
 
-@router.post("/send")
+@router.post("/send", tags=["Terms"])
 async def send_email(name: str = Form(...), email: str = Form(...), message: str = Form(...)):
     try:
         smtp_server = "smtp.office365.com"

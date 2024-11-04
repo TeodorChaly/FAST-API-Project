@@ -17,3 +17,4 @@ plugin/sites_indexing/sites_to_check.txt
 configs/config_setup.py
 templates/assets/img/logo/text_image_black.png
 templates/assets/img/logo/text_image_white.png
+background_task.log

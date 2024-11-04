@@ -1,4 +1,7 @@
 import os
+from fastapi import HTTPException
+from datetime import datetime
+from starlette import status
 
 
 def create_config_file():
@@ -24,3 +27,16 @@ main_language = ""  # Main language. For example 'en'
 
 google_id_tag = ""  # Google ID tag. Leave empty if you don't have one
 ''')
+
+
+active_sessions = {}
+
+
+def check_access():
+    expiry_time = active_sessions.get("user")
+    if expiry_time is None or datetime.utcnow() > expiry_time:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Access expired or not granted")
+
+
+async def access_required():
+    check_access()
