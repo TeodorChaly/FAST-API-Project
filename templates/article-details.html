@@ -56,7 +56,7 @@
                 "position": 3,
                 "item": {
                     "@type": "WebPage",
-                    "@id": "{{ site_domain }}/{{ language }}/{{ article.url_part }}",
+                    "@id": "{% if article.category and article.category[0] %}{{ site_domain }}/{{ language }}/{{ article.category[0] }}/{{ article.url_part }}{% else %}{{ site_domain }}/other/{{ article.url_part }}{% endif %}",
                     "name": "{{ article.seo_title }}"
                 }
             }

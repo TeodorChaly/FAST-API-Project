@@ -301,6 +301,7 @@ def compress_image(image, quality, max_size):
     return img_byte_arr
 
 
+#
 def save_images_local(url, topic, quality=85, max_size=(1024, 1024)):
     try:
         current_file_path = os.path.abspath(__file__)
@@ -309,7 +310,15 @@ def save_images_local(url, topic, quality=85, max_size=(1024, 1024)):
         reserve_directory = os.path.join(folder_name, topic)
         save_directory = os.path.join(reserve_directory, "main_images")
 
-        response = requests.get(url, timeout=5)
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+            'Cache-Control': 'max-age=0'
+        }
+
+        response = requests.get(url, timeout=5, headers=headers)
         response.raise_for_status()
 
         os.makedirs(save_directory, exist_ok=True)

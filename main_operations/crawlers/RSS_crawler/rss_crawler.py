@@ -125,7 +125,6 @@ async def check_by_rss_by_url_function(rss_url):
                 response.raise_for_status()
                 soup = BeautifulSoup(response.content, 'html.parser')
 
-
             result = await regenerate_function(soup, test_language, test_topic, url, "test")
 
             return result

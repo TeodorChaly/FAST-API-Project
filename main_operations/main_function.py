@@ -26,11 +26,11 @@ async def regenerate_again(content_to_generate, language, categories):
     return None
 
 
+#
 async def regenerate_function(soup, languages, topic, url, status, additional_info=None):
     try:
         main_text = main_content_download(url)
         main_text_with_url = add_links_to_text(main_text, soup)
-
         img_url = img_path_scraper(soup)
         img_url = save_images_local(img_url, topic)
 
