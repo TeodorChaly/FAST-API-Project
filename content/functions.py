@@ -4,7 +4,6 @@ from main_operations.scraper.json_save import categories_extractor
 
 
 # Main page functions
-
 def get_list_of_categories(articles, categories):
     category_count = {category: 0 for category in categories}
 

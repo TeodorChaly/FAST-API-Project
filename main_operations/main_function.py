@@ -2,7 +2,6 @@ import datetime
 import logging
 
 import httpx
-from bs4 import BeautifulSoup
 
 from main_operations.crawlers.Google_news_crawler.google_search_crawler import google_news_extractor
 from main_operations.crawlers.RSS_crawler.json_save import process_json

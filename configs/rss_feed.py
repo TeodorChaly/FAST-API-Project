@@ -12,7 +12,6 @@ from main_operations.scraper.json_save import get_main_info
 router = APIRouter()
 
 
-# Объединение двух маршрутов
 @router.get("/rss", response_class=PlainTextResponse, tags=["RSS"])
 @router.get("/feed", response_class=PlainTextResponse, tags=["RSS"])
 async def rss_feed(language: str = main_language):
@@ -69,7 +68,6 @@ async def generate_rss_feed(language: str) -> str:
         author = item.get('author', 'Unknown Author')
         rss_feed += f"         <author>{author}</author>\n"
 
-        # Используем вспомогательную функцию для обработки даты
         pub_date = get_pub_date(item.get('lastmod'))
         rss_feed += f"         <pubDate>{pub_date}</pubDate>\n"
 
@@ -83,7 +81,6 @@ async def generate_rss_feed(language: str) -> str:
 
 
 def get_pub_date(lastmod: str) -> str:
-    """Обрабатывает формат даты и возвращает строку для <pubDate>"""
     try:
         if lastmod and lastmod != "-":
             pub_date = datetime.strptime(lastmod, '%Y-%m-%dT%H:%M:%SZ').strftime('%a, %d %b %Y %H:%M:%S +0000')
@@ -103,7 +100,6 @@ def get_content_from_json_files(language: str):
     filepath = os.path.join(directory, f"{main_site_topic}_{full_language}.json")
     urls_list = []
 
-    # Обработка ошибок при открытии файла
     if not os.path.exists(filepath):
         print(f"File {filepath} not found.")
         return urls_list
@@ -115,7 +111,6 @@ def get_content_from_json_files(language: str):
             print(f"Error decoding JSON from {filepath}")
             return urls_list
 
-        # Получаем последние 20 статей
         data_list = data_list[:20]
 
         for data in data_list:
@@ -127,7 +122,6 @@ def get_content_from_json_files(language: str):
             image = data.get('image')
             date_published = data.get('date_published')
 
-            # Формирование даты публикации
             try:
                 date_obj = datetime.strptime(date_published, "%d %m %Y %H:%M")
                 lastmod = date_obj.strftime("%Y-%m-%dT%H:%M:%SZ")
