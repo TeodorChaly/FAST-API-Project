@@ -26,6 +26,8 @@ SITE_NAME = ""  # Site name. For example 'Example'
 main_language = ""  # Main language. For example 'en'
 
 google_id_tag = ""  # Google ID tag. Leave empty if you don't have one
+
+google_adsense_tag = ""  # Google adsense tag. Leave empty if you don't have one
 ''')
 
 

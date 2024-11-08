@@ -14,6 +14,7 @@ router = APIRouter()
 
 @router.get("/rss", response_class=PlainTextResponse, tags=["RSS"])
 @router.get("/feed", response_class=PlainTextResponse, tags=["RSS"])
+@router.get("/rss_{language}", response_class=PlainTextResponse, tags=["RSS"])
 async def rss_feed(language: str = main_language):
     return await rss_feed_function(language)
 

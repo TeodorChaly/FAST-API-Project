@@ -1,5 +1,6 @@
 from markupsafe import Markup
 
+from configs.config_setup import main_site_topic
 from main_operations.scraper.json_save import categories_extractor
 
 
@@ -83,10 +84,34 @@ def get_trending_categories(all_categories):
 
 def get_all_articles(articles, category, page):
     page_articles_max = 5
-    filtered_articles = [article for article in articles if article.get("category").lower() == category.lower()]
+
+    filtered_articles = []
+
+    for article in articles:
+        article_category = article.get("category", "").lower()
+
+        if article_category == category.lower():
+            filtered_articles.append(article)
+
     total_articles = len(filtered_articles)
-    total_pages = (total_articles + page_articles_max - 1) // page_articles_max
+    if total_articles == 0:
+        topic = main_site_topic
+        get_all_categories = categories_extractor(topic)
+        items = [item.strip() for item in get_all_categories.splitlines()]
+        categories_list = [item.strip('",[]') for item in items if item.strip('",[]')]
+        for cat in categories_list:
+            if cat.lower() == category.lower():
+                return [], 0
+        return None, None
+
+    if total_articles % page_articles_max == 0:
+        total_pages = total_articles // page_articles_max
+    else:
+        total_pages = total_articles // page_articles_max + 1
+
     start_index = (page - 1) * page_articles_max
     end_index = start_index + page_articles_max
+
     filtered_articles = filtered_articles[start_index:end_index]
+
     return filtered_articles, total_pages

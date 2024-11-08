@@ -19,18 +19,26 @@
 
     {% include 'base/analytics_tag.html' %}
 
-    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('assets', path='/img/favicon.png') }}">
     <!-- Place favicon.ico in the root directory -->
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('assets', path='/img/favicon.png') }}">
 
-    <!-- CSS here -->
-    {% include 'base/css.html' %}
+    <!-- canonical link -->
+    {% if not canonical %}
+        <link rel="canonical" href="{{ site_domain }}" />
+    {% endif %}
 
-
+    <!-- Hreflang tags -->
     {% for lang in languages %}
         <link rel="alternate" href="{{ site_domain }}/{{lang}}" hreflang="{{lang}}">
     {% endfor %}
     <link rel="alternate" hreflang="x-default"
        href="{{ site_domain }}" />
+
+
+    <!-- CSS here -->
+    {% include 'base/css.html' %}
+
+
 
 </head>
 

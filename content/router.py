@@ -8,7 +8,7 @@ from starlette.templating import Jinja2Templates
 
 from content.functions import *
 from content.news_file_extractor import *
-from configs.config_setup import main_site_topic, SITE_DOMAIN, main_language, SITE_NAME
+from configs.config_setup import main_site_topic, SITE_DOMAIN, main_language, SITE_NAME, google_adsense_tag
 from main_operations.images_function import extract_logo_images
 
 try:
@@ -69,15 +69,14 @@ async def main_page_redirect(request: Request, language: str = main_language):
         if redirect not in all_topic:
             return f"Not correct topic {redirect}. \nGo to config_setup.py and change it. \nYou can see all topics: {all_topic}"
         else:
-            return await main_page(request, topic=redirect, language=language)
+            return await main_page(request, topic=redirect, language=language, canonic=True)
     except Exception as e:
         print(e)
 
 
-#
-#
 @router.get("/{language}", tags=["User content"], response_class=HTMLResponse)
-async def main_page(request: Request, topic: str = main_site_topic, language: str = main_language, limit: int = None):
+async def main_page(request: Request, topic: str = main_site_topic, language: str = main_language, limit: int = None,
+                    canonic: bool = False):
     try:
         time_now = datetime.now()
         languages = await languages_to_code()
@@ -163,7 +162,8 @@ async def main_page(request: Request, topic: str = main_site_topic, language: st
                                            "other_categories": remaining_categories_dict, "all_content": new_content,
                                            "today_news": today_news, "newest_news": newest_news,
                                            "info_translate": info_translate, "site_domain": SITE_DOMAIN,
-                                           "site_name": SITE_NAME, "footer": footer, "google_id_tag": google_id_tag})
+                                           "site_name": SITE_NAME, "footer": footer, "google_id_tag": google_id_tag,
+                                           "canonical": canonic, "google_adsense_id": google_adsense_tag})
     except Exception as e:
         print(e, 54321)
 
@@ -208,7 +208,7 @@ async def category_list(request: Request, category: str, language: str = main_la
 
         filtered_articles, total_pages = get_all_articles(articles, category, page)
 
-        if len(filtered_articles) == 0:
+        if filtered_articles is None:
             return templates.TemplateResponse(
                 "error.html",
                 {"request": request, "error": f"No articles found in category {category}."},
@@ -218,10 +218,6 @@ async def category_list(request: Request, category: str, language: str = main_la
         about_category = get_category_meta_tags(topic, category, language)
 
         info_translate = get_main_info(language, topic)
-
-        # if not filtered_articles and page == 1 or page <= 0:
-        #     return templates.TemplateResponse("error.html",
-        #                                       {"request": request, "error": f"No articles found in category {category}."})
 
         logos = await extract_logo_images()
         black_logo, white_logo = logos[0], logos[1]
@@ -255,6 +251,8 @@ async def category_list(request: Request, category: str, language: str = main_la
         end_time = datetime.now()
         print("Request wait:", end_time - start_time)
 
+        print(category)
+
         return templates.TemplateResponse("category_list_template.html",
                                           {"request": request, "topic": topic, "category": category,
                                            "language": language,
@@ -267,7 +265,8 @@ async def category_list(request: Request, category: str, language: str = main_la
                                            "info_translate": info_translate, "site_domain": SITE_DOMAIN,
                                            "site_name": SITE_NAME, "languages_urls": languages_urls, "footer": footer,
                                            "random_copywriter": random_copywriter, "google_id_tag": google_id_tag,
-                                           "black_logo": black_logo, "white_logo": white_logo, "footer_name": category})
+                                           "google_adsense_id": google_adsense_tag, "black_logo": black_logo,
+                                           "white_logo": white_logo, "footer_name": category})
     except Exception as e:
         print(e, 7654)
         return templates.TemplateResponse(
@@ -346,7 +345,6 @@ async def article_detail(request: Request, url_part: str, language: str, categor
 
                 end_time = datetime.now()
 
-
                 return templates.TemplateResponse("article-details.html",
                                                   {"request": request, "topic": topic, "article": article,
                                                    "language": language, "languages": languages,
@@ -362,7 +360,8 @@ async def article_detail(request: Request, url_part: str, language: str, categor
                                                    "site_domain": SITE_DOMAIN, "site_name": SITE_NAME,
                                                    "footer": footer, "copywriter": copywriter,
                                                    "google_id_tag": google_id_tag, "black_logo": black_logo,
-                                                   "white_logo": white_logo, "footer_name": None})
+                                                   "white_logo": white_logo, "footer_name": None,
+                                                   "google_adsense_id": google_adsense_tag})
         return templates.TemplateResponse(
             "error.html",
             {"request": request, "error": f"No articles found with url part {url_part} in category {category}."},
