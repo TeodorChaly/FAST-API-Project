@@ -8,13 +8,18 @@ from starlette.templating import Jinja2Templates
 
 from content.functions import *
 from content.news_file_extractor import *
-from configs.config_setup import main_site_topic, SITE_DOMAIN, main_language, SITE_NAME, google_adsense_tag
+from configs.config_setup import main_site_topic, SITE_DOMAIN, main_language, SITE_NAME
 from main_operations.images_function import extract_logo_images
 
 try:
     from configs.config_setup import google_id_tag
 except Exception as e:
     google_id_tag = ""
+
+try:
+    from configs.config_setup import google_adsense_tag
+except Exception as e:
+    google_adsense_tag = ""
 
 from languages.language_json import languages_to_code
 from main_operations.crawlers.RSS_crawler.rss_crawler import show_all_topics_function
