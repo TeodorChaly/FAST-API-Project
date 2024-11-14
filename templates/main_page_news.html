@@ -126,8 +126,8 @@
                             <nav class="tgmobile__menu-box">
                                 <div class="close-btn"><i class="fas fa-times"></i></div>
                                 <div class="nav-logo">
-                                    <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" loading="lazy" alt="Logo"></a>
-                                    <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" loading="lazy" alt="Logo"></a>
+                                    <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" alt="Logo"></a>
+                                    <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}"  alt="Logo"></a>
                                 </div>
                                 <div class="tgmobile__search">
                                     <form action="#">
@@ -162,8 +162,8 @@
                 <div class="offCanvas__toggle"><i class="flaticon-addition"></i></div>
                 <div class="offCanvas__content">
                    <div class="offCanvas__logo logo">
-                        <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}" loading="lazy" alt="Logo"></a>
-                        <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" loading="lazy" alt="Logo"></a>
+                        <a href="/" class="logo-dark"><img src="{{ url_for('assets', path='/img/logo/logo.png') }}"  alt="Logo"></a>
+                        <a href="/" class="logo-light"><img src="{{ url_for('assets', path='/img/logo/w_logo.png') }}" alt="Logo"></a>
                     </div>
                 </div>
                 <div class="offCanvas__contact">
@@ -228,7 +228,7 @@
                             </div>
                             <div class="col-lg-6">
                                 <div class="slider__img-wrap">
-                                    <img src="{{ item.image }}" class="main-img" alt="{{ item.seo_title }}"  width="600" height="600" loading="lazy">
+                                    <img src="{{ item.image }}" class="main-img" alt="{{ item.seo_title }}"  width="600" height="600" >
                                 </div>
                             </div>
                         </div>
@@ -272,7 +272,7 @@
                                 <div class="swiper-slide">
                                     <div class="trending__post">
                                         <div class="trending__post-thumb tgImage__hover">
-                                            <a href="/{{ language }}/{{ item.category }}/{{ item.url_part }}"><img src="{{ item.image }}" alt="{{ item.seo_title }}" loading="lazy"></a>
+                                            <a href="/{{ language }}/{{ item.category }}/{{ item.url_part }}"><img src="{{ item.image }}" alt="{{ item.seo_title }}" ></a>
                                             <span class="is_trend"><i class="fas fa-bolt"></i></span>
                                         </div>
                                         <div class="trending__post-content">
@@ -314,7 +314,7 @@
                                 <div class="swiper-slide">
                                     <div class="trending__post">
                                         <div class="trending__post-thumb tgImage__hover">
-                                            <a href="/{{ language }}/{{ item.category }}/{{ item.url_part }}"><img src="{{ item.image }}" alt="{{ item.seo_title }}" width="820" height="440" loading="lazy"></a>
+                                            <a href="/{{ language }}/{{ item.category }}/{{ item.url_part }}"><img src="{{ item.image }}" alt="{{ item.seo_title }}" width="820" height="440" ></a>
                                         </div>
                                         <div class="trending__post-content">
 <!--                                            <ul class="tgbanner__content-meta list-wrap">-->
