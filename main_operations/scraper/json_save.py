@@ -76,6 +76,7 @@ async def folder_prep(topic, language, additional_info=None):
         file_name = f"{str(topic)}_{str(language)}.json"
         file_path = os.path.join(sub_folder_name, file_name)
 
+
         if not os.path.exists(folder_name):
             os.makedirs(folder_name)
 
@@ -210,12 +211,12 @@ async def folder_prep(topic, language, additional_info=None):
                 json.dump([], file)
                 print(f"File created: {file_path}")
 
-        if not os.path.exists("templates/assets/img/logo/text_image_black.png") or not os.path.exists(
-                "templates/assets/img/logo/text_image_white.png"):
+        if not os.path.exists(main_directory + "/templates/assets/img/logo/text_image_black.png") or not os.path.exists(
+                main_directory+"/templates/assets/img/logo/text_image_white.png"):
 
             width, height = 218, 61
             text = SITE_NAME
-            font_path = "templates/assets/fonts/LEMONMILK-Medium.otf"
+            font_path = main_directory+"/templates/assets/fonts/LEMONMILK-Medium.otf"
 
             image_black = Image.new("RGBA", (width, height), (255, 255, 255, 0))
             image_white = Image.new("RGBA", (width, height), (255, 255, 255, 0))
@@ -263,8 +264,8 @@ async def folder_prep(topic, language, additional_info=None):
             draw_black.text((text_x, text_y), text, font=font, fill=(0, 0, 0, 255))
             draw_white.text((text_x, text_y), text, font=font, fill=(255, 255, 255, 255))
 
-            image_black.save("templates/assets/img/logo/text_image_black.png", "PNG")
-            image_white.save("templates/assets/img/logo/text_image_white.png", "PNG")
+            image_black.save(main_directory+"/templates/assets/img/logo/text_image_black.png", "PNG")
+            image_white.save(main_directory+"/templates/assets/img/logo/text_image_white.png", "PNG")
 
     except Exception as e:
         print(f"Error during folder preparation: {e}")

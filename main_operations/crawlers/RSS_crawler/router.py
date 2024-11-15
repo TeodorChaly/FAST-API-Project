@@ -3,7 +3,7 @@ from fastapi.params import Query
 
 from configs.prepare_config_file import access_required
 from languages.language_json import language_json_read
-from main_operations.crawlers.RSS_crawler.json_save import rss_list_saver
+from main_operations.crawlers.RSS_crawler.json_save import rss_list_saver, get_link_source
 from main_operations.crawlers.RSS_crawler.rss_crawler import *
 from main_operations.router import scraper_fun
 from main_operations.scraper.json_save import folder_prep
@@ -15,6 +15,19 @@ router = APIRouter()
 async def check_by_rss_by_url(url: str = Query(..., description="URL to RSS"),
                               api_key: dependencies = Depends(access_required)):
     result = await check_by_rss_by_url_function(url)
+    return result
+
+
+@router.get("/link_source_check", tags=["Link source check"])
+async def link_source_check(url: str = Query(..., description="URL slug to delete"),
+                            api_key: dependencies = Depends(access_required)):
+    try:
+        url_list = url.split("/")
+        url1 = url_list[2]
+        language = url_list[0]
+        result = await get_link_source(url1, language)
+    except Exception as e:
+        result = f"Error: {e}"
     return result
 
 

@@ -3,6 +3,7 @@ import logging
 
 import httpx
 
+from configs.config_setup import main_site_topic
 from main_operations.crawlers.Google_news_crawler.google_search_crawler import google_news_extractor
 from main_operations.crawlers.RSS_crawler.json_save import process_json
 from main_operations.scraper.json_save import *
@@ -15,7 +16,8 @@ async def regenerate_again(content_to_generate, language, categories):
     tries_count = 1
     while tries_count < 3:
         try:
-            regenerated_result = await ai_generator_function(content_to_generate, language, categories)
+            print(1431443)
+            regenerated_result = await ai_generator_function(content_to_generate, language, categories, main_site_topic)
             regenerated_result_json = json.loads(regenerated_result)
             print(f"Try {tries_count} for {language}", regenerated_result_json["url_part"])
             return regenerated_result_json
@@ -121,11 +123,10 @@ async def regenerate_function(soup, languages, topic, url, status, additional_in
         if not os.path.exists("logs_list"):
             os.makedirs("logs_list")
 
-        now_time = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-        log_filename = f"logs_list/bug_{now_time}.log"
+        log_filename = f"logs_list/bug.log"
 
-        with open(log_filename, "w", encoding="utf-8") as file:
-            file.write(str(e))
+        with open(log_filename, "a", encoding="utf-8") as file:
+            file.write(f"{str(e)}\n")
 
 
 async def scrape(url, topic, languages, status, bool_google=False, additional_info=None):

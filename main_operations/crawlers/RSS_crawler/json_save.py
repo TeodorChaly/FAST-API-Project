@@ -5,6 +5,9 @@ from urllib.parse import urlparse
 import feedparser
 import requests
 
+from configs.config_setup import main_site_topic
+from content.news_file_extractor import get_language_name_by_code
+
 
 async def rss_list_saver(url, topic):
     try:
@@ -84,6 +87,29 @@ def process_json(input_json):
     return fixed_json
 
 
+async def get_link_source(url_to_delete, language):
+    try:
+        topic = main_site_topic
+        language = language.lower()
+        language = get_language_name_by_code(language)
+        file_path = f"news_json/{topic}/{topic}_{language}.json"
+
+        if not os.path.isfile(file_path):
+            return {"error": "This topic does not exist. Use existing topic and language."}
+
+        with open(file_path, 'r', encoding='utf-8') as file:
+            articles = json.load(file)
+
+        for article in articles:
+            if article.get("url_part") == url_to_delete:
+                return article.get("url")
+        return {"error": "Article not found."}
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return "Error"
+
+
 def test_rss(url):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
@@ -96,5 +122,3 @@ def test_rss(url):
     }
     list1 = rss_list_saver(url, "r")
     print(requests.get(list1[0], headers=headers))
-
-# test_rss("https://coinbold.io/feed/")
