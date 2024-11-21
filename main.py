@@ -25,6 +25,7 @@ from configs.sitemap import router as sitemap_router
 from content.router import router as topics_router
 from other_content.router import router as other_content_router
 from configs.rss_feed import router as rss_router
+from configs.adds_txt import router as adds_txt_router
 
 logging.basicConfig(
     filename='access.log',
@@ -130,6 +131,7 @@ async def serve_image(topic, img):
 
 
 app.include_router(robots_router)
+app.include_router(adds_txt_router)
 app.include_router(rss_router)
 app.include_router(sitemap_router)
 app.include_router(crawler_router)
