@@ -1,8 +1,6 @@
 from fastapi.responses import PlainTextResponse
 from fastapi import APIRouter
 
-from configs.config_setup import SITE_DOMAIN
-
 router = APIRouter()
 
 
