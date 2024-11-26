@@ -27,7 +27,6 @@ async def regenerate_again(content_to_generate, language, categories):
     return None
 
 
-#
 async def regenerate_function(soup, languages, topic, url, status, additional_info=None):
     try:
         main_text = main_content_download(url)
