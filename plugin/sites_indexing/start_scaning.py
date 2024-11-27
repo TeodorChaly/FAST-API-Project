@@ -42,7 +42,6 @@ def parse_google_results(html):
         return "Not found"
 
 
-
 try:
     with open("sites_to_check.txt", "r", encoding="utf-8") as f:
         links = [line.strip() for line in f.readlines()]
@@ -51,7 +50,6 @@ except FileNotFoundError:
         f.write("example.com\n")
         links = ["example.com"]
         print(links)
-
 
 for site in links:
     query = f"site:{site}"

@@ -6,7 +6,7 @@ from plugin.extract_links_list import get_links
 
 
 async def news_regeneration_function(topic, path, limitation=0):
-    list_of_urls = await get_links("plugin/"+path, limitation)
+    list_of_urls = await get_links("plugin/" + path, limitation)
 
     current_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
