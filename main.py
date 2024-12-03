@@ -111,14 +111,20 @@ async def log_requests_middleware(request: Request, call_next):
 
 
 @app.get('/get_images/image', tags=["User content"])
-async def serve_image(topic, img):
+async def serve_image(topic, img, subtopic=None):
     current_file_path = os.path.abspath(__file__)
     main_directory = os.path.dirname(current_file_path)
     folder_name = os.path.join(main_directory, "news_json")
     reserve_directory = os.path.join(folder_name, topic)
     save_directory = os.path.join(reserve_directory, "main_images")
     name_file = img
-    result_directory = Path(os.path.join(save_directory, name_file))  # For Linux
+    if subtopic:
+        save2_directory = os.path.join(save_directory, subtopic)
+        print("Save directory", save_directory)
+    else:
+        save2_directory = save_directory
+    result_directory = Path(os.path.join(save2_directory, name_file))  # For Linux
+    print("Result directory", result_directory)
     # result_directory = Path(os.path.join(save_directory, name_file).replace("/", "\\"))
     try:
         if result_directory.exists():

@@ -1,6 +1,7 @@
 import httpx
 
 from ai_regenerator.ai_api_env import API_endpoint
+from ai_web.get_env import perplexity
 
 
 async def perplexity_api(prompt, system_content, model="llama-3.1-sonar-small-128k-online"):
@@ -16,12 +17,12 @@ async def perplexity_api(prompt, system_content, model="llama-3.1-sonar-small-12
     }
 
     headers = {
-        "Authorization": "Bearer <YOUR_API_KEY>",
+        "Authorization": f"Bearer {perplexity}",
         "Content-Type": "application/json"
     }
 
     async with httpx.AsyncClient() as client:
-        response = await client.post(perplexity_endpoint, json=payload, headers=headers)
+        response = await client.post(perplexity_endpoint, json=payload, headers=headers, timeout=120)
 
         if response.status_code == 200:
             data = response.json()

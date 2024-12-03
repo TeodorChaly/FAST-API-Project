@@ -19,8 +19,8 @@ async def get_html_structure_prompt():
     html_structure_prompt = """
 You will be provided with:
 
-Product information (“{Product information from Perplexity}”).
-Competitors’ structure on the same topic (“{Competitors’ structure on the topic {variable}}”).
+Product information.
+Competitors’ structure on the same topic.
 Based on these inputs, create a JSON structure that describes an HTML article. The article should:
 
 Be better structured than competitors (avoid overlapping categories, ensure clarity and uniqueness).
@@ -41,8 +41,6 @@ Video: At the end of the article, include a [Video description] relevant to the 
 Expected Output Format (JSON):
 The output must strictly follow this format:
 
-json
-Copy code
 {
   "title": "Main Title",
   "sections": [
@@ -78,5 +76,29 @@ Copy code
   ],
   "video": "Video description: A video demonstrating the product or explaining the topic."
 }
+
+without ```json and ``` at the beginning and end of the JSON structure.
 """
     return html_structure_prompt
+
+
+async def get_combine_info_prompt(general_content, competitors_content):
+    full_text = f"""
+    Product information: {general_content}
+    Competitors' structure: {competitors_content}
+    """
+    return full_text
+
+
+async def get_new_content_prompt():
+    rewrite_content = \
+        f"""You will be provided with a JSON, and you need to convert it into an HTML block, which will then be combined with other HTML blocks. 
+I already have a CSS file, but you don't have access to it. Therefore, you can make some modifications to ensure it looks nicer. 
+The changes should be "embedded" (i.e., directly in the HTML), but not in the <style> section, rather in the HTML elements themselves.
+In result you must provide a HTML block that will be combined with other HTML blocks. Without ```html and ``` at the beginning and end of the HTML block.
+       """
+    return rewrite_content
+
+
+
+
