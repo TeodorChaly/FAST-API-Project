@@ -21,28 +21,33 @@ You will be provided with:
 
 Product information.
 Competitors’ structure on the same topic.
-Based on these inputs, create a JSON structure that describes an HTML article. The article should:
+You have information about a product and the structure of competitors on the same topic.
+You need to imagine that you are writing an article on this topic and you need to make the structure of the article.
+Take into account the product information and the competitors.
+You also deside length of the article. 
+Here are the basic rules:
+Be better structured than your competitors (avoid duplicate categories, ensure clarity and uniqueness)
+In the content, put what I've given you and in the product information. 
 
-Be better structured than competitors (avoid overlapping categories, ensure clarity and uniqueness).
-Include concise product information in each subcategory.
-Where relevant, incorporate tables for structured data presentation.
 JSON Structure Guidelines:
 
 H1: The main title, tied to the topic {variable}.
 H2: Subcategories (optimized based on competitors’ structure, incorporating product information).
 Each subcategory must include:
-A brief description summarizing the subcategory and linking it to the product.
+An description of the subcategory’s focus. Try to get as much information as possible from the product information.
 H3: Subsections, if necessary. Each subsection may include:
-A brief explanation of the subsection’s focus.
+An explanation of the subsection’s focus. Try to get as much information as possible from the product information.
 Optionally:
-A table ([table]) with headers and rows for structured data (e.g., specifications, comparisons).
-An image ([Image description]) with a clear description to identify a relevant image.
-Video: At the end of the article, include a [Video description] relevant to the product or topic.
+A table ([table]) with headers and rows for structured data (e.g., specifications, comparisons). Table may contain up to 6 rows.
+Video: At the end of the article, include a [Video description] relevant to the product or topic. Maximum 7 words to describe image, bet try to keep it shorter. 
 Expected Output Format (JSON):
 The output must strictly follow this format:
 
 {
   "title": "Main Title",
+  "seo_description": "Brief description summarizing the article content.",
+  "url_part": "slug of URL",
+  tags: "tag1, tag2, tag3",
   "sections": [
     {
       "h2": "Subcategory Title",
@@ -54,8 +59,7 @@ The output must strictly follow this format:
           "table": {
             "headers": ["Column 1", "Column 2"],
             "rows": [["Data 1", "Data 2"], ["Data 3", "Data 4"]]
-          },
-          "image": "Image description: A relevant image showcasing the subsection."
+          }
         }
       ]
     },
@@ -78,6 +82,7 @@ The output must strictly follow this format:
 }
 
 without ```json and ``` at the beginning and end of the JSON structure.
+
 """
     return html_structure_prompt
 
@@ -92,13 +97,13 @@ async def get_combine_info_prompt(general_content, competitors_content):
 
 async def get_new_content_prompt():
     rewrite_content = \
-        f"""You will be provided with a JSON, and you need to convert it into an HTML block, which will then be combined with other HTML blocks. 
-I already have a CSS file, but you don't have access to it. Therefore, you can make some modifications to ensure it looks nicer. 
-The changes should be "embedded" (i.e., directly in the HTML), but not in the <style> section, rather in the HTML elements themselves.
-In result you must provide a HTML block that will be combined with other HTML blocks. Without ```html and ``` at the beginning and end of the HTML block.
+        f"""
+        You will be provided with a JSON and your task is to rewrite the content in a more engaging way.
+        Content must be E-E-A-T friendly and you should add something from your own experience or opinion and knowledge.
+        Then you need to convert new text into an HTML block, which will then be combined with other HTML blocks. 
+        The output must be valid HTML without any PHP or JavaScript code or CSS code (except inline CSS for tables).
+        Try to use different keywords (but don t owerspam) and try to make the text more engaging. Try to udnerstend: 
+        does this part of content must be big or small, does it need to be more detailed or less detailed (for better
+         user experience). Word count may various from 40 to 1000 words.Without ```html and ``` at the beginning and end. 
        """
     return rewrite_content
-
-
-
-

@@ -120,11 +120,9 @@ async def serve_image(topic, img, subtopic=None):
     name_file = img
     if subtopic:
         save2_directory = os.path.join(save_directory, subtopic)
-        print("Save directory", save_directory)
     else:
         save2_directory = save_directory
     result_directory = Path(os.path.join(save2_directory, name_file))  # For Linux
-    print("Result directory", result_directory)
     # result_directory = Path(os.path.join(save_directory, name_file).replace("/", "\\"))
     try:
         if result_directory.exists():

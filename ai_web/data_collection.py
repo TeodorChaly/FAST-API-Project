@@ -1,11 +1,14 @@
 import asyncio
 import json
+import random
+from datetime import datetime
 
+from ai_regenerator.system_prompts import extract_copywriters
 from ai_web.get_web_media import search_youtube_video, search_image
 from ai_web.web_ai import *
 from ai_web.web_prompts import *
 from configs.config_setup import main_site_topic
-from main_operations.scraper.json_save import save_images_local
+from main_operations.scraper.json_save import save_images_local, json_rewritten_news_saver, categories_extractor
 
 
 async def general_info(product):
@@ -51,7 +54,7 @@ async def get_structure(general_content, competitors_content):
     return html_structure_json
 
 
-async def get_video_and_images(html_structure_json):
+async def get_video_and_images(html_structure_json, sub_folder):
     video_link = search_youtube_video(html_structure_json["video"])
 
     images = []
@@ -62,7 +65,11 @@ async def get_video_and_images(html_structure_json):
 
     image_dict = {}
     for i in images:
-        image_dict[i] = search_image(i)
+        searched_img = search_image(i)
+        print(searched_img)
+        local_img = save_images_local(searched_img, main_site_topic, sub_folder=sub_folder)
+        image_dict[i] = local_img
+    print({"video": video_link, "images": image_dict})
     return {"video": video_link, "images": image_dict}
 
 
@@ -73,7 +80,14 @@ async def get_result_content(html_json_content, media_content):
 
     counter = 0
     for section in html_json_content["sections"]:
-        rewrite_content = await openai_api(rewrite_prompt, "content: " + json.dumps(section))
+        for subsection in section["subsections"]:
+            if "image" in subsection:
+                for key, value in media_content["images"].items():
+                    if subsection["image"] == key:
+                        subsection["image"] = f"alt:{key}, img:{value}"
+
+        rewrite_content = await openai_api(rewrite_prompt,
+                                           "content: " + json.dumps(section))
         print(counter)
         combine_html_text += rewrite_content
         counter += 1
@@ -81,20 +95,69 @@ async def get_result_content(html_json_content, media_content):
     return combine_html_text
 
 
+def extract_embed_url(youtube_url):
+    from urllib.parse import urlparse, parse_qs
+
+    parsed_url = urlparse(youtube_url)
+
+    if parsed_url.netloc in ("www.youtube.com", "youtube.com") and "v" in parse_qs(parsed_url.query):
+        video_id = parse_qs(parsed_url.query)["v"][0]
+        return f"https://www.youtube.com/embed/{video_id}"
+    else:
+        raise ValueError("Not correct YouTube url")
+
+
+def get_article():
+    topic = "technology-news"
+    language = "polish"
+
+    main_topic = "4Runner vs Land Cruiser"
+
+    results_dict = asyncio.run(get_web_content(main_topic))
+    main_info = results_dict["general"][0]
+    competitors_info = results_dict["competitors"][0]
+
+    categories = json.loads(categories_extractor(topic))
+
+    html_structure = asyncio.run(get_structure(main_info, competitors_info))
+
+    media_content = asyncio.run(get_video_and_images(html_structure, main_topic))
+
+    full_html_result = asyncio.run(get_result_content(html_structure, media_content))
+    print(full_html_result)
+
+    main_content = full_html_result
+    seo_title = html_structure["title"]
+    seo_description = html_structure["seo_description"]
+    chosen_category = "Write AI"
+    tags = html_structure["tags"]
+    url_part = html_structure["url_part"]
+    date_published = str(datetime.now())
+
+    list_of_copywriter = extract_copywriters(topic)
+
+    author = list_of_copywriter[random.randint(0, len(list_of_copywriter) - 1)]
+    author_name = f"{author['name']} {author['surname']}"
+
+    video = media_content["video"]
+    images = media_content["images"]
+
+    main_content = main_content + f"""<section id="video">
+      <div class="video-wrapper">
+        <iframe width="560" height="315" src="{extract_embed_url(video)}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </section>
+    """
+
+    img_path = author["image"]
+
+    content = {"rewritten_content": main_content, "seo_title": seo_title,
+               "seo_description": seo_description, "category": "mobile_technology",
+               "tags": tags, "url_part": url_part, "date_published": date_published,
+               "author": author_name, "image_path": img_path}
+    asyncio.run(json_rewritten_news_saver(content, topic, language, img_path, "-"))
+
+
 if __name__ == "__main__":
-    main_topic = "Golf 8"
-    #
-    # results_dict = asyncio.run(get_web_content(main_topic))
-    # main_info = results_dict["general"][0]
-    # competitors_info = results_dict["competitors"][0]
-    #
-    # html_structure = asyncio.run(get_structure(main_info, competitors_info))
-    #
-    # media_content = asyncio.run(get_video_and_images(html_structure))
-    # full_html_result = asyncio.run(get_result_content(html_structure, media_content))
-    # print(full_html_result)
-    folder = main_topic.lower().replace(" ", "_")
-    print(folder)
-    print(save_images_local(
-        r"https://hips.hearstapps.com/hmg-prod/images/2025-toyota-4runner-limited-108-jpg-6615620b104f8.jpg?crop\u003d0.563xw:0.474xh;0.309xw,0.409xh\u0026resize\u003d1200:*",
-        main_site_topic, sub_folder=main_topic))
+    get_article()
+

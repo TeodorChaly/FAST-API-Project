@@ -44,9 +44,9 @@ async def openai_api(system_fine_tuning, content):
                 {"role": "user", "content": content},
             ]
         )
-        print(completion.choices[0].message.content)
         return completion.choices[0].message.content
 
     except Exception as e:
         print(f'Error during generation: {e}')
         return None
+
