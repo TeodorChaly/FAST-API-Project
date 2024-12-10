@@ -12,7 +12,6 @@ async def perplexity_api(prompt, system_content, model="llama-3.1-sonar-small-12
             {"content": system_content, "role": "system"},
             {"role": "user", "content": prompt}
         ],
-        "return_images": True,
         "model": model
     }
 

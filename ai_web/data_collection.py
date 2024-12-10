@@ -38,8 +38,6 @@ async def get_web_content(topic):
 
 
 async def get_structure(general_content, competitors_content):
-    print("General Content:", general_content)
-    print("Competitors Content:", competitors_content)
     structure_prompt = await get_html_structure_prompt()
     web_content_prompt = await get_combine_info_prompt(general_content, competitors_content)
 
@@ -50,7 +48,6 @@ async def get_structure(general_content, competitors_content):
         print("Error decoding JSON")
         html_structure_json = None
 
-    print(html_structure_json)
     return html_structure_json
 
 
@@ -159,5 +156,52 @@ def get_article():
 
 
 if __name__ == "__main__":
-    get_article()
+    topic = "technology-news"
+    language = "polish"
 
+    main_topic = "Как достать козявек из носа"
+    related_keywords = []
+
+    competitors_info = asyncio.run(competitors_info(main_topic))
+    print("Competitors Info:", competitors_info)
+    html_structure = asyncio.run(get_structure(main_topic, competitors_info))
+    print("HTML Structure:", html_structure)
+    structure_prompt = asyncio.run(get_html_structure_prompt_3_v())
+    web_content_prompt = f"""
+Main Topic: {main_topic}
+Competitors' Structure: {competitors_info}
+Keywords: {related_keywords}"""
+    html_structure_raw = asyncio.run(openai_api(structure_prompt, web_content_prompt))
+    print("HTML Structure Raw:", html_structure_raw)
+    html_structure_json = json.loads(html_structure_raw)
+    combine_html_text = ""
+    audience = html_structure_json["audience"]
+
+    for section in html_structure_json["sections"]:
+        if "keywords" in section:
+            keywords = section["keywords"]
+        else:
+            keywords = None
+        system_fine_tuning = asyncio.run(get_perplexity_prompt(main_topic, section, keywords))
+        content, citations = asyncio.run(perplexity_api(system_fine_tuning, "-"))
+        print("Content:", content)
+        rewrite_content = asyncio.run(rewrite_content_prompt_v2(audience))
+
+        rewrite_content = asyncio.run(openai_api(rewrite_content, content))
+        print("Rewrite Content:", rewrite_content)
+        combine_html_text += rewrite_content
+
+    date_published = str(datetime.now())
+
+    list_of_copywriter = extract_copywriters(topic)
+
+    author = list_of_copywriter[random.randint(0, len(list_of_copywriter) - 1)]
+    author_name = f"{author['name']} {author['surname']}"
+    img_path = author["image"]
+
+    content = {"rewritten_content": combine_html_text, "seo_title": html_structure_json["title"],
+               "seo_description": html_structure_json["seo_description"], "category": "mobile_technology",
+               "tags": html_structure_json["tags"], "url_part": html_structure_json["url_part"],
+               "date_published": date_published,
+               "author": author_name, "image_path": img_path}
+    asyncio.run(json_rewritten_news_saver(content, topic, language, img_path, "-"))
