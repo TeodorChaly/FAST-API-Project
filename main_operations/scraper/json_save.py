@@ -76,7 +76,6 @@ async def folder_prep(topic, language, additional_info=None):
         file_name = f"{str(topic)}_{str(language)}.json"
         file_path = os.path.join(sub_folder_name, file_name)
 
-
         if not os.path.exists(folder_name):
             os.makedirs(folder_name)
 
@@ -212,11 +211,11 @@ async def folder_prep(topic, language, additional_info=None):
                 print(f"File created: {file_path}")
 
         if not os.path.exists(main_directory + "/templates/assets/img/logo/text_image_black.png") or not os.path.exists(
-                main_directory+"/templates/assets/img/logo/text_image_white.png"):
+                main_directory + "/templates/assets/img/logo/text_image_white.png"):
 
             width, height = 218, 61
             text = SITE_NAME
-            font_path = main_directory+"/templates/assets/fonts/LEMONMILK-Medium.otf"
+            font_path = main_directory + "/templates/assets/fonts/LEMONMILK-Medium.otf"
 
             image_black = Image.new("RGBA", (width, height), (255, 255, 255, 0))
             image_white = Image.new("RGBA", (width, height), (255, 255, 255, 0))
@@ -264,8 +263,8 @@ async def folder_prep(topic, language, additional_info=None):
             draw_black.text((text_x, text_y), text, font=font, fill=(0, 0, 0, 255))
             draw_white.text((text_x, text_y), text, font=font, fill=(255, 255, 255, 255))
 
-            image_black.save(main_directory+"/templates/assets/img/logo/text_image_black.png", "PNG")
-            image_white.save(main_directory+"/templates/assets/img/logo/text_image_white.png", "PNG")
+            image_black.save(main_directory + "/templates/assets/img/logo/text_image_black.png", "PNG")
+            image_white.save(main_directory + "/templates/assets/img/logo/text_image_white.png", "PNG")
 
     except Exception as e:
         print(f"Error during folder preparation: {e}")
@@ -300,7 +299,7 @@ def compress_image(image, quality, max_size):
 
 
 #
-def save_images_local(url, topic, quality=85, max_size=(1024, 1024)):
+def save_images_local(url, topic, quality=85, max_size=(1024, 1024), sub_folder=None):
     try:
         current_file_path = os.path.abspath(__file__)
         main_directory = os.path.dirname(os.path.dirname(os.path.dirname(current_file_path)))
@@ -308,30 +307,61 @@ def save_images_local(url, topic, quality=85, max_size=(1024, 1024)):
         reserve_directory = os.path.join(folder_name, topic)
         save_directory = os.path.join(reserve_directory, "main_images")
 
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-            'Connection': 'keep-alive',
-            'Upgrade-Insecure-Requests': '1',
-            'Cache-Control': 'max-age=0'
-        }
+        if sub_folder is not None:
+            sub_folder = sub_folder.replace(" ", "_").lower()
+            sub_folder_path = os.path.join(save_directory, sub_folder)
+            if not os.path.exists(sub_folder_path):
+                os.makedirs(sub_folder_path)
 
-        response = requests.get(url, timeout=5, headers=headers)
-        response.raise_for_status()
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1',
+                'Cache-Control': 'max-age=0'
+            }
 
-        os.makedirs(save_directory, exist_ok=True)
-        characters = string.ascii_letters + string.digits
-        base_name = ''.join(random.choice(characters) for _ in range(16))
+            response = requests.get(url, timeout=5, headers=headers)
+            response.raise_for_status()
 
-        with io.BytesIO(response.content) as data_stream:
-            with Image.open(data_stream) as img:
-                compressed_image = compress_image(img, quality, max_size)
-                output_file_path = os.path.join(save_directory, f"{base_name}.webp")
+            os.makedirs(sub_folder_path, exist_ok=True)
+            characters = string.ascii_letters + string.digits
+            base_name = ''.join(random.choice(characters) for _ in range(16))
 
-                with open(output_file_path, 'wb') as f:
-                    f.write(compressed_image.getvalue())
+            with io.BytesIO(response.content) as data_stream:
+                with Image.open(data_stream) as img:
+                    compressed_image = compress_image(img, quality, max_size)
+                    output_file_path = os.path.join(sub_folder_path, f"{base_name}.webp")
 
-        return f"/get_images/image?topic={topic}&img={base_name}.webp"
+                    with open(output_file_path, 'wb') as f:
+                        f.write(compressed_image.getvalue())
+
+            return f"/get_images/image?topic={topic}&subtopic={sub_folder}&img={base_name}.webp"
+        else:
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1',
+                'Cache-Control': 'max-age=0'
+            }
+
+            response = requests.get(url, timeout=5, headers=headers)
+            response.raise_for_status()
+
+            os.makedirs(save_directory, exist_ok=True)
+            characters = string.ascii_letters + string.digits
+            base_name = ''.join(random.choice(characters) for _ in range(16))
+
+            with io.BytesIO(response.content) as data_stream:
+                with Image.open(data_stream) as img:
+                    compressed_image = compress_image(img, quality, max_size)
+                    output_file_path = os.path.join(save_directory, f"{base_name}.webp")
+
+                    with open(output_file_path, 'wb') as f:
+                        f.write(compressed_image.getvalue())
+
+            return f"/get_images/image?topic={topic}&img={base_name}.webp"
 
     except requests.exceptions.RequestException as e:
         print(f"Error via loading: {e}, {url}")
