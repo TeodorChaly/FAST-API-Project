@@ -18,7 +18,7 @@ async def general_info(product):
 
 
 async def competitors_info(product):
-    system_prompt = get_competitors_info_prompt(product)
+    system_prompt = get_competitors_info_prompt_v2(product)
     content, citations = await perplexity_api(product, system_prompt)
     return content, citations
 
@@ -159,42 +159,72 @@ if __name__ == "__main__":
     topic = "technology-news"
     language = "polish"
 
-    main_topic = "Как достать козявек из носа"
-    related_keywords = []
+    main_topic = "Обзор на dysen vacuum cleaner v10"
+    related_keywords = ["цена", "двигатель", "плюсы", "минусы"]
 
     competitors_info = asyncio.run(competitors_info(main_topic))
+    competitors_info = competitors_info[0]
     print("Competitors Info:", competitors_info)
-    html_structure = asyncio.run(get_structure(main_topic, competitors_info))
-    print("HTML Structure:", html_structure)
-    structure_prompt = asyncio.run(get_html_structure_prompt_3_v())
+    print("-----")
+    # html_structure = asyncio.run(get_structure(main_topic, competitors_info))
+    # print("HTML Structure:", html_structure)
+    structure_prompt = asyncio.run(get_html_structure_prompt_3_v(language))
     web_content_prompt = f"""
 Main Topic: {main_topic}
 Competitors' Structure: {competitors_info}
 Keywords: {related_keywords}"""
     html_structure_raw = asyncio.run(openai_api(structure_prompt, web_content_prompt))
     print("HTML Structure Raw:", html_structure_raw)
+    print("------")
     html_structure_json = json.loads(html_structure_raw)
     combine_html_text = ""
     audience = html_structure_json["audience"]
 
+    print(html_structure_json["video"])
+    video_link = search_youtube_video(html_structure_json["video"])
+    correct_video_link = extract_embed_url(video_link)
+    video_part = f""""
+ <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+        <iframe
+            src="{correct_video_link}"
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;"
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+        </iframe>
+</div>
+    """
+    content_short_summary = ""
     for section in html_structure_json["sections"]:
         if "keywords" in section:
             keywords = section["keywords"]
         else:
             keywords = None
+
         system_fine_tuning = asyncio.run(get_perplexity_prompt(main_topic, section, keywords))
         content, citations = asyncio.run(perplexity_api(system_fine_tuning, "-"))
+        content = "title: " + section["h2"] + "\n" + content
         print("Content:", content)
-        rewrite_content = asyncio.run(rewrite_content_prompt_v2(audience))
+        print("-------")
 
+        rewrite_content = asyncio.run(rewrite_content_prompt_4_v(audience, content_short_summary))  # Previous content
         rewrite_content = asyncio.run(openai_api(rewrite_content, content))
+
+        content_summary = asyncio.run(content_summary_prompt())
+        new_shot_summary = asyncio.run(openai_api(content_summary, rewrite_content))
+        content_short_summary += new_shot_summary
+        print("New Shot Summary:", content_short_summary)
+        print("--------")
+
         print("Rewrite Content:", rewrite_content)
         combine_html_text += rewrite_content
+        print("---------")
+
+    combine_html_text = combine_html_text + video_part
 
     date_published = str(datetime.now())
 
     list_of_copywriter = extract_copywriters(topic)
-
     author = list_of_copywriter[random.randint(0, len(list_of_copywriter) - 1)]
     author_name = f"{author['name']} {author['surname']}"
     img_path = author["image"]
@@ -204,4 +234,6 @@ Keywords: {related_keywords}"""
                "tags": html_structure_json["tags"], "url_part": html_structure_json["url_part"],
                "date_published": date_published,
                "author": author_name, "image_path": img_path}
+
+    print(combine_html_text)
     asyncio.run(json_rewritten_news_saver(content, topic, language, img_path, "-"))

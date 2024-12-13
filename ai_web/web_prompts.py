@@ -15,6 +15,14 @@ def get_competitors_info_prompt(variable):
     return competitors_info_prompt
 
 
+def get_competitors_info_prompt_v2(variable):
+    competitors_info_prompt = f"""I am creating an article on the topic "{variable}". 
+       Scan the internet and my competitor's article (specifically on this topic) and provide the following in one sentence/headline:
+       Group common or similar topics/headlines that are covered in competitors' articles (try to find as many such topics as possible).
+       """
+    return competitors_info_prompt
+
+
 async def get_html_structure_prompt():
     html_structure_prompt = """
 You will be provided with:
@@ -214,7 +222,7 @@ without ```json and ``` at the beginning and end of the JSON structure.
     return structure_prompt
 
 
-async def get_html_structure_prompt_3_v():
+async def get_html_structure_prompt_3_v(language):
     structure_prompt = """
 You will be provided with three key pieces of data:
 
@@ -232,23 +240,27 @@ Psychographics: Their interests, values, and behavior.
 Needs and Problems: What challenges they face related to the topic.
 Goals: What they aim to achieve by reading the article.
 Tone and Style: What tone (formal, casual, professional) and style (informative, engaging, persuasive) will resonate with them.
-Decide the Article Length
 
-Think about the complexity of the topic and the audience’s preferences.
+Decide the Article Length (this is the most important part)
+Choose the article length based on the following factors:
+Topic Complexity: How deeply does the topic need to be explored?
+Audience Preferences: Estimate how much information the reader needs for a clear understanding.
 
-Small: 1–3 H2 sections
-Medium: 3–6 H2 sections
-Large: More than 6 H2 sections
+Article Length
+Structure: 1–3 H2 sections.
+
+
+
 Build the Structure
 
 Use the following JSON template to create the article structure. Be sure to include SEO-friendly elements:
 
 H1: The main title, tied to the topic.
 H2 and Content: Subcategories with detailed explanations, incorporating competitor insights and relevant product information.
-Keywords: Optional, but integrate them naturally into the content where provided and if you think they are not relevant, just skip them.
-Video Description: Suggest a relevant video idea, if applicable.
+Keywords: integrate them naturally into the content where provided and if you think they are not relevant, just skip them.
+Video Description: Suggest a relevant, short video title to search for in YouTube  # Important: description must be in English
 
-
+All content must be in {language} language. 
 
 Expected Output Format (JSON):
 The output must strictly follow this format:
@@ -262,14 +274,15 @@ The output must strictly follow this format:
     {
       "h2": "Subcategory Title",
       "content": "Detailed explanation relevant to the subcategory.",
+      "keywords": ["keyword1", "keyword2", "keyword3"] # Pest keywords (that will be provided) where you think it is suits the best
     {
       "h2": "Another Subcategory",
       "content": "Another subcategory description, with concise product information.",
-      "keywords": ["keyword1", "keyword2", "keyword3"] # optional
+      "keywords": [] # Pest keywords (that will be provided) where you think it is suits the best
      }
   ],
   "audience": "Audience description: Demographics, Psychographics, Needs and problems, Audience goals, Tone and style of communication.",
-  "video": "Video description: A video demonstrating the product or explaining the topic."
+  "video": "Video description: A short video title about product or topic. # Necessary in English"
 }
 
 without ```json and ``` at the beginning and end of the JSON structure.
@@ -370,6 +383,90 @@ Do not overuse them; instead, focus on high-quality, conversational language.
 And please - Without ```html and ``` at the beginning and end of the HTML block.
 """
 
+    return content
+
+async def rewrite_content_prompt_4_v(audience, content_short_summary):
+    structure_prompt = f"""
+    You will receive a text related to a specific topic. Additionally, you will be provided with a short summary of the content, which must be considered when rewriting. 
+    Your objective is to rewrite the text with the following guidelines and answer title in provided text:  
+
+Audience Context: The target audience has the following characteristics: {audience}. Tailor your language, tone, and depth of explanation to suit this audience.  
+
+Content Summary: Analyze the provided short summary "{content_short_summary}" and ensure that your response avoiding repetition. 
+
+Content Structure:  
+- Analyze the provided text to determine whether certain sections require in-depth answers with tables, bullet points, subheadings, or just brief responses. Use only the level of detail that enhances user experience.  
+- Create a logical and intuitive structure to guide the user seamlessly through the content.  
+
+SEO & E-E-A-T Requirements:  
+- Integrate keywords naturally (but avoid keyword stuffing).  
+- Prioritize Expertise, Experience, Authoritativeness, and Trustworthiness (E-E-A-T) by leveraging your knowledge, perspective, or insight when appropriate.  
+
+Personal Touch & Added Insights:  
+- Incorporate your personal experience, opinion, or expertise when relevant, to make the text more relatable and engaging for readers.  
+
+HTML Conversion:  
+- Format the final response as a valid HTML block. Do not use PHP, JavaScript, or CSS unless it’s inline for tables.  
+- Ensure the text uses proper headings and semantic HTML tags to improve accessibility and SEO. 
+- You could also (and it would be even better) use text formatting - say highlighting text with bolt or italics or something that will make the text more readable.
+
+Content Formatting Instructions:  
+- The output can vary from 40 words to 1000 words, depending on the depth and context required by the prompt.  
+- Think critically about each subtopic. Decide whether to add tables, detailed breakdowns, or short answers based on the user's experience needs.  
+
+Submission Format:  
+After rewriting, ensure the response is formatted in standard, valid HTML only (with inline styles for tables if needed). Here’s an example of the expected format:  
+
+<h2>Subtopic Title Here</h2>  
+<p>Write the rewritten and engaging content here, following the SEO, E-E-A-T principles, and user intent.</p>  
+<table style="border: 1px solid black; width: 100%;">  
+  <tr>  
+    <th style="border: 1px solid black;">Header 1</th>  
+    <th style="border: 1px solid black;">Header 2</th>  
+  </tr>  
+  <tr>  
+    <td style="border: 1px solid black;">Row 1, Column 1</td>  
+    <td style="border: 1px solid black;">Row 1, Column 2</td>  
+  </tr>  
+</table>  
+
+
+
+Additional Considerations  
+Content Should Be:  
+- Engaging, clear, and informative.  
+- Scannable for users by utilizing bullet points, numbered lists, tables, and subheadings.  
+- Written with proper grammar and tone consistency.  
+
+If provided text includes conclusions, please exclude them. 
+However, if you believe they are very relevant, present them as a summary specifically for this section 
+(and under no circumstances should you make them h2 headings). 
+
+Audience Experience:  
+Always prioritize user intent. Ask yourself:  
+- Is the information easy to digest?  
+- Does it provide value to the reader?  
+
+Keyword Usage:  
+- Use provided keywords naturally within the text.  
+- Do not overuse them; instead, focus on high-quality, conversational language.  
+
+And please - Without ```html and ``` at the beginning and end of the HTML block.  
+    """
+
+    return structure_prompt
+
+
+
+
+async def content_summary_prompt():
+    content = f"""
+    I am writing a long article and have already used a specific block of HTML content. 
+    I need you to consider this block when continuing to write and avoid repeating the information unless necessary. 
+    Please create a brief summary (in text format) of this block that I can provide in future prompts 
+    as a basis for further writing. Output should be in text format and should not exceed 100 words (and do not include 
+    any HTML block).
+    """
     return content
 
 
