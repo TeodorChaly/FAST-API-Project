@@ -224,11 +224,11 @@ without ```json and ``` at the beginning and end of the JSON structure.
 
 async def get_html_structure_prompt_3_v(language):
     structure_prompt = """
-You will be provided with three key pieces of data:
-
+You will be provided with four key pieces of data:
 Main Topic
 Competitors' Structure
 Keywords (optional)
+Partner links (optional)
 Your task is to create a detailed and effective structure for an article based on this information.
 Follow these steps carefully:
 
@@ -247,8 +247,7 @@ Topic Complexity: How deeply does the topic need to be explored?
 Audience Preferences: Estimate how much information the reader needs for a clear understanding.
 
 Article Length
-Structure: 1–3 H2 sections.
-
+Structure: 1–4 H2 sections.
 
 
 Build the Structure
@@ -258,6 +257,8 @@ Use the following JSON template to create the article structure. Be sure to incl
 H1: The main title, tied to the topic.
 H2 and Content: Subcategories with detailed explanations, incorporating competitor insights and relevant product information.
 Keywords: integrate them naturally into the content where provided and if you think they are not relevant, just skip them.
+Partner Links: Include them where you think they fit best. It is preferable to distribute partners (if there are more
+than 1) to different h2, but if you think they should be put in one h2 - you can do that too. description must be left in English.
 Video Description: Suggest a relevant, short video title to search for in YouTube  # Important: description must be in English
 
 All content must be in {language} language. 
@@ -275,14 +276,16 @@ The output must strictly follow this format:
       "h2": "Subcategory Title",
       "content": "Detailed explanation relevant to the subcategory.",
       "keywords": ["keyword1", "keyword2", "keyword3"] # Pest keywords (that will be provided) where you think it is suits the best
+      "link": [] # Partner link (that will be provided) where you think it is suits the best. Do not translate description.
     {
       "h2": "Another Subcategory",
       "content": "Another subcategory description, with concise product information.",
       "keywords": [] # Pest keywords (that will be provided) where you think it is suits the best
+      "link": [[partner_link_1, partner_link_description], [partner_link_2, partner_link_description]]
      }
   ],
   "audience": "Audience description: Demographics, Psychographics, Needs and problems, Audience goals, Tone and style of communication.",
-  "video": "Video description: A short video title about product or topic. # Necessary in English"
+  "video": "Video description: A short video title about product or topic."  # Necessary in English
 }
 
 without ```json and ``` at the beginning and end of the JSON structure.
@@ -385,7 +388,23 @@ And please - Without ```html and ``` at the beginning and end of the HTML block.
 
     return content
 
-async def rewrite_content_prompt_4_v(audience, content_short_summary):
+
+async def rewrite_content_prompt_4_v(audience, content_short_summary, link_to_partner):
+    if link_to_partner is None:
+        full_text = "No"
+    else:
+        full_text = ""
+        counter = 1
+        for links in link_to_partner:
+            full_text += f"""
+            Partner No. {counter}
+            link: {links[0]}
+            description: {links[1]}
+        
+            """
+            counter += 1
+        print("Partner!!!:", full_text)
+
     structure_prompt = f"""
     You will receive a text related to a specific topic. Additionally, you will be provided with a short summary of the content, which must be considered when rewriting. 
     Your objective is to rewrite the text with the following guidelines and answer title in provided text:  
@@ -393,6 +412,10 @@ async def rewrite_content_prompt_4_v(audience, content_short_summary):
 Audience Context: The target audience has the following characteristics: {audience}. Tailor your language, tone, and depth of explanation to suit this audience.  
 
 Content Summary: Analyze the provided short summary "{content_short_summary}" and ensure that your response avoiding repetition. 
+
+Partner Links: Please necessary integrate very carefully (and not fleshy) following partner links to the content: {full_text}. 
+If you have link and description (of partner) than you must to integrate this link. 
+Please do not mention this our partner links in the content.
 
 Content Structure:  
 - Analyze the provided text to determine whether certain sections require in-depth answers with tables, bullet points, subheadings, or just brief responses. Use only the level of detail that enhances user experience.  
@@ -442,6 +465,14 @@ If provided text includes conclusions, please exclude them.
 However, if you believe they are very relevant, present them as a summary specifically for this section 
 (and under no circumstances should you make them h2 headings). 
 
+If a currency is mentioned in the text, try to adjust it to match the language of the text:
+
+For English, use US dollars (USD);
+For Russian, use rubles (RUB);
+For German, Latvian, or other Eurozone languages, use euros (EUR);
+For other languages, choose the most appropriate currency associated with the region.
+Make sure the adjustment aligns with the context of the text.
+
 Audience Experience:  
 Always prioritize user intent. Ask yourself:  
 - Is the information easy to digest?  
@@ -451,12 +482,16 @@ Keyword Usage:
 - Use provided keywords naturally within the text.  
 - Do not overuse them; instead, focus on high-quality, conversational language.  
 
+Partner Links:
+- Integrate partner links where you think they fit best.
+- Integrate them naturally into the content.
+
+
+
 And please - Without ```html and ``` at the beginning and end of the HTML block.  
     """
 
     return structure_prompt
-
-
 
 
 async def content_summary_prompt():

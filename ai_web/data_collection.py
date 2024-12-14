@@ -159,8 +159,14 @@ if __name__ == "__main__":
     topic = "technology-news"
     language = "polish"
 
-    main_topic = "Обзор на dysen vacuum cleaner v10"
-    related_keywords = ["цена", "двигатель", "плюсы", "минусы"]
+    main_topic = "правила игры авиатор"
+    related_keywords = []
+
+    link_to_action = "https://www.google.com/search?q=aviator&oq=aviator"
+    action_link_description = "Link to a partner site where player can play the game."
+    link_to_action2 = "https://www.google.com/search?q=aviator+game"
+    action_link_description2 = "Link to a second partner site where player can play the game."
+    action_link_dict = [[link_to_action, action_link_description], [link_to_action2, action_link_description2]]
 
     competitors_info = asyncio.run(competitors_info(main_topic))
     competitors_info = competitors_info[0]
@@ -172,7 +178,9 @@ if __name__ == "__main__":
     web_content_prompt = f"""
 Main Topic: {main_topic}
 Competitors' Structure: {competitors_info}
-Keywords: {related_keywords}"""
+Keywords: {related_keywords}
+Partner Links and their description: {action_link_dict}
+"""
     html_structure_raw = asyncio.run(openai_api(structure_prompt, web_content_prompt))
     print("HTML Structure Raw:", html_structure_raw)
     print("------")
@@ -201,13 +209,18 @@ Keywords: {related_keywords}"""
         else:
             keywords = None
 
+        if "link" in section:
+            link = section["link"]
+        else:
+            link = None
+
         system_fine_tuning = asyncio.run(get_perplexity_prompt(main_topic, section, keywords))
         content, citations = asyncio.run(perplexity_api(system_fine_tuning, "-"))
         content = "title: " + section["h2"] + "\n" + content
         print("Content:", content)
         print("-------")
 
-        rewrite_content = asyncio.run(rewrite_content_prompt_4_v(audience, content_short_summary))  # Previous content
+        rewrite_content = asyncio.run(rewrite_content_prompt_4_v(audience, content_short_summary, link))  # Previous content
         rewrite_content = asyncio.run(openai_api(rewrite_content, content))
 
         content_summary = asyncio.run(content_summary_prompt())
