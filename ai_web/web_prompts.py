@@ -260,6 +260,10 @@ Keywords: integrate them naturally into the content where provided and if you th
 Partner Links: Include them where you think they fit best. It is preferable to distribute partners (if there are more
 than 1) to different h2, but if you think they should be put in one h2 - you can do that too. description must be left in English.
 Video Description: Suggest a relevant, short video title to search for in YouTube  # Important: description must be in English
+Images: Think about what pictures you really need for this section. It may be that a section (or the whole article) 
+does not need a picture (and that's okay). If you are thinking of inserting a picture, you need to [briefly describe the
+subject of the picture as you see it]. For example [“iphone 15 pro max camera”, “close look at camera”]. 
+
 
 All content must be in {language} language. 
 
@@ -277,11 +281,13 @@ The output must strictly follow this format:
       "content": "Detailed explanation relevant to the subcategory.",
       "keywords": ["keyword1", "keyword2", "keyword3"] # Pest keywords (that will be provided) where you think it is suits the best
       "link": [] # Partner link (that will be provided) where you think it is suits the best. Do not translate description.
+      "images": [[compact_image_description_1, image_description_1], [compact_image_description_2, image_description_2]]
     {
       "h2": "Another Subcategory",
       "content": "Another subcategory description, with concise product information.",
       "keywords": [] # Pest keywords (that will be provided) where you think it is suits the best
       "link": [[partner_link_1, partner_link_description], [partner_link_2, partner_link_description]]
+      "images": [] # For example no image at all
      }
   ],
   "audience": "Audience description: Demographics, Psychographics, Needs and problems, Audience goals, Tone and style of communication.",
@@ -389,7 +395,7 @@ And please - Without ```html and ``` at the beginning and end of the HTML block.
     return content
 
 
-async def rewrite_content_prompt_4_v(audience, content_short_summary, link_to_partner):
+async def rewrite_content_prompt_4_v(audience, content_short_summary, link_to_partner, images):
     if link_to_partner is None:
         full_text = "No"
     else:
@@ -403,7 +409,15 @@ async def rewrite_content_prompt_4_v(audience, content_short_summary, link_to_pa
         
             """
             counter += 1
-        print("Partner!!!:", full_text)
+    if images is None:
+        image_text = "No"
+    else:
+        image_text = ""
+        for image in images:
+            image_text += f"""
+            Image description: {image[0]}
+            Image link: {image[1]}
+            """
 
     structure_prompt = f"""
     You will receive a text related to a specific topic. Additionally, you will be provided with a short summary of the content, which must be considered when rewriting. 
@@ -439,6 +453,9 @@ Content Formatting Instructions:
 
 Submission Format:  
 After rewriting, ensure the response is formatted in standard, valid HTML only (with inline styles for tables if needed). Here’s an example of the expected format:  
+
+If {image_text} is not "No" than you need to add images to the content.
+
 
 <h2>Subtopic Title Here</h2>  
 <p>Write the rewritten and engaging content here, following the SEO, E-E-A-T principles, and user intent.</p>  

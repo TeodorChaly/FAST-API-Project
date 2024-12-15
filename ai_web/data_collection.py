@@ -159,7 +159,7 @@ if __name__ == "__main__":
     topic = "technology-news"
     language = "polish"
 
-    main_topic = "правила игры авиатор"
+    main_topic = "4Runner vs Land Cruiser"
     related_keywords = []
 
     link_to_action = "https://www.google.com/search?q=aviator&oq=aviator"
@@ -214,13 +214,26 @@ Partner Links and their description: {action_link_dict}
         else:
             link = None
 
+        if "images" in section:
+            images = section["images"]
+        else:
+            images = None
+
         system_fine_tuning = asyncio.run(get_perplexity_prompt(main_topic, section, keywords))
         content, citations = asyncio.run(perplexity_api(system_fine_tuning, "-"))
         content = "title: " + section["h2"] + "\n" + content
         print("Content:", content)
         print("-------")
 
-        rewrite_content = asyncio.run(rewrite_content_prompt_4_v(audience, content_short_summary, link))  # Previous content
+        images_list = []
+        for image in images:
+            searched_img = str(image[0])
+            # Function
+            image_url = "test.com"
+            images_list = [searched_img, image_url]
+
+        rewrite_content = asyncio.run(
+            rewrite_content_prompt_4_v(audience, content_short_summary, link, images_list))  # Previous content
         rewrite_content = asyncio.run(openai_api(rewrite_content, content))
 
         content_summary = asyncio.run(content_summary_prompt())
