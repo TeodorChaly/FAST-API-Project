@@ -260,9 +260,48 @@ Keywords: integrate them naturally into the content where provided and if you th
 Partner Links: Include them where you think they fit best. It is preferable to distribute partners (if there are more
 than 1) to different h2, but if you think they should be put in one h2 - you can do that too. description must be left in English.
 Video Description: Suggest a relevant, short video title to search for in YouTube  # Important: description must be in English
-Images: Think about what pictures you really need for this section. It may be that a section (or the whole article) 
-does not need a picture (and that's okay). If you are thinking of inserting a picture, you need to [briefly describe the
-subject of the picture as you see it]. For example [“iphone 15 pro max camera”, “close look at camera”]. 
+Video description must be short and contains all necessary information. 
+For example (if topic about Golf 2 vs Golf 3): 
+"Volkswagen Golf 2 vs Golf 3 comparison"
+or
+If topic is about xiaomi redmi pad 10.6:
+"Xiaomi Redmi Pad 10.6 review"
+
+Images: Think about which images you really need for this section. It may be that this section (or the entire article) does not require an image (and that’s okay). If you do want to insert an image, you need to briefly describe the subject of the image with all the necessary details so the search engine can find the most relevant picture.
+
+How to structure the description:
+
+Be specific and precise: Focus on the key elements of the image, such as the object, scene, or visual context. This helps the system clearly understand what image you're looking for.
+
+Consider the context and style: If the image is related to something specific (like a game, device, or car), mention this context so it can return the most accurate results.
+
+Use short, focused descriptions: Avoid too many details. Provide just enough information for the search engine to identify the image accurately.
+
+Avoid repetition: The second part should provide additional but different context to the first, while not repeating the same elements.
+
+Example:
+If you’re writing an article about iPhone 15 Pro and want to include a picture of the camera:
+
+Brief description: "iphone 15 pro camera"
+Details: "Close-up of iPhone 15 Pro camera"
+Search query: ["iphone 15 pro camera", "Close-up of iPhone 15 Pro camera"]
+
+If the article is about Toyota 4Runner and you want to show the interior (e.g., the steering wheel):
+
+Brief description: "toyota 4runner interior"
+Details: "Toyota 4Runner interior with steering wheel"
+Search query: ["toyota 4runner interior", "Toyota 4Runner interior with steering wheel"]
+
+If you need an image of fog from Silent Hill 2:
+
+Brief description: "silent hill fog"
+Details: "Fog scene in Silent Hill 2"
+Search query: ["silent hill fog", "Fog scene in Silent Hill 2"]
+
+Key Points:
+Be brief but informative: The description should be clear but not overloaded with information.
+Context matters: Always include the key context, like whether the image relates to a specific game, device, or location.
+Second part adds new context: The second part of the description should elaborate on the visual aspects but should not simply repeat the first part.
 
 
 All content must be in {language} language. 
@@ -274,14 +313,15 @@ The output must strictly follow this format:
   "title": "Main Title",
   "seo_description": "Brief description summarizing the article content.",
   "url_part": "slug of URL",
-  tags: "tag1, tag2, tag3",
+  "tags": "tag1, tag2, tag3",
+  "main_image": ["compact image description", "image description"],
   "sections": [
     {
       "h2": "Subcategory Title",
       "content": "Detailed explanation relevant to the subcategory.",
       "keywords": ["keyword1", "keyword2", "keyword3"] # Pest keywords (that will be provided) where you think it is suits the best
       "link": [] # Partner link (that will be provided) where you think it is suits the best. Do not translate description.
-      "images": [[compact_image_description_1, image_description_1], [compact_image_description_2, image_description_2]]
+      "images": [[compact image description 1, image description 1], [compact image description 2, image description 2]]
     {
       "h2": "Another Subcategory",
       "content": "Another subcategory description, with concise product information.",
@@ -418,7 +458,7 @@ async def rewrite_content_prompt_4_v(audience, content_short_summary, link_to_pa
             Image description: {image[0]}
             Image link: {image[1]}
             """
-
+        print("Image h2", image_text)
     structure_prompt = f"""
     You will receive a text related to a specific topic. Additionally, you will be provided with a short summary of the content, which must be considered when rewriting. 
     Your objective is to rewrite the text with the following guidelines and answer title in provided text:  
@@ -454,7 +494,13 @@ Content Formatting Instructions:
 Submission Format:  
 After rewriting, ensure the response is formatted in standard, valid HTML only (with inline styles for tables if needed). Here’s an example of the expected format:  
 
-If {image_text} is not "No" than you need to add images to the content.
+It is very, very important to include provided images in the content. 
+If you have image description and link than you must to integrate this image.
+this how should image be integrated:
+<img src="image_link" alt="image_description">
+
+Here is images:
+{image_text}
 
 
 <h2>Subtopic Title Here</h2>  

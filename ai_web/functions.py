@@ -1,7 +1,10 @@
+import asyncio
 import os
 import requests
 import xml.etree.ElementTree as ET
 from get_env import xml_river_key, xml_river_user
+import requests
+import json
 
 
 def delete_images_if_exist(folder_path):
@@ -67,4 +70,25 @@ def download_image(url, folder, index):
         return None
 
 
-get_xmlriver_list()
+async def get_best_image(search_query, validation_description, num_images=10):
+    url = 'http://178.18.252.239:5000/find_best_image'
+
+    data = {
+        "search_query": search_query,
+        "validation_description": validation_description,
+        "num_images": num_images
+    }
+
+    headers = {
+        'accept': 'application/json',
+        'Content-Type': 'application/json'
+    }
+
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+
+    if response.status_code == 200:
+        return response.json()["best_image_url"]
+    else:
+        return None
+
+# asyncio.run(get_best_image("golf 6 interior", "steering wheel"))

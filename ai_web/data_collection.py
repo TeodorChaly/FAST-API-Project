@@ -4,6 +4,7 @@ import random
 from datetime import datetime
 
 from ai_regenerator.system_prompts import extract_copywriters
+from ai_web.functions import get_best_image
 from ai_web.get_web_media import search_youtube_video, search_image
 from ai_web.web_ai import *
 from ai_web.web_prompts import *
@@ -101,7 +102,7 @@ def extract_embed_url(youtube_url):
         video_id = parse_qs(parsed_url.query)["v"][0]
         return f"https://www.youtube.com/embed/{video_id}"
     else:
-        raise ValueError("Not correct YouTube url")
+        return None
 
 
 def get_article():
@@ -159,7 +160,7 @@ if __name__ == "__main__":
     topic = "technology-news"
     language = "polish"
 
-    main_topic = "4Runner vs Land Cruiser"
+    main_topic = "How to play aviator game"
     related_keywords = []
 
     link_to_action = "https://www.google.com/search?q=aviator&oq=aviator"
@@ -203,6 +204,11 @@ Partner Links and their description: {action_link_dict}
 </div>
     """
     content_short_summary = ""
+
+    main_desc = html_structure_json["main_image"]
+    main_desc, main_desc2 = main_desc[0], main_desc[1]
+    image_url = asyncio.run(get_best_image(main_desc, main_desc2))
+
     for section in html_structure_json["sections"]:
         if "keywords" in section:
             keywords = section["keywords"]
@@ -227,10 +233,12 @@ Partner Links and their description: {action_link_dict}
 
         images_list = []
         for image in images:
-            searched_img = str(image[0])
-            # Function
-            image_url = "test.com"
-            images_list = [searched_img, image_url]
+            main_description = str(image[0])
+            second_description = str(image[1])
+            image_url = asyncio.run(get_best_image(main_description, second_description))
+            print("New image:", image_url)
+            images_list2 = [second_description, image_url]
+            images_list.append(images_list2)
 
         rewrite_content = asyncio.run(
             rewrite_content_prompt_4_v(audience, content_short_summary, link, images_list))  # Previous content
@@ -262,4 +270,4 @@ Partner Links and their description: {action_link_dict}
                "author": author_name, "image_path": img_path}
 
     print(combine_html_text)
-    asyncio.run(json_rewritten_news_saver(content, topic, language, img_path, "-"))
+    asyncio.run(json_rewritten_news_saver(content, topic, language, image_url, "-"))
