@@ -90,5 +90,3 @@ async def get_best_image(search_query, validation_description, num_images=10):
         return response.json()["best_image_url"]
     else:
         return None
-
-# asyncio.run(get_best_image("golf 6 interior", "steering wheel"))

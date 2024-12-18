@@ -48,4 +48,3 @@ async def openai_api(system_fine_tuning, content):
     except Exception as e:
         print(f'Error during generation: {e}')
         return None
-

@@ -36,4 +36,3 @@ def search_image(query):
         return image_url
     else:
         return "Image not found."
-
